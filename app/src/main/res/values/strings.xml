@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">Rocket</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="splash_screen">Splash Screen</string>
+    <string name="login_mobile">Enter Mobile No.</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_clear1">Clear</string>
+    <string name="btn_clear">C</string>
+    <string name="login_invalid_num">Enter a valid Number</string>
+    <string name="no_internet">Please connect to working Internet connection</string>
+    <string name="validation_msg">Validation Sms from </string>
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
+    <string name="game_type">Game Type</string>
+    <string name="nick_name">Nick Name</string>
+    <string name="dob">DOB</string>
+    <string name="save">Save</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="otp_info">Automatically fetching OTP.\nPlease wait.</string>
+
+    <string name="content_description">Image</string>
+    <string name="sign_out">Sign Out</string>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_landing">Landing Activity</string>
+    <string name="title_activity_event_detail">Event Detail Activity</string>
+
+    <!--Menu String-->
+    <string name="home">Home</string>
+    <string name="my_friends">My Friends</string>
+    <string name="locate_us">Locate Us</string>
+    <string name="settings">Settings</string>
+
+    <string name="about_us">About Us</string>
+    <string name="gallery">Gallery</string>
+    <string name="calendar">Calendar</string>
+    <string name="contact_us">Contact Us</string>
+
+    <string name="like_string">Interested</string>
+    <string name="share_string">Share</string>
+
+    <string name="send_to">Send</string>
+
+
+    <!-- Contents about the club -->
+
+    <string name="about_topic">ABOUT ROCKETS POKER ROOM</string>
+    <string name="about_para1">Rockets poker room is India’s largest poker room that offers fulltime
+high grade poker action to quench
+any and all poker desires that you might have. Get your poker face on and barge into our adrenaline
+pumping card rooms;which also happen to be the most colossal and active in the country; to play the
+belle of poker Texas No limit hold’em/Pot limit omaha. We have sparkling deepstack tables with a wide
+array and personalities of players.</string>
+    <string name="about_para2">We offer some of the biggest poker room games in the country; right in the bosom of bangalore; with well
+trained dealers to cater to all of your card’y’ needs and queries. Choose the table which comforts your
+bankroll and playing style. We are open all days of the week, so be ready for some heart racing poker
+action whenever you decide to drop by. We ensure you the most deeply rewarding and premium
+tournaments weekly althroughout the year for players of all stack sizes. Irrespective of the depth of your
+pocket be sure to find yourself a welcoming spot at our action heavy board.</string>
+
+    <string name="about_para3">See you at the tables!</string>
+
+    <!--Server String-->
+    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Server.</string>
+    <string name="server_registered">From Server: successfully added device!</string>
+    <string name="server_unregistered">From Server: successfully removed device!</string>
+    <string name="server_register_error">Could not register device on Server after %1$d attempts.</string>
+    <string name="server_unregister_error">Could not unregister device on Server (%1$s).</string>
+
+    <!--Gcm String-->
+    <string name="gcm_registered">From GCM: device successfully registered!</string>
+    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
+    <string name="gcm_message">From GCM: you got message!</string>
+    <string name="gcm_error">From GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/sub_toolbar" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/eventImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:scaleType="fitXY"
+            android:src="@drawable/event1"/>
+
+        <LinearLayout
+            android:id="@+id/eventDetails"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="#90D3F1"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/likeImage"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:src="@mipmap/ic_favorite_border"/>
+
+                <ImageButton
+                    android:id="@+id/shareImage"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/ic_share"
+                    android:background="@android:color/transparent"
+                    android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/eventHeaderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold"
+                android:textSize="@dimen/header_size"
+                android:text="Header Text comes here"/>
+
+
+            <TextView
+                android:id="@+id/eventSummaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/summary_size"
+                android:text="Header Text comes here"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

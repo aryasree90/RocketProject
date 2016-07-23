@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>-->
+
+    <!--<color name="actionBarColor">#FE0000</color>
+    <color name="contentLanding">#000000</color>
+    <color name="fontColor">#FFFFFF</color>-->
+
+    <color name="transparentBlack">#64000000</color>
+
+    <color name="colorPrimary">#FE0000</color>
+    <color name="colorPrimaryDark">#CB4F4F</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#ffffff</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#c8e8ff</color>
+</resources>

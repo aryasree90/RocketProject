@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/serviceItemLayout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="@drawable/rounded_cornered_layout"
+    android:padding="10dp"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:id="@+id/serviceContentLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:layout_weight="0.6">
+
+        <TextView
+            android:id="@+id/serviceHeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textSize="14dp"
+            android:text="Header Text comes here"/>
+
+        <TextView
+            android:id="@+id/serviceSummaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="Summary Text begins like this ..."/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/serviceImageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:src="@drawable/logo" />
+
+</LinearLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/newFriendItemLayout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="@drawable/rounded_cornered_layout"
+    android:padding="5dp"
+    android:weightSum="1">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/newFriendImageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:src="@drawable/default_profile" />
+
+    <LinearLayout
+        android:id="@+id/newFriendContentLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:layout_weight="0.7">
+
+        <TextView
+            android:id="@+id/newFriendHeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:text="Friend Name"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/acceptFriend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/friend_btn"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cornered_green"
+                android:text="@string/accept" />
+
+            <Button
+                android:id="@+id/rejectFriend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/friend_btn"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cornered_red"
+                android:text="@string/reject" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
