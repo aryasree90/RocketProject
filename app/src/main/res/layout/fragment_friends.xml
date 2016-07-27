@@ -6,31 +6,32 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
-        <LinearLayout
-            android:id="@+id/header_layout"
+        <EditText
+            android:id="@+id/search_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:gravity="right">
-
-            <ImageButton
-                android:id="@+id/add_friend_activity"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/addfriend"/>
-
-        </LinearLayout>
+            android:layout_margin="5dp"
+            android:hint="@string/search_friends" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/friends_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/header_layout"
+            android:layout_below="@+id/search_friend"
             android:scrollbars="vertical" />
 
-    </RelativeLayout>
+        <Button
+            android:id="@+id/add_new_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:text="@string/add_new_friend"/>
 
+    </RelativeLayout>
 </FrameLayout>

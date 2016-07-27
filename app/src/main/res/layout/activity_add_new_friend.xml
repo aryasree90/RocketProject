@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/sub_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:weightSum="1">
+
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_with_mob"
+            android:inputType="number"
+            android:layout_weight="0.80"/>
+
+        <Button
+            android:id="@+id/searchBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=">>"
+            android:layout_weight="0.20" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/show_friend_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/activity_friends_list_row" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/acceptFriend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/friend_btn"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cornered_green"
+                android:text="@string/accept" />
+
+            <Button
+                android:id="@+id/rejectFriend"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/friend_btn"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cornered_red"
+                android:text="@string/reject" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

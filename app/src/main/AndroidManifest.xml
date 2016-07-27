@@ -59,6 +59,9 @@
         <activity
             android:name=".EventDetailActivity"
             android:label="@string/title_activity_event_detail"></activity>
+        <activity
+            android:name=".AddNewFriendActivity"
+            android:label="@string/title_activity_add_new_friend"></activity>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"

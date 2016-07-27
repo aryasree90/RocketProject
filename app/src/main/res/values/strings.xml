@@ -28,6 +28,9 @@
 
     <string name="content_description">Image</string>
     <string name="sign_out">Sign Out</string>
+    <string name="add_new_friend">Add New Friend</string>
+    <string name="search_friends">Search Friends</string>
+    <string name="search_with_mob">Search with Mobile Number</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -35,6 +38,7 @@
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_landing">Landing Activity</string>
     <string name="title_activity_event_detail">Event Detail Activity</string>
+    <string name="title_activity_add_new_friend">Add New Friend Activity</string>
 
     <!--Menu String-->
     <string name="home">Home</string>

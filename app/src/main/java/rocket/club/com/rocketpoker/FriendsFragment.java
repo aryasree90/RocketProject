@@ -2,14 +2,19 @@ package rocket.club.com.rocketpoker;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -24,7 +29,8 @@ public class FriendsFragment extends Fragment {
     Context context = null;
     RecyclerView friendsListView = null;
     FriendListAdapter mAdapter = null;
-    ImageButton addNewFriend = null;
+    Button addNewFriend = null;
+    EditText searchFriend = null;
 
     View.OnClickListener clickListener = null;
 
@@ -43,7 +49,25 @@ public class FriendsFragment extends Fragment {
     private void initializeWidgets(View view) {
         context = getActivity();
         friendsListView = (RecyclerView) view.findViewById(R.id.friends_recycler_view);
-        addNewFriend = (ImageButton) view.findViewById(R.id.add_friend_activity);
+        addNewFriend = (Button) view.findViewById(R.id.add_new_friend);
+        searchFriend = (EditText) view.findViewById(R.id.search_friend);
+
+        searchFriend.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         FriendsListClass listClass1 = new FriendsListClass("AAAAA", "11111", "image");
         FriendsListClass listClass2 = new FriendsListClass("BBBBB", "22222", "image");
@@ -71,8 +95,9 @@ public class FriendsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
-                    case R.id.add_friend_activity:
-                        Toast.makeText(context, "Add friend clicked", Toast.LENGTH_LONG).show();
+                    case R.id.add_new_friend:
+                        Intent searchFriendActivity = new Intent(context, AddNewFriendActivity.class);
+                        context.startActivity(searchFriendActivity);
                         break;
                 }
             }
