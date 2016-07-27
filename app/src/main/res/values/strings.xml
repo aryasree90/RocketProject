@@ -11,19 +11,38 @@
     <string name="btn_clear1">Clear</string>
     <string name="btn_clear">C</string>
     <string name="login_invalid_num">Enter a valid Number</string>
+    <string name="enter_all">Enter all Fields</string>
     <string name="no_internet">Please connect to working Internet connection</string>
     <string name="validation_msg">Validation Sms from </string>
     <string name="validation_success">Validation Success</string>
     <string name="validation_failed">Validation Failed</string>
+    <string name="profile_update_success">Profile Updated</string>
+    <string name="profile_update_failed">Profile not updated</string>
     <string name="full_name">Full Name</string>
     <string name="email">Email</string>
     <string name="game_type">Game Type</string>
     <string name="nick_name">Nick Name</string>
-    <string name="dob">DOB</string>
+    <string name="gender">Gender</string>
+    <string name="dob">Date Of Birth</string>
     <string name="save">Save</string>
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
     <string name="invalid_otp">Incorrect OTP</string>
+    <string name="invalid_email">Incorrect Email</string>
+    <string name="select">Select</string>
+    <string-array name="gender_list">
+        <item><string name="male">Male</string></item>
+        <item><string name="female">Female</string></item>
+    </string-array>
+
+    <string-array name="game_list">
+        <item><string name="game1">Texas Hold Em</string></item>
+        <item><string name="game2">Omaha</string></item>
+        <item><string name="game3">7-Card Stud</string></item>
+        <item><string name="game4">5-Card Draw</string></item>
+        <item><string name="game5">High / Low Chicago</string></item>
+        <item><string name="game6">Follow the Queen</string></item>
+    </string-array>
 
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>

@@ -75,7 +75,7 @@ public class SplashScreen extends Activity {
         Intent loginActivity = null;
 
         if(appGlobals.sharedPref.getLogInStatus()) {
-            loginActivity = new Intent(SplashScreen.this, LandingActivity.class);
+            loginActivity = new Intent(SplashScreen.this, ProfileActivity.class);
         } else {
             loginActivity = new Intent(SplashScreen.this, LoginActivity.class);
             loginActivity.putExtra(LoginActivity.pageType, LoginActivity.loginPage);
