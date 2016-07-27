@@ -13,6 +13,8 @@
     <string name="login_invalid_num">Enter a valid Number</string>
     <string name="no_internet">Please connect to working Internet connection</string>
     <string name="validation_msg">Validation Sms from </string>
+    <string name="validation_success">Validation Success</string>
+    <string name="validation_failed">Validation Failed</string>
     <string name="full_name">Full Name</string>
     <string name="email">Email</string>
     <string name="game_type">Game Type</string>
@@ -21,6 +23,7 @@
     <string name="save">Save</string>
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
+    <string name="invalid_otp">Incorrect OTP</string>
 
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>

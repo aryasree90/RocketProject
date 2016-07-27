@@ -81,7 +81,7 @@
                 android:inputType="number"
                 android:maxLength="1"
                 android:gravity="center"
-                android:textSize="50sp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/otp2"
@@ -90,7 +90,7 @@
                 android:inputType="number"
                 android:maxLength="1"
                 android:gravity="center"
-                android:textSize="50sp"/>
+                android:textSize="20sp"/>
 
             <EditText
                 android:id="@+id/otp3"
@@ -99,7 +99,7 @@
                 android:inputType="number"
                 android:maxLength="1"
                 android:gravity="center"
-                android:textSize="50sp"/>
+                android:textSize="20sp"/>
 
             <EditText
                 android:id="@+id/otp4"
@@ -108,7 +108,7 @@
                 android:inputType="number"
                 android:maxLength="1"
                 android:gravity="center"
-                android:textSize="50sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 

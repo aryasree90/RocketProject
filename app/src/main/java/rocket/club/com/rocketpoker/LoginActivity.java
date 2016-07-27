@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,7 +23,18 @@ import rocket.club.com.rocketpoker.async.LoginAsync;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.FetchContact;
 import rocket.club.com.rocketpoker.utils.LogClass;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static rocket.club.com.rocketpoker.CommonUtilities.EXTRA_MESSAGE;
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
@@ -106,28 +118,30 @@ public class LoginActivity extends AppCompatActivity {
     private void setTextFocusForOtp(final EditText otpText) {
         otpText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(otpText == otp1) {
-                    if(count == 1)
+                if (otpText == otp1) {
+                    if (count == 1)
                         otp2.requestFocus();
-                } else if(otpText == otp2) {
-                    if(count == 1)
+                } else if (otpText == otp2) {
+                    if (count == 1)
                         otp3.requestFocus();
 
-                } else if(otpText == otp3) {
-                    if(count == 1)
+                } else if (otpText == otp3) {
+                    if (count == 1)
                         otp4.requestFocus();
-                } else if(otpText == otp4) {
-                    if(count == 1)
+                } else if (otpText == otp4) {
+                    if (count == 1)
                         btnContinue.requestFocus();
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
@@ -146,9 +160,11 @@ public class LoginActivity extends AppCompatActivity {
                             if(TextUtils.isEmpty(canonicalMobile)) {
                                 appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_SHORT);
                             } else {
-                                if (connectionDetector.isConnectingToInternet())
-                                    login(canonicalMobile, 1);
-                                else
+                                if (connectionDetector.isConnectingToInternet()) {
+                                    appGlobals.sharedPref.setLoginMobile(canonicalMobile);
+                                    LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
+                                    loginAsync.execute(mobile);
+                                } else
                                     Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
                             }
                         } else {
@@ -168,17 +184,20 @@ public class LoginActivity extends AppCompatActivity {
 
                         break;
                     case R.id.btn_otp:
+                        if (connectionDetector.isConnectingToInternet()) {
+                            String validOtp = appGlobals.sharedPref.getValidationCode();
+                            String enteredOtp = otp1.getText().toString() +
+                                                    otp2.getText().toString() +
+                                                    otp3.getText().toString() +
+                                                    otp4.getText().toString();
 
-                        String validOtp = appGlobals.sharedPref.getValidationCode();
-                        String enteredOtp = otp1.getText().toString() +
-                                                otp2.getText().toString() +
-                                                otp3.getText().toString() +
-                                                otp4.getText().toString();
-
-                        if(validOtp.equals(enteredOtp) || enteredOtp.equals("2016")) {
-                            continueLogin();
+                            if(validOtp.equals(enteredOtp) || enteredOtp.equals("2016")) {
+                                validateUser(appGlobals.sharedPref.getLoginMobile());
+                            } else {
+                                appGlobals.toastMsg(context, getString(R.string.invalid_otp), Toast.LENGTH_LONG);
+                            }
                         } else {
-                            appGlobals.toastMsg(context, "Invalid Otp", Toast.LENGTH_LONG);
+                            Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
                         }
                         break;
                 }
@@ -190,12 +209,6 @@ public class LoginActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(clickListener);
         btnClear1.setOnClickListener(clickListener);
 
-    }
-
-    private void login(String mobile, int process) {
-        appGlobals.sharedPref.setLoginMobile(mobile);
-        LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this, process);
-        loginAsync.execute(mobile);
     }
 
     private void clearEditText() {
@@ -246,7 +259,7 @@ public class LoginActivity extends AppCompatActivity {
                     otp3.setText(String.valueOf(otp[2]));
                     otp4.setText(String.valueOf(otp[3]));
 
-                    continueLogin();
+                    validateUser(appGlobals.sharedPref.getLoginMobile());
 
                 } catch(Exception e) {
                     appGlobals.logClass.setLogMsg(TAG, "Exception in auto set otp " + e.toString(), LogClass.ERROR_MSG);
@@ -274,8 +287,40 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    private void continueLogin() {
-        login(appGlobals.sharedPref.getLoginMobile(), 2);
+    private void validateUser(final String mobile) {
+        final String VALIDATION_URL = AppGlobals.SERVER_URL + "validate_user.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.trim().equals("success")){
+                            appGlobals.sharedPref.setLogInStatus(true);
+                            finish();
+                            Intent loginIntent = new Intent(context, ProfileActivity.class);
+                            startActivity(loginIntent);
+                        }else{
+                            Toast.makeText(context, getString(R.string.validation_failed),Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, getString(R.string.validation_failed),Toast.LENGTH_LONG).show();
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<String,String>();
+                Log.d(TAG, mobile);
+                map.put("mobile", mobile);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import rocket.club.com.rocketpoker.LoginActivity;
 import rocket.club.com.rocketpoker.ProfileActivity;
@@ -17,8 +18,24 @@ import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.ServerUtilities;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
@@ -28,17 +45,17 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
     Context ctx;
     Activity loginActivity;
     AppGlobals appGlobals = null;
-    int process = 0;
+    /*int process = 0;
 
     private final int LOGIN_PROCESS = 1;
-    private final int OTP_PROCESS = 2;
+    private final int OTP_PROCESS = 2;*/
     private final String TAG = "LoginAsync";
+    private static String VALIDATION_URL = AppGlobals.SERVER_URL + "validate_user.php";
 
-    public LoginAsync(Context ctx, Activity loginActivity, int process) {
+    public LoginAsync(Context ctx, Activity loginActivity) {
         this.ctx = ctx;
         this.loginActivity = loginActivity;
         this.appGlobals = AppGlobals.getInstance();
-        this.process = process;
     }
 
     @Override
@@ -48,45 +65,25 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-
         String mobile = "";
-        if(process == LOGIN_PROCESS) {
-            mobile = params[0];
-            registerNumer(mobile);
-        } else if(process == OTP_PROCESS) {
-            //TODO send validation note to the server
-        }
-
+        mobile = params[0];
+        registerNumer(mobile);
         return mobile;
     }
 
     @Override
     protected void onPostExecute(String mobile) {
         super.onPostExecute(mobile);
-
         appGlobals.logClass.setLogMsg(TAG, "Reached onPostExecute", LogClass.DEBUG_MSG);
-
-        Intent loginIntent = null;
-
-        if(process == LOGIN_PROCESS) {
-            sendValidationSms(mobile);
-
-            loginIntent = new Intent(ctx, LoginActivity.class);
-            loginIntent.putExtra(LoginActivity.pageType, LoginActivity.otpPage);
-        } else if(process == OTP_PROCESS) {
-            appGlobals.sharedPref.setLogInStatus(true);
-            loginIntent = new Intent(ctx, ProfileActivity.class);
-        }
-
+        sendValidationSms(mobile);
         loginActivity.finish();
-        if(loginIntent != null) {
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ctx.startActivity(loginIntent);
-        }
+        Intent loginIntent = new Intent(ctx, LoginActivity.class);
+        loginIntent.putExtra(LoginActivity.pageType, LoginActivity.otpPage);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(loginIntent);
     }
 
-    private void registerNumer(String mobile) {
-
+    private boolean registerNumer(String mobile) {
         // Make sure the device has the proper dependencies.
         GCMRegistrar.checkDevice(ctx);
         // Make sure the manifest was properly set - comment out this line
@@ -97,27 +94,57 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
 
         appGlobals.logClass.setLogMsg(TAG, regId, LogClass.DEBUG_MSG);
         appGlobals.logClass.setLogMsg(TAG, mobile, LogClass.DEBUG_MSG);
-        Log.d(TAG, "______ status 1");
         // Check if regid already presents
         if (regId.equals("")) {
             // Registration is not present, register now with GCM
-            Log.d(TAG, "______ status 2");
             appGlobals.logClass.setLogMsg(TAG, "Regid not found", LogClass.DEBUG_MSG);
             GCMRegistrar.register(ctx, SENDER_ID);
         } else {
-            Log.d(TAG, "______ status 3");
             // Device is already registered on GCM
             if (GCMRegistrar.isRegisteredOnServer(ctx)) {
-                Log.d(TAG, "______ status 4");
                 // Skips registration.
                 appGlobals.logClass.setLogMsg(TAG, "Already registered with GCM " + regId, LogClass.DEBUG_MSG);
             } else {
-                Log.d(TAG, "______ status 5");
                 // Try to register again
                 appGlobals.logClass.setLogMsg(TAG, "Trying to register again", LogClass.DEBUG_MSG);
                 ServerUtilities.register(ctx, regId);
             }
         }
+        return true;
+    }
+
+
+    private void validateUser(final String mobile) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(ctx, "Outside " + response,Toast.LENGTH_LONG).show();
+                        if(response.trim().equals("success")){
+                            Toast.makeText(ctx, response,Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(ctx, response,Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<String,String>();
+                Log.d(TAG, mobile);
+                map.put("mobile", mobile);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ctx);
+        requestQueue.add(stringRequest);
     }
 
     private void sendValidationSms(String mobile) {
