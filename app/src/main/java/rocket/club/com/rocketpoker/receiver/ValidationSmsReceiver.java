@@ -27,7 +27,7 @@ public class ValidationSmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         ctx = context;
-        AppGlobals appGlobals = AppGlobals.getInstance();
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
 
         try {
 

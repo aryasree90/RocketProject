@@ -52,7 +52,7 @@ public class LandingActivity extends AppCompatActivity
 
     private void initializeWidgets() {
         context = getApplicationContext();
-        appGlobals = AppGlobals.getInstance();
+        appGlobals = AppGlobals.getInstance(context);
 
         imgRocket = (ImageButton)findViewById(R.id.rocket_img);
         imgChatRoom = (ImageButton)findViewById(R.id.chat_room_img);

@@ -76,7 +76,7 @@ public class ProfileActivity extends ActionBarActivity {
 
     private void initializeWidgets() {
         context = getApplicationContext();
-        appGlobals = AppGlobals.getInstance();
+        appGlobals = AppGlobals.getInstance(context);
         connectionDetector = new ConnectionDetector(context);
 
         gotoHome = (Button) findViewById(R.id.btn_toHome);
@@ -143,9 +143,10 @@ public class ProfileActivity extends ActionBarActivity {
         final String mobile = appGlobals.sharedPref.getLoginMobile();
         final String userGameType = gameTypeSpinner.getText().toString();
         final String userGender = genderSpinner.getText().toString();
+        final String userDob = dob.getText().toString();
 
         if(validateFields(userFullName, userEmail, userNickName, userGender, userGameType))
-            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, mobile);
+            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob, mobile);
 
     }
 
@@ -174,11 +175,17 @@ public class ProfileActivity extends ActionBarActivity {
                 int curMonth = cur.get(Calendar.MONTH) + 1;
 
                 int yearDiff = curYear - year;
+                boolean isAdult = true;
                 if(yearDiff < 18)
-                    validation = false;
+                    isAdult = false;
                 else if(yearDiff == 18) {
                     if(curMonth < month)
-                        validation = false;
+                        isAdult = false;
+                }
+
+                if(!isAdult) {
+                    validation = false;
+                    Toast.makeText(context, getString(R.string.below_age), Toast.LENGTH_LONG).show();
                 }
             }
         } else {
@@ -188,7 +195,8 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void updateProfile(final String userFullName, final String userEmail,
-                               final String userNickName, final String userGender, final String userGameType, final String mobile) {
+                               final String userNickName, final String userGender,
+                               final String userGameType, final String userDob, final String mobile) {
         final String VALIDATION_URL = AppGlobals.SERVER_URL + "userProfile.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
                 new Response.Listener<String>() {
@@ -211,12 +219,14 @@ public class ProfileActivity extends ActionBarActivity {
                 }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+
                 Map<String,String> map = new HashMap<String,String>();
                 map.put("fullName", userFullName);
                 map.put("email", userEmail);
                 map.put("nickName", userNickName);
                 map.put("gender", userGender);
                 map.put("gameType", userGameType);
+                map.put("dob", userDob);
                 map.put("mobile", mobile);
                 return map;
             }
@@ -249,8 +259,7 @@ public class ProfileActivity extends ActionBarActivity {
 
             // set selected date into textview
             dob.setText(new StringBuilder().append(month)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "));
+                    .append("-").append(day).append("-").append(year));
         }
     };
 

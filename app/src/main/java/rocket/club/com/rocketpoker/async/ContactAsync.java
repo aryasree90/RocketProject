@@ -43,7 +43,7 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
     protected void onPreExecute() {
         super.onPreExecute();
 
-        appGlobals = AppGlobals.getInstance();
+        appGlobals = AppGlobals.getInstance(context);
     }
 
     @Override

@@ -20,9 +20,10 @@ public class AppGlobals {
     public SharedPref sharedPref = null;
     private static final String TAG = "AppGlobals";
 
-    public static AppGlobals getInstance() {
+    public static AppGlobals getInstance(Context context) {
         if(appGlobals == null) {
             appGlobals = new AppGlobals();
+            appGlobals.init(context);
         }
         return appGlobals;
     }

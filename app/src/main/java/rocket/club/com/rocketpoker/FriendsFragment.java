@@ -1,6 +1,7 @@
 package rocket.club.com.rocketpoker;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,14 +26,22 @@ import java.util.List;
 
 import rocket.club.com.rocketpoker.adapter.FriendListAdapter;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
+import rocket.club.com.rocketpoker.utils.AppGlobals;
 
 public class FriendsFragment extends Fragment {
 
     Context context = null;
+    AppGlobals appGlobals = null;
+
     RecyclerView friendsListView = null;
     FriendListAdapter mAdapter = null;
     Button addNewFriend = null;
     EditText searchFriend = null;
+
+    Dialog dialog = null;
+    Button searchBtn = null;
+    EditText searchMobile = null;
+    LinearLayout showFriendDetails = null;
 
     View.OnClickListener clickListener = null;
 
@@ -48,6 +59,8 @@ public class FriendsFragment extends Fragment {
 
     private void initializeWidgets(View view) {
         context = getActivity();
+        appGlobals = AppGlobals.getInstance(context);
+
         friendsListView = (RecyclerView) view.findViewById(R.id.friends_recycler_view);
         addNewFriend = (Button) view.findViewById(R.id.add_new_friend);
         searchFriend = (EditText) view.findViewById(R.id.search_friend);
@@ -96,14 +109,49 @@ public class FriendsFragment extends Fragment {
             public void onClick(View v) {
                 switch(v.getId()) {
                     case R.id.add_new_friend:
-                        Intent searchFriendActivity = new Intent(context, AddNewFriendActivity.class);
-                        context.startActivity(searchFriendActivity);
+                        createDialog();
+                        break;
+                    case R.id.acceptFriend:
+                        resetDialog();
+                        Toast.makeText(context, "Friend request sent", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.rejectFriend:
+                        resetDialog();
+                        break;
+                    case R.id.searchBtn:
+                        showFriendDetails.setVisibility(View.VISIBLE);
                         break;
                 }
             }
         };
 
         addNewFriend.setOnClickListener(clickListener);
+    }
+
+    private void createDialog()
+    {
+        dialog=new Dialog(context);
+        dialog.setContentView(R.layout.activity_add_new_friend);
+
+        searchBtn = (Button) dialog.findViewById(R.id.searchBtn);
+        searchFriend = (EditText) dialog.findViewById(R.id.searchText);
+        TextView acceptBtn= (TextView) dialog.findViewById(R.id.acceptFriend);
+        TextView rejectBtn= (TextView) dialog.findViewById(R.id.rejectFriend);
+        showFriendDetails = (LinearLayout) dialog.findViewById(R.id.show_friend_details);
+
+        acceptBtn.setText("Send Request");
+        rejectBtn.setText("Clear");
+
+        acceptBtn.setOnClickListener(clickListener);
+        rejectBtn.setOnClickListener(clickListener);
+        searchBtn.setOnClickListener(clickListener);
+
+        dialog.show();
+    }
+
+    private void resetDialog() {
+        showFriendDetails.setVisibility(View.INVISIBLE);
+        searchFriend.setText("");
     }
 
 }

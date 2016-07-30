@@ -22,7 +22,7 @@ public class SplashScreen extends Activity {
     }
     /** Called when the activity is first created. */
 
-    Context ctx = null;
+    Context context = null;
     Thread splashTread;
     AppGlobals appGlobals = null;
 
@@ -31,9 +31,8 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        ctx = getApplicationContext();
-        appGlobals = AppGlobals.getInstance();
-        appGlobals.init(ctx);
+        context = getApplicationContext();
+        appGlobals = AppGlobals.getInstance(context);
 
         StartAnimations();
     }
@@ -75,7 +74,7 @@ public class SplashScreen extends Activity {
         Intent loginActivity = null;
 
         if(appGlobals.sharedPref.getLogInStatus()) {
-            loginActivity = new Intent(SplashScreen.this, ProfileActivity.class);
+            loginActivity = new Intent(SplashScreen.this, LandingActivity.class);
         } else {
             loginActivity = new Intent(SplashScreen.this, LoginActivity.class);
             loginActivity.putExtra(LoginActivity.pageType, LoginActivity.loginPage);

@@ -38,7 +38,7 @@ public final class CommonUtilities {
      * @param message message to be displayed.
      */
     static void displayMessage(Context context, String message) {
-        AppGlobals appGlobals = AppGlobals.getInstance();
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
         appGlobals.logClass.setLogMsg(TAG, "Control reached displayMessage " + message, LogClass.DEBUG_MSG);
         try {
             JSONObject obj = new JSONObject(message);

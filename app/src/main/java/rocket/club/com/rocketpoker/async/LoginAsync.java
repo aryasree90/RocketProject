@@ -55,7 +55,7 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
     public LoginAsync(Context ctx, Activity loginActivity) {
         this.ctx = ctx;
         this.loginActivity = loginActivity;
-        this.appGlobals = AppGlobals.getInstance();
+        this.appGlobals = AppGlobals.getInstance(ctx);
     }
 
     @Override

@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initializeWidgets() {
         context = getApplicationContext();
-        appGlobals = AppGlobals.getInstance();
+        appGlobals = AppGlobals.getInstance(context);
 
         editMobileNum = (EditText) findViewById(R.id.edit_mobile_num);
         btnLogin = (Button) findViewById(R.id.btn_login);

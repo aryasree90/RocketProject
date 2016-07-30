@@ -38,7 +38,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
     private void initializeWidgets() {
         context = getApplicationContext();
-        appGlobals = AppGlobals.getInstance();
+        appGlobals = AppGlobals.getInstance(context);
 
         connectionDetector = new ConnectionDetector(getApplicationContext());
 

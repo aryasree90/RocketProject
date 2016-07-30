@@ -30,6 +30,7 @@
     <string name="invalid_otp">Incorrect OTP</string>
     <string name="invalid_email">Incorrect Email</string>
     <string name="select">Select</string>
+    <string name="below_age">You are below 18</string>
     <string-array name="gender_list">
         <item><string name="male">Male</string></item>
         <item><string name="female">Female</string></item>

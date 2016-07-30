@@ -32,7 +32,7 @@ public final class ServerUtilities {
      *
      */
     public static void register(final Context context, final String regId) {
-        AppGlobals appGlobals = AppGlobals.getInstance();
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
         String mobile = appGlobals.sharedPref.getLoginMobile();
         appGlobals.logClass.setLogMsg(TAG, "Registering into server " + regId, LogClass.DEBUG_MSG);
         String serverUrl = SERVER_URL;
