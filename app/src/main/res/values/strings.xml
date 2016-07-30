@@ -18,6 +18,7 @@
     <string name="validation_failed">Validation Failed</string>
     <string name="profile_update_success">Profile Updated</string>
     <string name="profile_update_failed">Profile not updated</string>
+    <string name="profile_fetch_error">Error in Fetching Profile Details</string>
     <string name="full_name">Full Name</string>
     <string name="email">Email</string>
     <string name="game_type">Game Type</string>

@@ -74,7 +74,10 @@ public class LandingActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        circularImageView = (CircleImageView)findViewById(R.id.profileImage);
+        View headerView = getLayoutInflater().inflate(R.layout.nav_header_landing, navigationView, false);
+        navigationView.addHeaderView(headerView);
+
+        circularImageView = (CircleImageView) headerView.findViewById(R.id.profileImage);
 
         if(appGlobals.currentFragmentClass == null)
             appGlobals.currentFragmentClass = HomeFragment.class;
@@ -113,7 +116,7 @@ public class LandingActivity extends AppCompatActivity
         imgRocket.setOnClickListener(clickListener);
         imgChatRoom.setOnClickListener(clickListener);
         imgAddFriend.setOnClickListener(clickListener);
-//        circularImageView.setOnClickListener(clickListener);
+        circularImageView.setOnClickListener(clickListener);
     }
 
     @Override

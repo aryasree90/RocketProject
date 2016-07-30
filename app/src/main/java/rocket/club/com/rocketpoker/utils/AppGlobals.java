@@ -1,17 +1,11 @@
 package rocket.club.com.rocketpoker.utils;
 
-import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.provider.ContactsContract;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-
-import rocket.club.com.rocketpoker.R;
 
 public class AppGlobals {
 
@@ -36,6 +30,9 @@ public class AppGlobals {
     public final int LENGTH_LONG = 1;
     public final int LENGTH_SHORT = 2;
     public Class currentFragmentClass = null;
+
+    public final String UPDATE_PROFILE = "1";
+    public final String FETCH_PROFILE = "2";
 
 
     public static final String AUTO_SMS_READER =

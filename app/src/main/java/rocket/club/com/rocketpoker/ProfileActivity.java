@@ -1,28 +1,17 @@
 package rocket.club.com.rocketpoker;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,18 +21,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import rocket.club.com.rocketpoker.classes.ProfileDetailsClass;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -58,6 +45,7 @@ public class ProfileActivity extends ActionBarActivity {
     MaterialBetterSpinner gameTypeSpinner = null, genderSpinner = null;
     ArrayAdapter<String> gameTypeAdapter = null, genderAdapter = null;
     int year, month, day;
+    final String VALIDATION_URL = AppGlobals.SERVER_URL + "userProfile.php";
 
     View.OnClickListener clickListener = null;
     private static final int CAMERA = 0;
@@ -72,6 +60,8 @@ public class ProfileActivity extends ActionBarActivity {
 
         initializeWidgets();
         setClickListener();
+
+        fetchProfile();
     }
 
     private void initializeWidgets() {
@@ -140,13 +130,12 @@ public class ProfileActivity extends ActionBarActivity {
         final String userFullName = fullName.getText().toString();
         final String userEmail = email.getText().toString();
         final String userNickName = nickName.getText().toString();
-        final String mobile = appGlobals.sharedPref.getLoginMobile();
         final String userGameType = gameTypeSpinner.getText().toString();
         final String userGender = genderSpinner.getText().toString();
         final String userDob = dob.getText().toString();
 
         if(validateFields(userFullName, userEmail, userNickName, userGender, userGameType))
-            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob, mobile);
+            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob);
 
     }
 
@@ -196,44 +185,84 @@ public class ProfileActivity extends ActionBarActivity {
 
     private void updateProfile(final String userFullName, final String userEmail,
                                final String userNickName, final String userGender,
-                               final String userGameType, final String userDob, final String mobile) {
-        final String VALIDATION_URL = AppGlobals.SERVER_URL + "userProfile.php";
+                               final String userGameType, final String userDob) {
+
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("fullName", userFullName);
+        map.put("email", userEmail);
+        map.put("nickName", userNickName);
+        map.put("gender", userGender);
+        map.put("gameType", userGameType);
+        map.put("dob", userDob);
+        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+        map.put("task", appGlobals.UPDATE_PROFILE);
+
+        serverCall(map, appGlobals.UPDATE_PROFILE);
+    }
+
+    private void fetchProfile() {
+
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+        map.put("task", appGlobals.FETCH_PROFILE);
+
+        serverCall(map, appGlobals.FETCH_PROFILE);
+    }
+
+    private void serverCall(final Map<String,String> params, final String task) {
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.trim().equals("success")){
-                            Toast.makeText(context, getString(R.string.profile_update_success),Toast.LENGTH_LONG).show();
-                            gotoHomeActivity();
-                        }else{
-                            Toast.makeText(context, getString(R.string.profile_update_failed),Toast.LENGTH_LONG).show();
+                        if(task.equals(appGlobals.UPDATE_PROFILE)) {
+                            if (response.trim().equals("success")) {
+                                Toast.makeText(context, getString(R.string.profile_update_success), Toast.LENGTH_LONG).show();
+                                gotoHomeActivity();
+                            } else {
+                                Toast.makeText(context, getString(R.string.profile_update_failed), Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            if (!response.trim().isEmpty()) {
+                                setProfileDetails(response);
+                            }
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, getString(R.string.profile_update_failed),Toast.LENGTH_LONG).show();
+                        String msg = "";
+                        if(task.equals(appGlobals.UPDATE_PROFILE))
+                            msg = getString(R.string.profile_update_failed);
+                        else
+                            msg = getString(R.string.profile_fetch_error);
+
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String,String> map = new HashMap<String,String>();
-                map.put("fullName", userFullName);
-                map.put("email", userEmail);
-                map.put("nickName", userNickName);
-                map.put("gender", userGender);
-                map.put("gameType", userGameType);
-                map.put("dob", userDob);
-                map.put("mobile", mobile);
-                return map;
+                return params;
             }
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    private void setProfileDetails(String response) {
+
+        Gson profileJson = new Gson();
+        ProfileDetailsClass profileDetails = profileJson.fromJson(response, ProfileDetailsClass[].class)[0];
+
+        fullName.setText(profileDetails.getName());
+        email.setText(profileDetails.getEmail());
+        nickName.setText(profileDetails.getNickname());
+        dob.setText(profileDetails.getDob());
+        gameTypeSpinner.setText(profileDetails.getGametype());
+        genderSpinner.setText(profileDetails.getGender());
     }
 
     @Override
