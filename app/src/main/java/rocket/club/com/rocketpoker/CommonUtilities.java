@@ -5,8 +5,16 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import rocket.club.com.rocketpoker.classes.NotifClass;
+import rocket.club.com.rocketpoker.classes.UserDetails;
+import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -40,12 +48,37 @@ public final class CommonUtilities {
     static void displayMessage(Context context, String message) {
         AppGlobals appGlobals = AppGlobals.getInstance(context);
         appGlobals.logClass.setLogMsg(TAG, "Control reached displayMessage " + message, LogClass.DEBUG_MSG);
+    }
+
+    static void updateFriends(Context context, String message, String type) {
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Control reached updateFriends " + message, LogClass.DEBUG_MSG);
         try {
-            JSONObject obj = new JSONObject(message);
-            appGlobals.logClass.setLogMsg(TAG, "displayMessage sender " + obj.getString("sender"), LogClass.DEBUG_MSG);
-            appGlobals.logClass.setLogMsg(TAG, "displayMessage msg " + obj.getString("msg"), LogClass.DEBUG_MSG);
+            DBHelper db = new DBHelper(context);
+            if(type.equals(AppGlobals.NOTIF_FRND_REQ)) {
+                Gson gson = new Gson();
+                NotifClass notif = gson.fromJson(message, NotifClass.class);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends sender " + notif.getSender(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends msg " + notif.getMsg(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends mobile " + notif.getUserDetails().getMobile(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends status " + notif.getUserDetails().getStatus(), LogClass.DEBUG_MSG);
+
+                UserDetails userDetails = notif.getUserDetails();
+                ArrayList<UserDetails> list = new ArrayList<UserDetails>();
+                list.add(userDetails);
+
+                db.insertContactDetails(list);
+            } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
+                Gson gson = new Gson();
+                NotifClass notif = gson.fromJson(message, NotifClass.class);
+
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends sender1 " + notif.getSender(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends msg1 " + notif.getMsg(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends mobile1 " + notif.getUserDetails().getMobile(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends status1 " + notif.getUserDetails().getStatus(), LogClass.DEBUG_MSG);
+            }
         } catch(Exception e) {
-            appGlobals.logClass.setLogMsg(TAG, "Exception in displayMessage " + e.toString(), LogClass.ERROR_MSG);
+            appGlobals.logClass.setLogMsg(TAG, "Exception in updateFriends " + e.toString(), LogClass.ERROR_MSG);
         }
         Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
         intent.putExtra(EXTRA_MESSAGE, message);

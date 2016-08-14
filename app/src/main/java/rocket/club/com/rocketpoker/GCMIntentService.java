@@ -13,8 +13,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import rocket.club.com.rocketpoker.utils.AppGlobals;
+
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 import static rocket.club.com.rocketpoker.CommonUtilities.displayMessage;
+import static rocket.club.com.rocketpoker.CommonUtilities.updateFriends;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
@@ -57,8 +60,15 @@ public class GCMIntentService extends GCMBaseIntentService {
         }
 
         String message = null;
-        if(intent.hasExtra("price")){
+        if(intent.hasExtra("price")) {
             message = intent.getExtras().getString("price");
+            displayMessage(context, message);
+        } else if(intent.hasExtra(AppGlobals.NOTIF_FRND_REQ)) {
+            message = intent.getExtras().getString(AppGlobals.NOTIF_FRND_REQ);
+            updateFriends(context, message, AppGlobals.NOTIF_FRND_REQ);
+        } else if(intent.hasExtra(AppGlobals.NOTIF_FRND_REQ_RESP)) {
+            message = intent.getExtras().getString(AppGlobals.NOTIF_FRND_REQ_RESP);
+            updateFriends(context, message, AppGlobals.NOTIF_FRND_REQ_RESP);
         }else if(intent.hasExtra("received_messages")){
             try {
                 JSONArray array  = new JSONArray(intent.getExtras().getString("received_messages"));
@@ -68,13 +78,14 @@ public class GCMIntentService extends GCMBaseIntentService {
                         message = jObj.getString("message");
                     }
                 }
+                displayMessage(context, message);
             } catch (JSONException e) {
                 // TODO displaAuto-generated catch block
                 e.printStackTrace();
             }
         }
 
-        displayMessage(context, message);
+//        displayMessage(context, message);
         // notifies user
         //generateNotification(context, message);
     }

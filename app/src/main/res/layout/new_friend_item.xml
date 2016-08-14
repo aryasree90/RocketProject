@@ -32,7 +32,10 @@
             android:textStyle="bold"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
-            android:text="Friend Name"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
             android:textSize="16sp" />
 
         <LinearLayout

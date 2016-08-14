@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import rocket.club.com.rocketpoker.LandingActivity;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.database.DBHelper;
+import rocket.club.com.rocketpoker.utils.AppGlobals;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class LoadContactAsync extends AsyncTask<Void, Void, ArrayList<ContactCla
     protected ArrayList<ContactClass> doInBackground(Void... params) {
 
         DBHelper db = new DBHelper(context);
-        ArrayList<ContactClass> contactList = db.getAllContacts();
+        ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.ACCEPTED_FRIENDS);
 
         return contactList;
     }

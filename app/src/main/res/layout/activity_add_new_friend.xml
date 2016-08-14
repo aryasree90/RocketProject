@@ -64,10 +64,5 @@
                 android:text="@string/reject" />
 
         </LinearLayout>
-
     </LinearLayout>
-
-
-
-
 </LinearLayout>

@@ -2,16 +2,25 @@ package rocket.club.com.rocketpoker.classes;
 
 public class UserDetails {
 
-    private String userId;
+    private String nickName;
     private String mobile;
     private String userName;
+    private int status = -1;
 
-    public String getUserId() {
-        return userId;
+    public int getStatus() {
+        return status;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getMobile() {

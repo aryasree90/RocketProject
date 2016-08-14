@@ -8,9 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import rocket.club.com.rocketpoker.adapter.EventListAdapter;
 import rocket.club.com.rocketpoker.adapter.NewFriendListAdapter;
 import rocket.club.com.rocketpoker.adapter.ServiceListAdapter;
+import rocket.club.com.rocketpoker.classes.ContactClass;
+import rocket.club.com.rocketpoker.classes.UserDetails;
+import rocket.club.com.rocketpoker.database.DBHelper;
+import rocket.club.com.rocketpoker.utils.AppGlobals;
 
 public class HomeFragment extends Fragment {
 
@@ -51,8 +57,16 @@ public class HomeFragment extends Fragment {
         serviceList = (ViewPager) view.findViewById(R.id.serviceList);
         serviceList.setAdapter(serviceAdapter);
 
-        newFriendAdapter = new NewFriendListAdapter(context, mResources, clickListener);
+        DBHelper db = new DBHelper(context);
+        ArrayList<ContactClass> userList = db.getContacts(AppGlobals.PENDING_FRIENDS);
         newFriendsList = (ViewPager) view.findViewById(R.id.newFriendsList);
-        newFriendsList.setAdapter(newFriendAdapter);
+
+        if(userList != null && userList.size() > 0) {
+            newFriendsList.setVisibility(View.VISIBLE);
+            newFriendAdapter = new NewFriendListAdapter(context, userList, clickListener);
+            newFriendsList.setAdapter(newFriendAdapter);
+        } else {
+            newFriendsList.setVisibility(View.GONE);
+        }
     }
 }

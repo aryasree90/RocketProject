@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import rocket.club.com.rocketpoker.ConnectionDetector;
+
 public class AppGlobals {
 
     public static AppGlobals appGlobals;
@@ -30,9 +32,25 @@ public class AppGlobals {
     public final int LENGTH_LONG = 1;
     public final int LENGTH_SHORT = 2;
     public Class currentFragmentClass = null;
+    public ConnectionDetector connectionDetector = null;
 
+    //Profile
     public final String UPDATE_PROFILE = "1";
     public final String FETCH_PROFILE = "2";
+
+    //Friend Request
+    public final String NEW_FRND_REQ = "1";
+    public final String REPLY_FRND_REQ = "2";
+    public final String SEARCH_FRND = "3";
+
+    //Friends Database
+    public static final int ACCEPTED_FRIENDS = 1;
+    public static final int PENDING_FRIENDS = 2;
+    public static final int ALL_FRIENDS = 3;
+
+    //Notification keys
+    public static final String NOTIF_FRND_REQ = "frnd_req";
+    public static final String NOTIF_FRND_REQ_RESP = "frnd_req_resp";
 
 
     public static final String AUTO_SMS_READER =
@@ -40,10 +58,11 @@ public class AppGlobals {
 
     // methods
 
-    public boolean init(Context ctx) {
+    public boolean init(Context context) {
         try {
             logClass = new LogClass();
-            sharedPref = new SharedPref(ctx);
+            sharedPref = new SharedPref(context);
+            connectionDetector = new ConnectionDetector(context);
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
@@ -64,6 +83,17 @@ public class AppGlobals {
             mobile = "+" + mobile;
         }
         return mobile;
+    }
+
+    public boolean isNetworkConnected(Context context) {
+        if(connectionDetector == null)
+            connectionDetector = new ConnectionDetector(context);
+
+        if (connectionDetector.isConnectingToInternet()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void writeContacts(Context context, int count) {

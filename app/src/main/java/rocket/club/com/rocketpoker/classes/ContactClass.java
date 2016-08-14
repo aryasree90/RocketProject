@@ -4,7 +4,8 @@ public class ContactClass {
 
     private String contactName;
     private String phoneNumber;
-    private String userId;
+    private String nickName;
+    private int status;
 
     //    getter functions
 
@@ -16,11 +17,15 @@ public class ContactClass {
         return phoneNumber;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getNickName() {
+        return nickName;
     }
 
-//    setter functions
+    public int getStatus() {
+        return status;
+    }
+
+    //    setter functions
 
     public void setContactName(String contactName) {
         this.contactName = contactName;
@@ -30,8 +35,12 @@ public class ContactClass {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
 }

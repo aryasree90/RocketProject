@@ -134,14 +134,14 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
                 for(int i=0; i<len; i++) {
                     String item[] = list[i].split("':'");
                     appGlobals.logClass.setLogMsg(TAG, item[0] + " " + item[1], LogClass.DEBUG_MSG);
-                    userDetails.setUserId(item[0]);
+//                    userDetails.setUserId(item[0]);
                     userDetails.setMobile(item[1]);
                     userDetails.setUserName(item[2]);
 
                     userDetailList.add(userDetails);
                 }
                 DBHelper db = new DBHelper(context);
-                db.insertContactDetils(userDetailList);
+                db.insertContactDetails(userDetailList);
             }
         } catch (Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
