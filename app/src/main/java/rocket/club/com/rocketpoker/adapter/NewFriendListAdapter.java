@@ -101,6 +101,11 @@ public class NewFriendListAdapter extends PagerAdapter {
 
     private void serverCall(final String frnd_mob, final String status) {
 
+        if(!appGlobals.connectionDetector.isConnectingToInternet()) {
+            appGlobals.toastMsg(mContext, mContext.getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+            return;
+        }
+
         final String FRIEND_RESP_URL = AppGlobals.SERVER_URL + "frndReq.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, FRIEND_RESP_URL,
                 new Response.Listener<String>() {
@@ -109,6 +114,8 @@ public class NewFriendListAdapter extends PagerAdapter {
                         if(response.equals("Success")) {
                             DBHelper db = new DBHelper(mContext);
                             db.updateContacts(status, frnd_mob);
+                        } else {
+                            appGlobals.toastMsg(mContext, mContext.getString(R.string.unable_to_connect_server), appGlobals.LENGTH_LONG);
                         }
                     }
                 },

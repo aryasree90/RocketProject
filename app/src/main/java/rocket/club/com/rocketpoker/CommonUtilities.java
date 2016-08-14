@@ -55,13 +55,13 @@ public final class CommonUtilities {
         appGlobals.logClass.setLogMsg(TAG, "Control reached updateFriends " + message, LogClass.DEBUG_MSG);
         try {
             DBHelper db = new DBHelper(context);
+
+            Gson gson = new Gson();
+            NotifClass notif = gson.fromJson(message, NotifClass.class);
+            appGlobals.logClass.setLogMsg(TAG, "updateFriends sender " + notif.getSender(), LogClass.DEBUG_MSG);
+            appGlobals.logClass.setLogMsg(TAG, "updateFriends msg " + notif.getMsg(), LogClass.DEBUG_MSG);
+
             if(type.equals(AppGlobals.NOTIF_FRND_REQ)) {
-                Gson gson = new Gson();
-                NotifClass notif = gson.fromJson(message, NotifClass.class);
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends sender " + notif.getSender(), LogClass.DEBUG_MSG);
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends msg " + notif.getMsg(), LogClass.DEBUG_MSG);
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends mobile " + notif.getUserDetails().getMobile(), LogClass.DEBUG_MSG);
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends status " + notif.getUserDetails().getStatus(), LogClass.DEBUG_MSG);
 
                 UserDetails userDetails = notif.getUserDetails();
                 ArrayList<UserDetails> list = new ArrayList<UserDetails>();
@@ -69,13 +69,8 @@ public final class CommonUtilities {
 
                 db.insertContactDetails(list);
             } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
-                Gson gson = new Gson();
-                NotifClass notif = gson.fromJson(message, NotifClass.class);
-
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends sender1 " + notif.getSender(), LogClass.DEBUG_MSG);
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends msg1 " + notif.getMsg(), LogClass.DEBUG_MSG);
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends mobile1 " + notif.getUserDetails().getMobile(), LogClass.DEBUG_MSG);
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends status1 " + notif.getUserDetails().getStatus(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "updateFriends status " + notif.getStatus(), LogClass.DEBUG_MSG);
+                db.updateContacts(notif.getStatus(), notif.getSender());
             }
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in updateFriends " + e.toString(), LogClass.ERROR_MSG);

@@ -52,6 +52,8 @@
     <string name="navigation_drawer_close">Close</string>
     <string name="otp_info">Automatically fetching OTP.\nPlease wait.</string>
 
+    <string name="unable_to_connect_server">Unable to Connect to Server</string>
+
     <string name="content_description">Image</string>
     <string name="sign_out">Sign Out</string>
     <string name="add_new_friend">Add New Friend</string>
