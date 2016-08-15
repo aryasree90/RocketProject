@@ -26,7 +26,7 @@
             android:id="@+id/searchBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text=">>"
+            android:text="@string/go_search"
             android:layout_weight="0.20" />
 
     </LinearLayout>
@@ -52,7 +52,7 @@
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:background="@drawable/rounded_cornered_green"
-                android:text="@string/accept" />
+                android:text="@string/send_req" />
 
             <Button
                 android:id="@+id/rejectFriend"
@@ -61,7 +61,7 @@
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:background="@drawable/rounded_cornered_red"
-                android:text="@string/reject" />
+                android:text="@string/btn_clear1" />
 
         </LinearLayout>
     </LinearLayout>

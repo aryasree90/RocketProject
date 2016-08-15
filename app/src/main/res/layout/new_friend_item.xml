@@ -51,7 +51,6 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/rounded_cornered_green"
                 android:text="@string/accept" />
-
             <Button
                 android:id="@+id/rejectFriend"
                 android:layout_width="0dp"
@@ -62,7 +61,5 @@
                 android:text="@string/reject" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>

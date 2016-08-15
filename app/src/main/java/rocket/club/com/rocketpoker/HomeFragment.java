@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ public class HomeFragment extends Fragment {
     ServiceListAdapter serviceAdapter = null;
     NewFriendListAdapter newFriendAdapter = null;
     ViewPager eventList = null, serviceList = null, newFriendsList = null;
+    TextView emptyFriend = null, emptyEvent = null, emptyService = null;
     int[] mResources = {
             R.drawable.event1,
             R.drawable.event2,
@@ -49,24 +52,46 @@ public class HomeFragment extends Fragment {
     private void initializeWidgets(View view) {
         context = getActivity();
 
-        eventAdapter = new EventListAdapter(context, mResources);
-        eventList = (ViewPager) view.findViewById(R.id.eventList);
-        eventList.setAdapter(eventAdapter);
-
-        serviceAdapter = new ServiceListAdapter(context, mResources, clickListener);
-        serviceList = (ViewPager) view.findViewById(R.id.serviceList);
-        serviceList.setAdapter(serviceAdapter);
-
         DBHelper db = new DBHelper(context);
+
+        eventList = (ViewPager) view.findViewById(R.id.eventList);
+        emptyEvent = (TextView) view.findViewById(R.id.emptyEventItem);
+
+        if(mResources.length == 0) {
+            eventList.setVisibility(View.VISIBLE);
+            emptyEvent.setVisibility(View.GONE);
+            eventAdapter = new EventListAdapter(context, mResources);
+            eventList.setAdapter(eventAdapter);
+        } else {
+            eventList.setVisibility(View.GONE);
+            emptyEvent.setVisibility(View.VISIBLE);
+        }
+
+        serviceList = (ViewPager) view.findViewById(R.id.serviceList);
+        emptyService = (TextView) view.findViewById(R.id.emptyServiceItem);
+
+        if(mResources.length != 0) {
+            serviceList.setVisibility(View.VISIBLE);
+            emptyService.setVisibility(View.GONE);
+            serviceAdapter = new ServiceListAdapter(context, mResources, clickListener);
+            serviceList.setAdapter(serviceAdapter);
+        } else {
+            serviceList.setVisibility(View.GONE);
+            emptyService.setVisibility(View.VISIBLE);
+        }
+
         ArrayList<ContactClass> userList = db.getContacts(AppGlobals.PENDING_FRIENDS);
         newFriendsList = (ViewPager) view.findViewById(R.id.newFriendsList);
+        emptyFriend = (TextView) view.findViewById(R.id.emptyFriendItem);
 
         if(userList != null && userList.size() > 0) {
             newFriendsList.setVisibility(View.VISIBLE);
+            emptyFriend.setVisibility(View.GONE);
             newFriendAdapter = new NewFriendListAdapter(context, userList, clickListener);
             newFriendsList.setAdapter(newFriendAdapter);
-        } else {
+        } else{
             newFriendsList.setVisibility(View.GONE);
+            emptyFriend.setVisibility(View.VISIBLE);
         }
     }
 }

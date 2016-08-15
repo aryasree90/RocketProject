@@ -32,10 +32,14 @@
     <string name="invalid_email">Incorrect Email</string>
     <string name="select">Select</string>
     <string name="req_sent">Friend Request Sent</string>
+    <string name="req_not_sent">Unable to send Friend Request</string>
     <string name="send_req">Send Request</string>
     <string name="below_age">You are below 18</string>
     <string name="frnd_req_rec">&#160; has sent you a friend request</string>
-    <string name="frnd_req_accept">&#160; accepted your request</string>
+    <string name="frnd_req_accept">&#160; accepted your friend request</string>
+    <string name="empty_frnd_req">You have 0 Friend Request</string>
+    <string name="empty_service">No Services</string>
+    <string name="empty_events">No Events</string>
     <string-array name="gender_list">
         <item><string name="male">Male</string></item>
         <item><string name="female">Female</string></item>
@@ -61,6 +65,8 @@
     <string name="add_new_friend">Add New Friend</string>
     <string name="search_friends">Search Friends</string>
     <string name="search_with_mob">Search with Mobile Number</string>
+    <string name="go_search">Go</string>
+    <string name="friend_not_found">Unable to find the number</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_home">HomeActivity</string>

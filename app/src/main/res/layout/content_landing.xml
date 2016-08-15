@@ -18,30 +18,74 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/eventList"
+        <LinearLayout
+            android:id="@+id/eventLayout"
             android:layout_width="match_parent"
             android:layout_height="220dp"
+            android:orientation="horizontal"
             android:padding="5dp"
-            android:elevation="2dp"/>
+            android:elevation="2dp">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/newFriendsList"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/eventList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/emptyEventItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/empty_events"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/newFriendsLayout"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_below="@+id/eventList"
             android:layout_height="100dp"
+            android:layout_below="@+id/eventLayout"
             android:layout_marginTop="10dp"
             android:padding="5dp"
-            android:elevation="2dp"/>
+            android:elevation="2dp">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/serviceList"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/newFriendsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/emptyFriendItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/empty_frnd_req"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/serviceLayout"
             android:layout_width="match_parent"
-            android:layout_below="@+id/newFriendsList"
             android:layout_height="180dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/newFriendsLayout"
             android:layout_marginTop="10dp"
             android:padding="5dp"
-            android:elevation="2dp"/>
+            android:elevation="2dp">
 
+            <android.support.v4.view.ViewPager
+                android:id="@+id/serviceList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/emptyServiceItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/empty_service"/>
+        </LinearLayout>
     </RelativeLayout>
 </ScrollView>

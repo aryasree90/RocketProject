@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 
 import com.google.gson.Gson;
 
@@ -70,7 +72,7 @@ public final class CommonUtilities {
             String notifMsg = "";
 
             if(type.equals(AppGlobals.NOTIF_FRND_REQ)) {
-                ArrayList<UserDetails> list = new ArrayList<UserDetails>();
+                ArrayList<UserDetails> list = new ArrayList<>();
                 list.add(userDetails);
                 db.insertContactDetails(list);
                 notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_rec);
@@ -89,34 +91,30 @@ public final class CommonUtilities {
         context.sendBroadcast(intent);
     }
 
-    /**
-     * Issues a notification to inform the user that server has sent a message.
-     */
+    private static void generateNotification(Context ctx, String message) {
 
-    private static void generateNotification(Context context, String message) {
-        int icon = R.mipmap.ic_launcher;
-        long when = System.currentTimeMillis();
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(icon, message, when);
+        final int NOTIF_REQ_CODE = 11;
+        final int NOTIF_ID = 111;
 
-        String title = context.getString(R.string.app_name);
+        Intent notificationIntent = new Intent(ctx, LandingActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(ctx, NOTIF_REQ_CODE, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
-        Intent notificationIntent = new Intent(context, LoginActivity.class);
-        // set intent so it does not start a new activity
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent =
-                PendingIntent.getActivity(context, 0, notificationIntent, 0);
-//        notification.setLatestEventInfo(context, title, message, intent);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        NotificationManager nm = (NotificationManager) ctx
+                .getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Play default notification sound
-        notification.defaults |= Notification.DEFAULT_SOUND;
+        Resources res = ctx.getResources();
+        Notification.Builder builder = new Notification.Builder(ctx);
 
-        // Vibrate if vibrate is enabled
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notificationManager.notify(0, notification);
-
+        builder.setContentIntent(contentIntent)
+                .setSmallIcon(R.drawable.logo)
+                .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.logo))
+                .setTicker(message)    // notification minimized message
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setContentTitle(ctx.getString(R.string.app_name))  // notification expanded message
+                .setContentText(message);
+        Notification n = builder.build();
+        nm.notify(NOTIF_ID, n);
     }
 }
