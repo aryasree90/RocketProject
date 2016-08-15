@@ -67,7 +67,7 @@ public class NewFriendListAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.new_friend_item, container, false);
 
         appGlobals = AppGlobals.getInstance(mContext);
-        LinearLayout itemLayout = (LinearLayout) itemView.findViewById(R.id.newFriendItemLayout);
+
         CircleImageView itemImage = (CircleImageView) itemView.findViewById(R.id.newFriendImageView);
         headerText = (TextView) itemView.findViewById(R.id.newFriendHeaderText);
         accept = (Button) itemView.findViewById(R.id.acceptFriend);
@@ -87,21 +87,21 @@ public class NewFriendListAdapter extends PagerAdapter {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverCall(frnd_mob, "1");
+                serverCall(frnd_mob, 1);
             }
         });
 
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverCall(frnd_mob, "2");
+                serverCall(frnd_mob, 2);
             }
         });
     }
 
-    private void serverCall(final String frnd_mob, final String status) {
+    private void serverCall(final String frnd_mob, final int status) {
 
-        if(!appGlobals.connectionDetector.isConnectingToInternet()) {
+        if(!appGlobals.isNetworkConnected(mContext)) {
             appGlobals.toastMsg(mContext, mContext.getString(R.string.no_internet), appGlobals.LENGTH_LONG);
             return;
         }
@@ -130,7 +130,7 @@ public class NewFriendListAdapter extends PagerAdapter {
                 Map<String,String> map = new HashMap<String,String>();
                 map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                 map.put("frnd_mobile", frnd_mob);
-                map.put("status", status);
+                map.put("status", Integer.toString(status));
                 map.put("task", appGlobals.REPLY_FRND_REQ);
                 return map;
             }
@@ -139,7 +139,6 @@ public class NewFriendListAdapter extends PagerAdapter {
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         requestQueue.add(stringRequest);
     }
-
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {

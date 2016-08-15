@@ -59,6 +59,7 @@ public class FriendsFragment extends Fragment {
     LinearLayout showFriendDetails = null;
     TextView friendName, friendMobile;
     ArrayList<UserDetails> list = null;
+    String searchAFriend = "";
 
     View.OnClickListener clickListener = null;
     private final String TAG = "Friends Fragment";
@@ -108,7 +109,7 @@ public class FriendsFragment extends Fragment {
             ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.ALL_FRIENDS);
             for(ContactClass contactClass : contactList) {
                 String name = contactClass.getContactName() + "-" + contactClass.getStatus();
-                friendsList.add(new FriendsListClass(name, contactList.get(0).getPhoneNumber(), "image"));
+                friendsList.add(new FriendsListClass(name, contactClass.getPhoneNumber(), "image"));
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -130,32 +131,38 @@ public class FriendsFragment extends Fragment {
                         createDialog();
                         break;
                     case R.id.acceptFriend:
-                        if(appGlobals.isNetworkConnected(context)) {
 
-                            String frnd_mob = searchFriend.getText().toString();
-                            Map<String,String> map = new HashMap<String,String>();
-                            map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                            map.put("frnd_mobile", frnd_mob);
-                            map.put("task", appGlobals.NEW_FRND_REQ);
+//                            String frnd_mob = searchFriend.getText().toString();
+                            if(searchAFriend.isEmpty()) {
+                                appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
+                                return;
+                            }
 
-                            serverCall(map, FRIEND_REQ_URL);
+                            Map<String, String> frnd_map = new HashMap<String, String>();
+                            frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                            frnd_map.put("frnd_mobile", searchAFriend);
+                            frnd_map.put("task", appGlobals.NEW_FRND_REQ);
+
+                            serverCall(frnd_map, FRIEND_REQ_URL);
                             resetDialog();
-                            appGlobals.toastMsg(context, getString(R.string.req_sent), appGlobals.LENGTH_LONG);
-                        } else {
-                            appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
-                        }
                         break;
                     case R.id.rejectFriend:
                         resetDialog();
                         break;
                     case R.id.searchBtn:
-                        showFriendDetails.setVisibility(View.VISIBLE);
-                        String frnd_mob = searchFriend.getText().toString();
+//                        String search_mob = searchFriend.getText().toString();
+                        searchAFriend = searchFriend.getText().toString();
 
-                        Map<String,String> map = new HashMap<String,String>();
-                        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                        map.put("frnd_mobile", frnd_mob);
-                        serverCall(map, FRIEND_SEARCH_URL);
+                        if(searchAFriend.isEmpty()) {
+                            appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
+                            return;
+                        }
+
+                        searchFriend.setEnabled(false);
+                        Map<String,String> search_map = new HashMap<String,String>();
+                        search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                        search_map.put("frnd_mobile", searchAFriend);
+                        serverCall(search_map, FRIEND_SEARCH_URL);
                         break;
                 }
             }
@@ -166,6 +173,11 @@ public class FriendsFragment extends Fragment {
 
     private void serverCall(final Map<String, String> map, final String URL) {
 
+        if(!appGlobals.isNetworkConnected(context)) {
+            appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+            return;
+        }
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                 new Response.Listener<String>() {
                     @Override
@@ -175,17 +187,26 @@ public class FriendsFragment extends Fragment {
                                 if (list != null && list.size() == 1) {
                                     DBHelper db = new DBHelper(context);
                                     db.insertContactDetails(list);
+                                    appGlobals.toastMsg(context, getString(R.string.req_sent), appGlobals.LENGTH_LONG);
+                                } else {
+                                    appGlobals.toastMsg(context, getString(R.string.req_not_sent), appGlobals.LENGTH_LONG);
                                 }
                             }
                         } else if(URL.equals(FRIEND_SEARCH_URL)){
-                            Gson gson = new Gson();
-                            UserDetails userDetails = gson.fromJson(response, UserDetails.class);
+                            try {
+                                Gson gson = new Gson();
+                                UserDetails userDetails = gson.fromJson(response, UserDetails.class);
 
-                            friendName.setText(userDetails.getUserName());
-                            friendMobile.setText(userDetails.getMobile());
+                                friendName.setText(userDetails.getUserName());
+                                friendMobile.setText(userDetails.getMobile());
 
-                            list = new ArrayList<UserDetails>();
-                            list.add(userDetails);
+                                list = new ArrayList<UserDetails>();
+                                list.add(userDetails);
+
+                                showFriendDetails.setVisibility(View.VISIBLE);
+                            } catch(Exception e) {
+                                appGlobals.toastMsg(context, getString(R.string.friend_not_found), appGlobals.LENGTH_LONG);
+                            }
                         }
                     }
                 },
@@ -211,6 +232,8 @@ public class FriendsFragment extends Fragment {
         dialog=new Dialog(context);
         dialog.setContentView(R.layout.activity_add_new_friend);
 
+        dialog.setTitle(getString(R.string.search_friends));
+
         searchBtn = (Button) dialog.findViewById(R.id.searchBtn);
         searchFriend = (EditText) dialog.findViewById(R.id.searchText);
         TextView acceptBtn= (TextView) dialog.findViewById(R.id.acceptFriend);
@@ -233,5 +256,7 @@ public class FriendsFragment extends Fragment {
     private void resetDialog() {
         showFriendDetails.setVisibility(View.INVISIBLE);
         searchFriend.setText("");
+        searchFriend.setEnabled(true);
+        dialog.cancel();
     }
 }

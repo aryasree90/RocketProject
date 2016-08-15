@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
@@ -16,6 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "rocketPoker.db";
     public static final int DB_VERSION = 1;
+    private static final String TAG = "DBHelper";
 
     public static final String friendsTable = "friendsTable";
 
@@ -63,10 +65,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public void updateContacts(String statusValue, String updtMob) {
+    public void updateContacts(int statusValue, String updtMob) {
         SQLiteDatabase db = this.getWritableDatabase();
         final String where = mobile + "=" + updtMob;
-        if(statusValue == "1") {
+        if(statusValue == 1) {
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
             db.update(friendsTable, cv, where, null);
@@ -101,6 +103,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 String userNickName = res.getString(res.getColumnIndex(nickName));
                 String userMobile = res.getString(res.getColumnIndex(mobile));
                 int userStatus = res.getInt(res.getColumnIndex(status));
+
+                Log.d(TAG, "__________ db getContacts " + name + " " + userMobile + " " + userStatus + " " + userNickName);
 
                 ContactClass contactClass = new ContactClass();
                 contactClass.setContactName(name);
