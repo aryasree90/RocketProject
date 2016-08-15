@@ -3,29 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/app_multicolor"
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="rocket.club.com.rocketpoker.AboutActivity"
-    tools:showIn="@layout/activity_about">
+    ><!--tools:showIn="@layout/activity_about"-->
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about_topic"
+        android:paddingTop="20dp"
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textSize="20sp"/>
+</LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/rounded_cornered_layout"
+        android:layout_margin="3dp"
+        android:layout_marginBottom="7dp"
         android:orientation="vertical">
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/about_topic"
-            android:paddingTop="20dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textSize="25sp"/>
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_para1"
             android:paddingTop="15dp"
+            android:layout_marginLeft="3dp"
             android:textSize="14sp"
             />
         <TextView
@@ -33,6 +49,7 @@
             android:layout_height="wrap_content"
             android:text="@string/about_para2"
             android:paddingTop="15dp"
+            android:layout_marginLeft="3dp"
             android:textSize="14sp"
             />
         <TextView
@@ -40,6 +57,8 @@
             android:layout_height="wrap_content"
             android:text="@string/about_para3"
             android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_marginLeft="3dp"
             android:textSize="14sp"
             />
     </LinearLayout>

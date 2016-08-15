@@ -19,7 +19,7 @@ import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
 public final class CommonUtilities {
- 
+
     // give your server registration url here
     static final String SERVER_URL = AppGlobals.SERVER_URL + "GCMFiles/register.php";
 

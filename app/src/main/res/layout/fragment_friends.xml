@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:padding="10dp"
+            android:background="@color/colorGreenButton"
             android:layout_margin="5dp"
             android:text="@string/add_new_friend"/>
 
