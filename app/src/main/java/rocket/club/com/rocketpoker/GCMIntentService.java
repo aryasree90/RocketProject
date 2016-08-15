@@ -87,7 +87,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 //        displayMessage(context, message);
         // notifies user
-        //generateNotification(context, message);
+        generateNotification(context, message);
     }
 
     /**

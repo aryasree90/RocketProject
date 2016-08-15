@@ -63,10 +63,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public void updateContacts(String statusValue, String updtMob) {
+    public void updateContacts(int statusValue, String updtMob) {
         SQLiteDatabase db = this.getWritableDatabase();
         final String where = mobile + "=" + updtMob;
-        if(statusValue == "1") {
+        if(statusValue == 1) {
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
             db.update(friendsTable, cv, where, null);

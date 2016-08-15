@@ -3,17 +3,8 @@ package rocket.club.com.rocketpoker.classes;
 public class NotifClass {
 
     private String msg;
-    private String status;
     private String sender;
     private UserDetails userDetails;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public UserDetails getUserDetails() {
         return userDetails;

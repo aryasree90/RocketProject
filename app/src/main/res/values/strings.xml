@@ -34,6 +34,8 @@
     <string name="req_sent">Friend Request Sent</string>
     <string name="send_req">Send Request</string>
     <string name="below_age">You are below 18</string>
+    <string name="frnd_req_rec">&#160; has sent you a friend request</string>
+    <string name="frnd_req_accept">&#160; accepted your request</string>
     <string-array name="gender_list">
         <item><string name="male">Male</string></item>
         <item><string name="female">Female</string></item>

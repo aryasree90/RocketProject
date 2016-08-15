@@ -1,16 +1,14 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import rocket.club.com.rocketpoker.classes.NotifClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
@@ -61,22 +59,64 @@ public final class CommonUtilities {
             appGlobals.logClass.setLogMsg(TAG, "updateFriends sender " + notif.getSender(), LogClass.DEBUG_MSG);
             appGlobals.logClass.setLogMsg(TAG, "updateFriends msg " + notif.getMsg(), LogClass.DEBUG_MSG);
 
-            if(type.equals(AppGlobals.NOTIF_FRND_REQ)) {
+            UserDetails userDetails = notif.getUserDetails();
+            appGlobals.logClass.setLogMsg(TAG, "updateFriends friend request", LogClass.DEBUG_MSG);
+            appGlobals.logClass.setLogMsg(TAG, "updateFriends mobile " + userDetails.getMobile(), LogClass.DEBUG_MSG);
+            appGlobals.logClass.setLogMsg(TAG, "updateFriends username " + userDetails.getUserName(), LogClass.DEBUG_MSG);
 
-                UserDetails userDetails = notif.getUserDetails();
+            appGlobals.logClass.setLogMsg(TAG, "updateFriends request responds", LogClass.DEBUG_MSG);
+            appGlobals.logClass.setLogMsg(TAG, "updateFriends status " + userDetails.getStatus(), LogClass.DEBUG_MSG);
+
+            String notifMsg = "";
+
+            if(type.equals(AppGlobals.NOTIF_FRND_REQ)) {
                 ArrayList<UserDetails> list = new ArrayList<UserDetails>();
                 list.add(userDetails);
-
                 db.insertContactDetails(list);
+                notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_rec);
             } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
-                appGlobals.logClass.setLogMsg(TAG, "updateFriends status " + notif.getStatus(), LogClass.DEBUG_MSG);
-                db.updateContacts(notif.getStatus(), notif.getSender());
+                db.updateContacts(userDetails.getStatus(), notif.getSender());
+                if(userDetails.getStatus() == 1) {
+                    notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_accept);
+                }
             }
+            generateNotification(context, notifMsg);
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in updateFriends " + e.toString(), LogClass.ERROR_MSG);
         }
         Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
         intent.putExtra(EXTRA_MESSAGE, message);
         context.sendBroadcast(intent);
+    }
+
+    /**
+     * Issues a notification to inform the user that server has sent a message.
+     */
+
+    private static void generateNotification(Context context, String message) {
+        int icon = R.mipmap.ic_launcher;
+        long when = System.currentTimeMillis();
+        NotificationManager notificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new Notification(icon, message, when);
+
+        String title = context.getString(R.string.app_name);
+
+        Intent notificationIntent = new Intent(context, LoginActivity.class);
+        // set intent so it does not start a new activity
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent =
+                PendingIntent.getActivity(context, 0, notificationIntent, 0);
+//        notification.setLatestEventInfo(context, title, message, intent);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        // Play default notification sound
+        notification.defaults |= Notification.DEFAULT_SOUND;
+
+        // Vibrate if vibrate is enabled
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        notificationManager.notify(0, notification);
+
     }
 }
