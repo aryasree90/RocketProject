@@ -83,6 +83,8 @@ public class LandingActivity extends AppCompatActivity
             appGlobals.currentFragmentClass = HomeFragment.class;
 
         setFragment(appGlobals.currentFragmentClass);
+
+        appGlobals.findMyLocation(context);
     }
 
     private void setClickListener() {
@@ -176,12 +178,13 @@ public class LandingActivity extends AppCompatActivity
 
         switch(menuItem.getItemId()) {
             case R.id.my_home:
-                Toast.makeText(context, "My Home", Toast.LENGTH_LONG).show();
                 fragmentClass = HomeFragment.class;
                 break;
             case R.id.my_friends:
-                Toast.makeText(context, "My Friends", Toast.LENGTH_LONG).show();
                 fragmentClass = FriendsFragment.class;
+                break;
+            case R.id.location:
+                fragmentClass = LocationFragment.class;
                 break;
             case R.id.about_us:
                 fragmentClass = AboutFragment.class;

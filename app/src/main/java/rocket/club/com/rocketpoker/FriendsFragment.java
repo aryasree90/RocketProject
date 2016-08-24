@@ -132,7 +132,6 @@ public class FriendsFragment extends Fragment {
                         break;
                     case R.id.acceptFriend:
 
-//                            String frnd_mob = searchFriend.getText().toString();
                             if(searchAFriend.isEmpty()) {
                                 appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
                                 return;

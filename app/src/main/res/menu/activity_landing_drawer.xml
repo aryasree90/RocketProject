@@ -11,7 +11,7 @@
             android:icon="@drawable/locate_us"
             android:title="@string/my_friends" />
         <item
-            android:id="@+id/locate_us"
+            android:id="@+id/location"
             android:icon="@drawable/locate_us"
             android:title="@string/locate_us" />
         <item
