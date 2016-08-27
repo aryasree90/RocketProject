@@ -75,6 +75,7 @@
     <string name="title_activity_landing">Landing Activity</string>
     <string name="title_activity_event_detail">Event Detail Activity</string>
     <string name="title_activity_add_new_friend">Add New Friend Activity</string>
+    <string name="title_activity_chat_room">Chat Room Activity</string>
 
     <!--Menu String-->
     <string name="home">Home</string>

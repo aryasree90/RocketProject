@@ -1,13 +1,16 @@
 package rocket.club.com.rocketpoker;
 
+import android.*;
 import android.content.Context;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,13 +24,24 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import rocket.club.com.rocketpoker.classes.ContactClass;
+import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -71,11 +85,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     @Override
     public void onMapReady(GoogleMap gMap) {
 
-        if(!AppGlobals.checkLocationPermission(context))
-            return;
-
         // Getting GoogleMap object from the fragment
         googleMap = gMap;
+
+        if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_COARSE_LOC))
+            return;
+        if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_FINE_LOC))
+            return;
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         // Enabling MyLocation Layer of Google Map
@@ -92,8 +108,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        appGlobals.logClass.setLogMsg(TAG, "Received Location Details from server", LogClass.DEBUG_MSG);
-                        appGlobals.logClass.setLogMsg(TAG, response, LogClass.DEBUG_MSG);
+                        appGlobals.logClass.setLogMsg(TAG, "Received Location Details from server" + response, LogClass.DEBUG_MSG);
+
+                        LoadNewMarker newMarker = new LoadNewMarker(response,
+                                LocationFragment.this);
+                        newMarker.execute();
                     }
                 },
                 new Response.ErrorListener() {
@@ -115,6 +134,96 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         requestQueue.add(stringRequest);
     }
 
+    class LoadNewMarker extends AsyncTask<Void, String, Void> {
+
+        String respString;
+        LocationFragment mapActivity;
+        LatLngBounds.Builder builder = null;
+
+        public LoadNewMarker(String respString, LocationFragment mapActivity) {
+
+            this.respString = respString;
+            this.mapActivity = mapActivity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+
+                JSONArray arr = new JSONArray(respString);
+                int size = arr.length();
+
+                for(int i=0; i<size; i++) {
+
+                    JSONObject obj = arr.getJSONObject(i);
+                    String regMob = obj.getString("reg_mob");
+
+                    DBHelper db = new DBHelper(context);
+                    ContactClass contact = db.getContacts(regMob);
+
+                    publishProgress(obj.getString("user_location"), contact.getContactName());
+                }
+
+            } catch (Exception e) {
+                appGlobals.logClass.setLogMsg(TAG, "Exception in AsyncTask " + e.toString(), LogClass.ERROR_MSG);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+
+            try {
+
+                JSONObject locDet = new JSONObject(values[0]);
+
+                if(mapActivity != null && mapActivity.isVisible()) {
+                    LatLng loc = new LatLng(locDet.getDouble(appGlobals.LAT), locDet.getDouble(appGlobals.LNG));
+
+                    if(builder == null)
+                        builder = new LatLngBounds.Builder();
+
+                    builder.include(loc);
+                    mapActivity.drawMarker(loc, locDet.getString(appGlobals.LOC_NAME), values[1]);
+
+                }
+            } catch(Exception e) {
+                appGlobals.logClass.setLogMsg(TAG, "Exception in Progress Update " + e.toString(), LogClass.ERROR_MSG);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (builder != null) {
+                mapActivity.moveCamera(builder);
+            }
+
+        }
+    }
+
+    private void moveCamera(LatLngBounds.Builder builder) {
+        LatLngBounds bounds = builder.build();
+        int padding = 0; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        googleMap.animateCamera(cu);
+    }
+
+    private void drawMarker(final LatLng markerLatLng, String locName, String personName) {
+
+/*        if (dismissDialog)
+            dismissProgressDialog();*/
+
+        googleMap.addMarker(new MarkerOptions()
+                .position(markerLatLng)
+                .title(locName));
+
+    }
+
     private void startLocationShare() {
         mLocationClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).addConnectionCallbacks(this)
@@ -125,10 +234,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
 
     @Override
     public void onConnected(Bundle bundle) {
-        if(AppGlobals.checkLocationPermission(context)) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    mLocationClient, REQUEST, this); // LocationListener
-        }
+        if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_COARSE_LOC))
+            return;
+        if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_FINE_LOC))
+            return;
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mLocationClient, REQUEST, this); // LocationListener
     }
 
     @Override

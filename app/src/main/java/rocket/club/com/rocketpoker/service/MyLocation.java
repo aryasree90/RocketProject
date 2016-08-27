@@ -55,8 +55,12 @@ public class MyLocation implements LocationService{
 				if (locationListenerNetwork == null) {
 					locationListenerNetwork = new LocationListenerNetwork();
 				}else{
-					if(AppGlobals.checkLocationPermission(context))
-						lm.removeUpdates(locationListenerNetwork);
+					if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_COARSE_LOC))
+						return false;
+					if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_FINE_LOC))
+						return false;
+
+					lm.removeUpdates(locationListenerNetwork);
 				}
 				
 				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
@@ -101,7 +105,9 @@ public class MyLocation implements LocationService{
 		 * if(timer1!=null) timer1.cancel();
 		 */
 		if (lm != null) {
-			if(!AppGlobals.checkLocationPermission(AppGlobals.appContext))
+			if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_COARSE_LOC))
+				return;
+			if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_FINE_LOC))
 				return;
 
 			if (locationListenerGps != null) {
@@ -127,7 +133,9 @@ public class MyLocation implements LocationService{
 				AppGlobals.appGlobals.logClass.setLogMsg(TAG, "Reached onLocationChanged of network listener " + AppGlobals.getCurrentTime(), LogClass.DEBUG_MSG);
 
 				if(location==null)return;
-				if(!AppGlobals.checkLocationPermission(AppGlobals.appContext))
+				if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_COARSE_LOC))
+					return;
+				if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_FINE_LOC))
 					return;
 
 				lm.removeUpdates(this);
@@ -138,6 +146,8 @@ public class MyLocation implements LocationService{
 				// timer1.cancel();
 				//locationResult.gotLocation(location);
 				findLocationNameAsync(location);
+
+				appGlobals.sendLocationToServer(location);
 
 			}catch(Exception ex){
 				ex.printStackTrace();
@@ -168,7 +178,9 @@ public class MyLocation implements LocationService{
 				AppGlobals.appGlobals.logClass.setLogMsg(TAG, "Reached onLocationChanged of gps listener " + AppGlobals.getCurrentTime(), LogClass.DEBUG_MSG);
 
 				if(location==null)return;
-				if(!AppGlobals.checkLocationPermission(AppGlobals.appContext))
+				if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_COARSE_LOC))
+					return;
+				if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_FINE_LOC))
 					return;
 				lm.removeUpdates(this);
 				AppGlobals.appGlobals.logClass.setLogMsg(TAG, "MyLocation::onLocationChanged() : locationListenerGps ::  latitude "
@@ -207,12 +219,16 @@ public class MyLocation implements LocationService{
 		 
 		 Location location=null;
 		 if(lm!=null){
-			 if(!AppGlobals.checkLocationPermission(AppGlobals.appContext)) {
-				 if (network_enabled) {
-					 location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				 } else if (gps_enabled) {
-					 location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-				 }
+
+			 if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_COARSE_LOC))
+				 return null;
+			 if(!AppGlobals.checkLocationPermission(AppGlobals.appContext, AppGlobals.ACCESS_FINE_LOC))
+				 return null;
+
+			 if (network_enabled) {
+				 location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			 } else if (gps_enabled) {
+				 location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			 }
 		 }
 

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/received_msg_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/sender_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sender Name"/>
+
+        <TextView
+            android:id="@+id/chat_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat message comes here"/>
+
+        <TextView
+            android:id="@+id/sender_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="00:00"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sent_msg_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/sent_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat message comes here"/>
+
+        <TextView
+            android:id="@+id/sent_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -123,15 +123,16 @@ public class GooglePlayServiceLocation implements LocationListener,
 		if (servicesConnected(context)) {
 			appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient::getLocation():: "
 								+ "servicesConnected:: true ", LogClass.DEBUG_MSG);
-			if(AppGlobals.checkLocationPermission(context)) {
+			if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_COARSE_LOC))
+				return;
+			if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_FINE_LOC))
+				return;
 				// Get the current location
-				Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);//mLocationClient.getLastLocation();
+			Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);//mLocationClient.getLastLocation();
 
-				appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient::getLocation():: "
-						+ "currentLocation::" + currentLocation, LogClass.DEBUG_MSG);
-				if (currentLocation != null) {
-				}
-			}
+			appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient::getLocation():: "
+					+ "currentLocation::" + currentLocation, LogClass.DEBUG_MSG);
+			if (currentLocation != null) {}
 		}
 	}
 
@@ -221,7 +222,7 @@ public class GooglePlayServiceLocation implements LocationListener,
 						+ location.getLongitude(), LogClass.DEBUG_MSG);
 				// locationResult.gotLocation(location);
 				findLocationNameAsync(location);
-
+				appGlobals.sendLocationToServer(location);
 			}
 		} catch (Exception ex) {
 			appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient::onLocationChanged():: "
@@ -237,13 +238,15 @@ public class GooglePlayServiceLocation implements LocationListener,
 	private void startPeriodicUpdates() {
 		appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient::startPeriodicUpdates()::ENTRY", LogClass.DEBUG_MSG);
 		if (mLocationClient != null) {
-			if(AppGlobals.checkLocationPermission(context)) {
-				appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient Permission allowed", LogClass.DEBUG_MSG);
-				LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, mLocationRequest, this);
-				appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient FusedLocationApi triggered", LogClass.DEBUG_MSG);
-			} else {
-				appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient Permission is not allowed", LogClass.DEBUG_MSG);
-			}
+			if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_COARSE_LOC))
+				return;
+			if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_FINE_LOC))
+				return;
+
+			appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient Permission allowed", LogClass.DEBUG_MSG);
+			LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, mLocationRequest, this);
+			appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient FusedLocationApi triggered", LogClass.DEBUG_MSG);
+
 		} else {
 			appGlobals.logClass.setLogMsg(TAG, "GooglePlayServiceLocationClient mLocationClient is null", LogClass.DEBUG_MSG);
 		}
@@ -271,8 +274,12 @@ public class GooglePlayServiceLocation implements LocationListener,
 
 	public Location getLastKnownLocation() {
 		if (mLocationClient != null) {
-			if(AppGlobals.checkLocationPermission(context))
-				return LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
+			if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_COARSE_LOC))
+				return null;
+			if(!AppGlobals.checkLocationPermission(context, AppGlobals.ACCESS_FINE_LOC))
+				return null;
+
+			return LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 		}
 		return null;
 	}

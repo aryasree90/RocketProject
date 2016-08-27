@@ -69,6 +69,11 @@
         <activity
             android:name=".EventDetailActivity"
             android:label="@string/title_activity_event_detail"></activity>
+        <activity
+            android:name=".ChatRoomActivity"
+            android:label="@string/title_activity_chat_room"></activity>
+
+        <receiver android:name=".receiver.LocationTrigger"></receiver>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"

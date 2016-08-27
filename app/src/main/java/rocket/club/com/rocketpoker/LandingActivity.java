@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -84,7 +83,8 @@ public class LandingActivity extends AppCompatActivity
 
         setFragment(appGlobals.currentFragmentClass);
 
-        appGlobals.findMyLocation(context);
+        AppGlobals.tempActivity = this;
+        appGlobals.startLocationIntent(context);
     }
 
     private void setClickListener() {
@@ -94,14 +94,15 @@ public class LandingActivity extends AppCompatActivity
             public void onClick(View v) {
                 switch(v.getId()) {
                     case R.id.chat_room_img:
-                        Toast.makeText(context, "Chat Room Coming Soon", Toast.LENGTH_LONG).show();
+                        Intent chatRoomIntent = new Intent(context, ChatRoomActivity.class);
+                        startActivity(chatRoomIntent);
                         break;
                     case R.id.invite_to_play:
                         Toast.makeText(context, "Invite Your Friends to club by one click", Toast.LENGTH_LONG).show();
                         break;
                     case R.id.rocket_img:
-                        Class fragmentClass = AboutFragment.class;
-                        setFragment(fragmentClass);
+                        Class fragmentAbout = AboutFragment.class;
+                        setFragment(fragmentAbout);
                         break;
                     case R.id.profileImage:
                         Intent profileIntent = new Intent(context, ProfileActivity.class);
