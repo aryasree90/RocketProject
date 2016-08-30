@@ -21,11 +21,23 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rocket.club.com.rocketpoker.adapter.ChatRoomAdapter;
 import rocket.club.com.rocketpoker.adapter.FriendListAdapter;
@@ -34,6 +46,7 @@ import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 /**
  * Created by Admin on 8/27/2016.
@@ -49,6 +62,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     Toolbar toolBar = null;
     ChatRoomAdapter mAdapter = null;
     View.OnClickListener clickListener = null;
+
+    final String TAG = "Chat Room Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +130,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 msgClass.setLocation(appGlobals.sharedPref.getLocation());
 
                                 DBHelper db = new DBHelper(context);
+                                db.insertMessages(msgClass);
 
-                                if(db.insertMessages(msgClass)) {
-                                    Gson gson = new Gson();
-                                    String str = gson.toJson(msgClass);
+                                Gson gson = new Gson();
+                                String str = gson.toJson(msgClass);
+                                serverCall(str);
 
-                                    Log.d("____", "____" + str);
-                                }
+                                chatMsg.setText("");
+                                mAdapter.notifyDataSetChanged();
                             }
                         }
                         break;
@@ -130,5 +146,50 @@ public class ChatRoomActivity extends AppCompatActivity {
         };
         chatMsg.setOnClickListener(clickListener);
         sendMsg.setOnClickListener(clickListener);
+    }
+
+    private void serverCall(final String msgJson) {
+        final String VALIDATION_URL = AppGlobals.SERVER_URL + "chatRoom.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        appGlobals.logClass.setLogMsg(TAG, "Response from server " + response , LogClass.DEBUG_MSG);
+
+                        try {
+                            JSONArray msgArr = new JSONArray(response);
+                            JSONObject msgObj = msgArr.getJSONObject(0);
+
+                            String msgId = msgObj.getString("msgId");
+
+                            JSONObject msgDet = new JSONObject(msgObj.getString("msgJson"));
+                            String timeStamp = msgDet.getString("time");
+
+                            DBHelper db = new DBHelper(context);
+                            db.updateMessages(msgId, timeStamp);
+
+                        } catch(Exception e) {
+                            appGlobals.logClass.setLogMsg(TAG, "Exception in response" + e.toString(), LogClass.ERROR_MSG);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<String,String>();
+                map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                map.put("msgJson", msgJson);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
     }
 }

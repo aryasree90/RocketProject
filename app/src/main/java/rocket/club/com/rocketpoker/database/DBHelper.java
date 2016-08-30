@@ -29,18 +29,19 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String nickName = "frndNickName";
     public static final String status = "status";
 
+    public static final String msgId = "msgId";
     public static final String senderMob = "senderMob";
     public static final String message = "message";
     public static final String time = "time";
     public static final String location = "location";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + friendsTable + "(" + _id +
-            " integer primary key, " + mobile + " text, " + userName + " text, " + nickName +
-            " text, " + status + " integer)";
+            " integer primary key autoincrement not null, " + mobile + " text, " + userName +
+            " text, " + nickName + " text, " + status + " integer)";
 
     public static final String CREATE_MSG_TABLE = "CREATE TABLE " + messageTable + "(" + _id +
-            " integer primary key, " + senderMob + " text, " + message + " text, " + time +
-            " text, " + location + " integer)";
+            " integer primary key autoincrement not null, " + msgId + " integer, " + senderMob +
+            " text, " + message + " text, " + time + " text, " + location + " integer)";
 
     public static final String SELECT_ALL_FRIENDS = "SELECT * FROM " + friendsTable;
     public static final String SELECT_PENDING = "SELECT * FROM " + friendsTable + " WHERE " +
@@ -92,6 +93,8 @@ public class DBHelper extends SQLiteOpenHelper {
         } else {
             db.delete(friendsTable, where, null);
         }
+        if(db != null)
+            db.close();
     }
 
     public ArrayList<ContactClass> getContacts(int type) {
@@ -178,6 +181,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public void updateMessages(String msgId, String timeStamp) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        final String where = time + "=" + timeStamp;
+
+        ContentValues cv = new ContentValues();
+        cv.put(this.msgId, msgId);
+        db.update(messageTable, cv, where, null);
+
+        if(db != null)
+            db.close();
+    }
+
     public ArrayList<ChatListClass> getMessages() {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -191,12 +206,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 String msg = res.getString(res.getColumnIndex(message));
                 String msgTime = res.getString(res.getColumnIndex(time));
                 String msgLoc = res.getString(res.getColumnIndex(location));
+                String msgId = res.getString(res.getColumnIndex(this.msgId));
 
                 ChatListClass chatListClass = new ChatListClass();
                 chatListClass.setSenderMob(msgSenderMob);
                 chatListClass.setMsg(msg);
                 chatListClass.setTime(Long.parseLong(msgTime));
                 chatListClass.setLocation(msgLoc);
+                chatListClass.setMsgId(msgId);
 
                 chatList.add(chatListClass);
 

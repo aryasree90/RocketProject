@@ -102,6 +102,7 @@ public class AppGlobals {
     //Notification keys
     public static final String NOTIF_FRND_REQ = "frnd_req";
     public static final String NOTIF_FRND_REQ_RESP = "frnd_req_resp";
+    public static final String CHAT_ROOM = "chat_room";
 
 
     public static final String AUTO_SMS_READER =

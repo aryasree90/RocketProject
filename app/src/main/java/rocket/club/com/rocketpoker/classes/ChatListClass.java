@@ -9,6 +9,7 @@ public class ChatListClass {
     private String msg;
     private long time;
     private String location;
+    private String msgId;
 
     public String getSenderMob() {
         return senderMob;
@@ -40,5 +41,13 @@ public class ChatListClass {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 }
