@@ -32,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.classes.ContactClass;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
@@ -177,18 +179,18 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
             super.onProgressUpdate(values);
 
             try {
-
-                JSONObject locDet = new JSONObject(values[0]);
+                Gson gson = new Gson();
+                LocationClass locClass = gson.fromJson(values[0], LocationClass.class);
 
                 if(mapActivity != null && mapActivity.isVisible()) {
-                    LatLng loc = new LatLng(locDet.getDouble(appGlobals.LAT), locDet.getDouble(appGlobals.LNG));
+                    LatLng loc = new LatLng(Double.valueOf(locClass.getLat()), Double.valueOf(locClass.getLng()));
 
                     if(builder == null)
                         builder = new LatLngBounds.Builder();
 
                     builder.include(loc);
-                    mapActivity.drawMarker(loc, locDet.getString(appGlobals.LOC_NAME), values[1]);
-
+                    String snippet = values[1] + " " + AppGlobals.convertTime(locClass.getTimeStamp());
+                    mapActivity.drawMarker(loc, locClass.getLoc_name(), snippet);
                 }
             } catch(Exception e) {
                 appGlobals.logClass.setLogMsg(TAG, "Exception in Progress Update " + e.toString(), LogClass.ERROR_MSG);
@@ -213,14 +215,14 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         googleMap.animateCamera(cu);
     }
 
-    private void drawMarker(final LatLng markerLatLng, String locName, String personName) {
+    private void drawMarker(final LatLng markerLatLng, String locName, String snippet) {
 
 /*        if (dismissDialog)
             dismissProgressDialog();*/
 
         googleMap.addMarker(new MarkerOptions()
                 .position(markerLatLng)
-                .title(locName));
+                .title(locName)).setSnippet(snippet);
 
     }
 

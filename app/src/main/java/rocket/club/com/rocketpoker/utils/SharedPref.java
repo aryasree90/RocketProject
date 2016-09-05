@@ -3,6 +3,10 @@ package rocket.club.com.rocketpoker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.JsonObject;
+
+import rocket.club.com.rocketpoker.classes.LocationClass;
+
 public class SharedPref {
 
     SharedPreferences pref;

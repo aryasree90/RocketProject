@@ -5,10 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 
@@ -170,10 +174,19 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
+
+        if(msgClass.getMsgId() != null && !TextUtils.isEmpty(msgClass.getMsgId())) {
+            contentValues.put(this.msgId, msgClass.getMsgId());
+        }
+
         contentValues.put(this.senderMob, msgClass.getSenderMob());
         contentValues.put(this.message, msgClass.getMsg());
         contentValues.put(this.time, msgClass.getTime());
-        contentValues.put(this.location, msgClass.getLocation());
+
+        LocationClass locClass = msgClass.getLocation();
+        Gson gson = new Gson();
+        String loc = gson.toJson(locClass);
+        contentValues.put(this.location, loc);
         db.insert(messageTable, null, contentValues);
 
         if(db != null)
@@ -212,7 +225,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 chatListClass.setSenderMob(msgSenderMob);
                 chatListClass.setMsg(msg);
                 chatListClass.setTime(Long.parseLong(msgTime));
-                chatListClass.setLocation(msgLoc);
+
+                Gson gson = new Gson();
+                LocationClass locClass = gson.fromJson(msgLoc, LocationClass.class);
+                chatListClass.setLocation(locClass);
                 chatListClass.setMsgId(msgId);
 
                 chatList.add(chatListClass);

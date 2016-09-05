@@ -1,5 +1,7 @@
 package rocket.club.com.rocketpoker.classes;
 
+import com.google.gson.JsonObject;
+
 /**
  * Created by Admin on 8/27/2016.
  */
@@ -8,7 +10,7 @@ public class ChatListClass {
     private String senderMob;
     private String msg;
     private long time;
-    private String location;
+    private LocationClass location;
     private String msgId;
 
     public String getSenderMob() {
@@ -35,11 +37,11 @@ public class ChatListClass {
         this.time = time;
     }
 
-    public String getLocation() {
+    public LocationClass getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(LocationClass location) {
         this.location = location;
     }
 

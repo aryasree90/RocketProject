@@ -29,11 +29,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +48,7 @@ import rocket.club.com.rocketpoker.adapter.FriendListAdapter;
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
@@ -127,12 +132,15 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 msgClass.setSenderMob(mob);
                                 msgClass.setMsg(msg);
                                 msgClass.setTime(System.currentTimeMillis());
-                                msgClass.setLocation(appGlobals.sharedPref.getLocation());
+//                                msgClass.setLocation(appGlobals.sharedPref.getLocation());
+
+                                Gson gson = new Gson();
+                                LocationClass locClass = gson.fromJson(appGlobals.sharedPref.getLocation(), LocationClass.class);
+                                msgClass.setLocation(locClass);
 
                                 DBHelper db = new DBHelper(context);
                                 db.insertMessages(msgClass);
 
-                                Gson gson = new Gson();
                                 String str = gson.toJson(msgClass);
                                 serverCall(str);
 
@@ -157,7 +165,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                         appGlobals.logClass.setLogMsg(TAG, "Response from server " + response , LogClass.DEBUG_MSG);
 
                         try {
-                            JSONArray msgArr = new JSONArray(response);
+                            /*JSONArray msgArr = new JSONArray(response);
                             JSONObject msgObj = msgArr.getJSONObject(0);
 
                             String msgId = msgObj.getString("msgId");
@@ -166,7 +174,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             String timeStamp = msgDet.getString("time");
 
                             DBHelper db = new DBHelper(context);
-                            db.updateMessages(msgId, timeStamp);
+                            db.updateMessages(msgId, timeStamp);*/
 
                         } catch(Exception e) {
                             appGlobals.logClass.setLogMsg(TAG, "Exception in response" + e.toString(), LogClass.ERROR_MSG);

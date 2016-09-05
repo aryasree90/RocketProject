@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.ConnectionDetector;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.receiver.LocationTrigger;
 import rocket.club.com.rocketpoker.service.GooglePlayServiceLocation;
 import rocket.club.com.rocketpoker.service.LocationService;
@@ -150,9 +152,12 @@ public class AppGlobals {
     }
 
     public static String getCurrentTime() {
-        String time = (String) DateFormat.format("hh:mm a",
-                System.currentTimeMillis());
+        return convertTime(System.currentTimeMillis());
+    }
 
+
+    public static String convertTime(long timeStamp) {
+        String time = (String) DateFormat.format("hh:mm a", timeStamp);
         return time;
     }
 
@@ -226,10 +231,20 @@ public class AppGlobals {
 
     public void sendLocationToServer(Location location) {
 
-        final JsonObject loc = new JsonObject();
+        /*final JsonObject loc = new JsonObject();
         loc.addProperty(LAT, location.getLatitude());
         loc.addProperty(LNG, location.getLongitude());
-        loc.addProperty(LOC_NAME, getLocality(location));
+        loc.addProperty(LOC_NAME, getLocality(location));*/
+
+        String lat = String.valueOf(location.getLatitude());
+        String lng = String.valueOf(location.getLongitude());
+        String loc_name = getLocality(location);
+
+        LocationClass locClass = new LocationClass();
+        locClass.setLocation(lat, lng, loc_name, System.currentTimeMillis());
+
+        Gson gson = new Gson();
+        final String loc = gson.toJson(locClass);
 
         appGlobals.sharedPref.setLocation(loc.toString());
 
@@ -253,7 +268,7 @@ public class AppGlobals {
                 Map<String,String> map = new HashMap<String,String>();
                 map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                 map.put("task", appGlobals.UPDATE_LOCATION);
-                map.put("locDet", loc.toString());
+                map.put("locDet", loc);
                 return map;
             }
         };

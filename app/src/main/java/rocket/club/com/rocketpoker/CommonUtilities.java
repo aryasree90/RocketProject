@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.classes.ChatListClass;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.NotifClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
@@ -115,8 +116,12 @@ public final class CommonUtilities {
             newChatList.setMsg(msgDet.getString("msg"));
             newChatList.setSenderMob(msgDet.getString("senderMob"));
 
-            if(msgDet.has("location"))
-                newChatList.setLocation(msgDet.getString("location"));
+            if(msgDet.has("location")) {
+//                newChatList.setLocation(msgDet.getString("location"));
+                Gson gson = new Gson();
+                LocationClass locClass = gson.fromJson(msgDet.getString("location"), LocationClass.class);
+                newChatList.setLocation(locClass);
+            }
 
             DBHelper db = new DBHelper(context);
             db.insertMessages(newChatList);
