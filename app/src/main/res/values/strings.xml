@@ -40,6 +40,7 @@
     <string name="empty_frnd_req">You have 0 Friend Request</string>
     <string name="empty_service">No Services</string>
     <string name="empty_events">No Events</string>
+    <string name="skip">Skip >></string>
     <string-array name="gender_list">
         <item><string name="male">Male</string></item>
         <item><string name="female">Female</string></item>

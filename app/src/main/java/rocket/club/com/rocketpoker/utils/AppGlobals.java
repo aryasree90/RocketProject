@@ -74,6 +74,7 @@ public class AppGlobals {
 
     private LocationService.LocationResult locationResult = null;
     LocationService locationService = null;
+    public static boolean inChatRoom = false;
 
     public final static int PERMISSION_REQ_CODE = 111;
 
@@ -109,6 +110,8 @@ public class AppGlobals {
 
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";
+
+
 
     // methods
 
@@ -206,10 +209,11 @@ public class AppGlobals {
         locationService.getLocation(context, locationResult);
     }
 
-    private void createLocationService(Context context) {
+    public void createLocationService(Context context) {
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion >= Build.VERSION_CODES.GINGERBREAD) {
             locationService = GooglePlayServiceLocation.getInstance();
+
             if (!locationService.servicesConnected(context)) {
                 locationService = MyLocation.getInstance();
             }
@@ -221,7 +225,6 @@ public class AppGlobals {
     public void startLocationIntent(Context context) {
 
         final long firstTime = System.currentTimeMillis();
-        final long intervalTime = 5 * oneSecond;   // TODO Every 15 minutes
 
         Intent intent = new Intent(context, LocationTrigger.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 234324243, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -230,11 +233,6 @@ public class AppGlobals {
     }
 
     public void sendLocationToServer(Location location) {
-
-        /*final JsonObject loc = new JsonObject();
-        loc.addProperty(LAT, location.getLatitude());
-        loc.addProperty(LNG, location.getLongitude());
-        loc.addProperty(LOC_NAME, getLocality(location));*/
 
         String lat = String.valueOf(location.getLatitude());
         String lng = String.valueOf(location.getLongitude());

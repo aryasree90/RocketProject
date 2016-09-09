@@ -2,7 +2,10 @@ package rocket.club.com.rocketpoker;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -53,6 +57,9 @@ import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
+import static rocket.club.com.rocketpoker.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static rocket.club.com.rocketpoker.CommonUtilities.EXTRA_MESSAGE;
+
 /**
  * Created by Admin on 8/27/2016.
  */
@@ -67,6 +74,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     Toolbar toolBar = null;
     ChatRoomAdapter mAdapter = null;
     View.OnClickListener clickListener = null;
+    List<ChatListClass> chatList = null;
+    public static final String CHAT_MESSAGE = "ChatMessage";
 
     final String TAG = "Chat Room Activity";
 
@@ -100,7 +109,16 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        List<ChatListClass> chatList= new ArrayList<ChatListClass>();
+        IntentFilter chatMsgFilter = new IntentFilter(AppGlobals.CHAT_ROOM);
+        registerReceiver(mHandleMessageReceiver, chatMsgFilter);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        chatList = new ArrayList<ChatListClass>();
         try {
             DBHelper db = new DBHelper(context);
             chatList = db.getMessages();
@@ -112,6 +130,22 @@ public class ChatRoomActivity extends AppCompatActivity {
         chatRecyclerView.setLayoutManager(mLayoutManager);
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(mAdapter);
+
+        AppGlobals.inChatRoom = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        AppGlobals.inChatRoom = false;
+
+        try {
+            unregisterReceiver(mHandleMessageReceiver);
+            GCMRegistrar.onDestroy(this);
+        } catch (Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error > " + e.getMessage(), LogClass.ERROR_MSG);
+        }
     }
 
     private void setClickListener() {
@@ -145,6 +179,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 serverCall(str);
 
                                 chatMsg.setText("");
+                                chatList.add(msgClass);
                                 mAdapter.notifyDataSetChanged();
                             }
                         }
@@ -165,7 +200,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                         appGlobals.logClass.setLogMsg(TAG, "Response from server " + response , LogClass.DEBUG_MSG);
 
                         try {
-                            /*JSONArray msgArr = new JSONArray(response);
+
+                            JSONArray msgArr = new JSONArray(response);
                             JSONObject msgObj = msgArr.getJSONObject(0);
 
                             String msgId = msgObj.getString("msgId");
@@ -174,7 +210,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             String timeStamp = msgDet.getString("time");
 
                             DBHelper db = new DBHelper(context);
-                            db.updateMessages(msgId, timeStamp);*/
+                            db.updateMessages(msgId, timeStamp);
 
                         } catch(Exception e) {
                             appGlobals.logClass.setLogMsg(TAG, "Exception in response" + e.toString(), LogClass.ERROR_MSG);
@@ -198,6 +234,46 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
-
     }
+
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent.getAction().equals(AppGlobals.CHAT_ROOM)) {
+
+                try {
+                    String message = intent.getExtras().getString(CHAT_MESSAGE, "");
+                    JSONArray msgArr = new JSONArray(message);
+                    JSONObject msgObj = msgArr.getJSONObject(0);
+
+                    String msgId = msgObj.getString("msgId");
+
+                    JSONObject msgDet = new JSONObject(msgObj.getString("msgJson"));
+                    String timeStamp = msgDet.getString("time");
+
+                    ChatListClass newChatList = new ChatListClass();
+                    newChatList.setMsgId(msgId);
+                    newChatList.setTime(Long.parseLong(timeStamp));
+                    newChatList.setMsg(msgDet.getString("msg"));
+                    newChatList.setSenderMob(msgDet.getString("senderMob"));
+
+                    if(msgDet.has("location")) {
+                        Gson gson = new Gson();
+                        LocationClass locClass = gson.fromJson(msgDet.getString("location"), LocationClass.class);
+                        newChatList.setLocation(locClass);
+                    }
+
+                    if(mAdapter != null && chatList != null) {
+                        chatList.add(newChatList);
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                } catch(Exception e) {
+                    appGlobals.logClass.setLogMsg(TAG, "Exception in auto set otp " + e.toString(), LogClass.ERROR_MSG);
+                }
+
+            }
+        }
+    };
 }

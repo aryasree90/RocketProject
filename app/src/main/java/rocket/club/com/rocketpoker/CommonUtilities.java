@@ -117,7 +117,6 @@ public final class CommonUtilities {
             newChatList.setSenderMob(msgDet.getString("senderMob"));
 
             if(msgDet.has("location")) {
-//                newChatList.setLocation(msgDet.getString("location"));
                 Gson gson = new Gson();
                 LocationClass locClass = gson.fromJson(msgDet.getString("location"), LocationClass.class);
                 newChatList.setLocation(locClass);
@@ -126,8 +125,14 @@ public final class CommonUtilities {
             DBHelper db = new DBHelper(context);
             db.insertMessages(newChatList);
 
-            String notifMsg = "You have received a message from " + newChatList.getSenderMob();
-            generateNotification(context, notifMsg);
+            if(AppGlobals.inChatRoom) {
+                Intent autoIntent = new Intent(AppGlobals.CHAT_ROOM);
+                autoIntent.putExtra(ChatRoomActivity.CHAT_MESSAGE, message);
+                context.sendBroadcast(autoIntent);
+            } else {
+                String notifMsg = "You have received a message from " + newChatList.getSenderMob();
+                generateNotification(context, notifMsg);
+            }
 
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in response" + e.toString(), LogClass.ERROR_MSG);

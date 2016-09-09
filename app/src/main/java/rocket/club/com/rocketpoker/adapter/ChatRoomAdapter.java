@@ -70,20 +70,20 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         ChatListClass itemList = chatList.get(position);
 
-
+        String time = AppGlobals.convertTime(itemList.getTime());
         if(itemList.getSenderMob().equals(loginNum)) {
             holder.sentMsgLayout.setVisibility(View.VISIBLE);
             holder.receivedMsgLayout.setVisibility(View.GONE);
 
             holder.sent_msg.setText(itemList.getMsg());
-            holder.sent_time.setText(""+itemList.getTime());
+            holder.sent_time.setText(time);
         } else {
             holder.sentMsgLayout.setVisibility(View.GONE);
             holder.receivedMsgLayout.setVisibility(View.VISIBLE);
 
             holder.rec_senderId.setText(itemList.getSenderMob());
             holder.rec_msg.setText(itemList.getMsg());
-            holder.rec_time.setText(""+itemList.getTime());
+            holder.rec_time.setText(time);
         }
     }
 

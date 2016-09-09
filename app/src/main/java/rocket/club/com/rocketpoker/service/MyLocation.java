@@ -37,7 +37,8 @@ public class MyLocation implements LocationService{
 		// use LocationResult callback class to pass location value from
 		// MyLocation to user code.
 		AppGlobals.appGlobals.logClass.setLogMsg(TAG, "MyLocation::getLocation() : Entry", LogClass.DEBUG_MSG);
-		if (lm == null) {
+
+			if (lm == null) {
 			lm = (LocationManager) context
 					.getSystemService(Context.LOCATION_SERVICE);
 			if (lm == null) {
