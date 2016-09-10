@@ -132,14 +132,14 @@ public class FriendsFragment extends Fragment {
                         break;
                     case R.id.acceptFriend:
                             friendNotFoundTxt.setVisibility(View.GONE);
-                            if(searchAFriend.isEmpty()) {
+                            /*if(searchAFriend.isEmpty()) {
                                 appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
                                 return;
-                            }
+                            }*/
 
                             Map<String, String> frnd_map = new HashMap<String, String>();
                             frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                            frnd_map.put("frnd_mobile", searchAFriend);
+                            frnd_map.put("frnd_mobile", friendMobile.getText().toString());
                             frnd_map.put("task", appGlobals.NEW_FRND_REQ);
 
                             serverCall(frnd_map, FRIEND_REQ_URL);

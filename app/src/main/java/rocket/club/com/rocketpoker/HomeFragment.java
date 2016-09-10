@@ -1,33 +1,52 @@
 package rocket.club.com.rocketpoker;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gcm.GCMRegistrar;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.adapter.EventListAdapter;
 import rocket.club.com.rocketpoker.adapter.NewFriendListAdapter;
 import rocket.club.com.rocketpoker.adapter.ServiceListAdapter;
+import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 public class HomeFragment extends Fragment {
 
     Context context = null;
+    AppGlobals appGlobals = null;
     EventListAdapter eventAdapter = null;
     ServiceListAdapter serviceAdapter = null;
     NewFriendListAdapter newFriendAdapter = null;
     ViewPager eventList = null, serviceList = null, newFriendsList = null;
     TextView emptyFriend = null, emptyEvent = null, emptyService = null;
+    DBHelper db = null;
+
+    ArrayList<ContactClass> userList = null;
+
+    private static final String TAG = "Home Fragment";
     int[] mResources = {
             R.drawable.event1,
             R.drawable.event2,
@@ -51,8 +70,9 @@ public class HomeFragment extends Fragment {
 
     private void initializeWidgets(View view) {
         context = getActivity();
+        appGlobals = AppGlobals.getInstance(context);
 
-        DBHelper db = new DBHelper(context);
+        db = new DBHelper(context);
 
         eventList = (ViewPager) view.findViewById(R.id.eventList);
         emptyEvent = (TextView) view.findViewById(R.id.emptyEventItem);
@@ -80,18 +100,53 @@ public class HomeFragment extends Fragment {
             emptyService.setVisibility(View.VISIBLE);
         }
 
-        ArrayList<ContactClass> userList = db.getContacts(AppGlobals.PENDING_FRIENDS);
         newFriendsList = (ViewPager) view.findViewById(R.id.newFriendsList);
         emptyFriend = (TextView) view.findViewById(R.id.emptyFriendItem);
 
-        if(userList != null && userList.size() > 0) {
-            newFriendsList.setVisibility(View.VISIBLE);
-            emptyFriend.setVisibility(View.GONE);
-            newFriendAdapter = new NewFriendListAdapter(context, userList, clickListener);
-            newFriendsList.setAdapter(newFriendAdapter);
-        } else{
-            newFriendsList.setVisibility(View.GONE);
-            emptyFriend.setVisibility(View.VISIBLE);
+        refreshFriendReqList();
+    }
+
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent.getAction().equals(AppGlobals.NOTIF_FRND_REQ)) {
+                refreshFriendReqList();
+            }
+        }
+    };
+
+    private void refreshFriendReqList() {
+        try {
+            userList = db.getContacts(AppGlobals.PENDING_FRIENDS);
+            if(userList != null && userList.size() > 0) {
+                newFriendsList.setVisibility(View.VISIBLE);
+                emptyFriend.setVisibility(View.GONE);
+                newFriendAdapter = new NewFriendListAdapter(context, userList, clickListener);
+                newFriendsList.setAdapter(newFriendAdapter);
+            } else{
+                newFriendsList.setVisibility(View.GONE);
+                emptyFriend.setVisibility(View.VISIBLE);
+            }
+        } catch(Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "Exception in broadcast receiver " + e.toString(), LogClass.ERROR_MSG);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter frndReqMsgFilter = new IntentFilter(AppGlobals.NOTIF_FRND_REQ);
+        context.registerReceiver(mHandleMessageReceiver, frndReqMsgFilter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroy();
+        try {
+            context.unregisterReceiver(mHandleMessageReceiver);
+        } catch (Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error > " + e.getMessage(), LogClass.ERROR_MSG);
         }
     }
 }
