@@ -57,7 +57,7 @@ public class FriendsFragment extends Fragment {
     Dialog dialog = null;
     Button searchBtn = null;
     LinearLayout showFriendDetails = null;
-    TextView friendName, friendMobile;
+    TextView friendName, friendMobile,friendNotFoundTxt;
     ArrayList<UserDetails> list = null;
     String searchAFriend = "";
 
@@ -132,7 +132,7 @@ public class FriendsFragment extends Fragment {
                         break;
                     case R.id.acceptFriend:
 
-//                            String frnd_mob = searchFriend.getText().toString();
+                            friendNotFoundTxt.setVisibility(View.GONE);
                             if(searchAFriend.isEmpty()) {
                                 appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
                                 return;
@@ -206,6 +206,10 @@ public class FriendsFragment extends Fragment {
                                 showFriendDetails.setVisibility(View.VISIBLE);
                             } catch(Exception e) {
                                 appGlobals.toastMsg(context, getString(R.string.friend_not_found), appGlobals.LENGTH_LONG);
+                                searchFriend.setText("");
+                                friendNotFoundTxt.setVisibility(View.VISIBLE);
+                                searchAFriend = "";
+                                searchFriend.requestFocus();
                             }
                         }
                     }
@@ -239,9 +243,11 @@ public class FriendsFragment extends Fragment {
         TextView acceptBtn= (TextView) dialog.findViewById(R.id.acceptFriend);
         TextView rejectBtn= (TextView) dialog.findViewById(R.id.rejectFriend);
         showFriendDetails = (LinearLayout) dialog.findViewById(R.id.show_friend_details);
+        friendNotFoundTxt = (TextView) dialog.findViewById(R.id.txt_friend_not_found);
 
         friendName = (TextView) dialog.findViewById(R.id.friendName);
         friendMobile = (TextView) dialog.findViewById(R.id.friendNumber);
+        searchFriend.requestFocus();
 
         acceptBtn.setText(getString(R.string.send_req));
         rejectBtn.setText(getString(R.string.btn_clear1));
@@ -257,6 +263,7 @@ public class FriendsFragment extends Fragment {
         showFriendDetails.setVisibility(View.INVISIBLE);
         searchFriend.setText("");
         searchFriend.setEnabled(true);
+        friendNotFoundTxt.setVisibility(View.GONE);
         dialog.cancel();
     }
 }

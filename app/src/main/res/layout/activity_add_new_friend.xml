@@ -32,6 +32,15 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_friend_not_found"
+        android:text="@string/friend_not_found"
+        android:visibility="invisible"
+        android:textSize="15sp"
+        android:textColor="@color/colorPrimary"/>
+
     <LinearLayout
         android:id="@+id/show_friend_details"
         android:layout_width="match_parent"
