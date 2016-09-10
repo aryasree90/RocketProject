@@ -17,6 +17,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_margin="5dp"
         android:layout_height="50dp"
         android:weightSum="1">
 
@@ -24,14 +25,15 @@
             android:id="@+id/chat_msg"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.80"/>
+            android:layout_weight="0.85"/>
 
         <ImageButton
             android:id="@+id/send_msg"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.20"
-            android:src="@mipmap/right_arrow"/>
+            android:layout_weight="0.15"
+            android:background="@color/common_plus_signin_btn_text_light_disabled"
+            android:src="@mipmap/ic_go"/>
 
     </LinearLayout>
 

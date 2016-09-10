@@ -7,11 +7,11 @@
 
         <item
             android:id="@+id/my_home"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_home_black"
             android:title="@string/home" />
         <item
             android:id="@+id/my_friends"
-            android:icon="@drawable/locate_us"
+            android:icon="@mipmap/ic_people_black"
             android:title="@string/my_friends" />
         <item
             android:id="@+id/location"
@@ -19,11 +19,11 @@
             android:title="@string/locate_us" />
         <item
             android:id="@+id/transactions"
-            android:icon="@drawable/locate_us"
+            android:icon="@mipmap/ic_transactions"
             android:title="@string/transactions" />
         <item
             android:id="@+id/settings"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@mipmap/ic_settings"
             android:title="@string/settings" />
     </group>
 
@@ -34,19 +34,19 @@
                 android:id="@+id/common_group">
                 <item
                     android:id="@+id/about_us"
-                    android:icon="@drawable/ic_menu_share"
+                    android:icon="@mipmap/ic_about_us"
                     android:title="@string/about_us" />
-                <item
+             <!--   <item
                     android:id="@+id/gallery"
                     android:icon="@drawable/ic_menu_send"
                     android:title="@string/gallery" />
                 <item
                     android:id="@+id/calendar"
                     android:icon="@drawable/ic_menu_send"
-                    android:title="@string/calendar" />
+                    android:title="@string/calendar" /> -->
                 <item
                     android:id="@+id/contact_us"
-                    android:icon="@drawable/ic_menu_send"
+                    android:icon="@mipmap/ic_contact_us"
                     android:title="@string/contact_us" />
             </group>
         </menu>

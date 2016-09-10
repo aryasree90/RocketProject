@@ -55,7 +55,7 @@ public class FriendsFragment extends Fragment {
     EditText searchFriend = null;
 
     Dialog dialog = null;
-    Button searchBtn = null;
+    ImageButton searchBtn = null;
     LinearLayout showFriendDetails = null;
     TextView friendName, friendMobile,friendNotFoundTxt;
     ArrayList<UserDetails> list = null;
@@ -237,7 +237,7 @@ public class FriendsFragment extends Fragment {
 
         dialog.setTitle(getString(R.string.search_friends));
 
-        searchBtn = (Button) dialog.findViewById(R.id.searchBtn);
+        searchBtn = (ImageButton) dialog.findViewById(R.id.searchBtn);
         searchFriend = (EditText) dialog.findViewById(R.id.searchText);
         TextView acceptBtn= (TextView) dialog.findViewById(R.id.acceptFriend);
         TextView rejectBtn= (TextView) dialog.findViewById(R.id.rejectFriend);
