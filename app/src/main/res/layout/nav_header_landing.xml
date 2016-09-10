@@ -3,7 +3,7 @@
     android:id="@+id/header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#81B456"
+    android:background="@color/common_plus_signin_btn_text_light_default"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="16dp"
@@ -12,11 +12,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+   <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
+       android:visibility="gone"
         android:src="@drawable/default_profile" />
 
     <TextView

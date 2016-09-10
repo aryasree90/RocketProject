@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
@@ -14,13 +15,23 @@
         android:layout_margin="5dp"
         android:weightSum="1">
 
+
+
+
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/ccp"
+        android:layout_weight="0.30"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:defaultNameCode="IN"
+        app:textSize="12sp"/>
         <EditText
             android:id="@+id/searchText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/search_with_mob"
             android:inputType="number"
-            android:layout_weight="0.80"/>
+            android:layout_weight="0.60"/>
 
         <Button
             android:id="@+id/searchBtn"
@@ -28,7 +39,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorBlueButton"
             android:text="@string/go_search"
-            android:layout_weight="0.20" />
+            android:layout_weight="0.10" />
 
     </LinearLayout>
 

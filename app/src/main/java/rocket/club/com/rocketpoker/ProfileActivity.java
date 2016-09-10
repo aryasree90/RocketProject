@@ -313,5 +313,7 @@ public class ProfileActivity extends ActionBarActivity {
         fullName.setText("");
         email.setText("");
         nickName.setText("");
+
+
     }
 }

@@ -51,7 +51,7 @@
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name">
-            <intent-filter>
+           <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -68,7 +68,8 @@
             android:label="@string/title_activity_landing"></activity>
         <activity
             android:name=".EventDetailActivity"
-            android:label="@string/title_activity_event_detail"></activity>
+            android:label="@string/title_activity_event_detail">
+        </activity>
         <activity
             android:name=".ChatRoomActivity"
             android:label="@string/title_activity_chat_room"></activity>

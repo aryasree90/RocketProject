@@ -13,11 +13,17 @@
 
     <ImageView
         android:id="@+id/userProfilePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/content_description"
-        android:src="@drawable/success"/>
+        android:src="@drawable/logo"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Full Name"
+        android:layout_gravity="left"/>
 
     <EditText
         android:id="@+id/fullName"

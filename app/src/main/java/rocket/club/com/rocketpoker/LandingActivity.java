@@ -78,7 +78,7 @@ public class LandingActivity extends AppCompatActivity
         View headerView = getLayoutInflater().inflate(R.layout.nav_header_landing, navigationView, false);
         navigationView.addHeaderView(headerView);
 
-        circularImageView = (CircleImageView) headerView.findViewById(R.id.profileImage);
+       circularImageView = (CircleImageView) headerView.findViewById(R.id.profileImage);
 
         if(appGlobals.currentFragmentClass == null)
             appGlobals.currentFragmentClass = HomeFragment.class;

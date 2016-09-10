@@ -21,6 +21,7 @@
         <LinearLayout
             android:id="@+id/eventLayout"
             android:layout_width="match_parent"
+            android:background="@drawable/rounded_cornered_layout"
             android:layout_height="220dp"
             android:orientation="horizontal"
             android:padding="5dp"
@@ -47,6 +48,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@drawable/rounded_cornered_layout"
             android:layout_below="@+id/eventLayout"
             android:layout_marginTop="10dp"
             android:padding="5dp"
@@ -72,6 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:orientation="horizontal"
+            android:background="@drawable/rounded_cornered_layout"
             android:layout_below="@+id/newFriendsLayout"
             android:layout_marginTop="10dp"
             android:padding="5dp"
