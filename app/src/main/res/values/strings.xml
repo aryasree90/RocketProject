@@ -40,6 +40,7 @@
     <string name="empty_frnd_req">You have 0 Friend Request</string>
     <string name="empty_service">No Services</string>
     <string name="empty_events">No Events</string>
+    <string name="skip">Skip >></string>
     <string-array name="gender_list">
         <item><string name="male">Male</string></item>
         <item><string name="female">Female</string></item>
@@ -75,6 +76,7 @@
     <string name="title_activity_landing">Landing Activity</string>
     <string name="title_activity_event_detail">Event Detail Activity</string>
     <string name="title_activity_add_new_friend">Add New Friend Activity</string>
+    <string name="title_activity_chat_room">Chat Room Activity</string>
 
     <!--Menu String-->
     <string name="home">Home</string>

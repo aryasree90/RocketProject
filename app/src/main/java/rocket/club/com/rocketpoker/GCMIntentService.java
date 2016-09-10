@@ -18,6 +18,7 @@ import rocket.club.com.rocketpoker.utils.AppGlobals;
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 import static rocket.club.com.rocketpoker.CommonUtilities.displayMessage;
 import static rocket.club.com.rocketpoker.CommonUtilities.updateFriends;
+import static rocket.club.com.rocketpoker.CommonUtilities.getChatMessages;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
@@ -69,6 +70,9 @@ public class GCMIntentService extends GCMBaseIntentService {
         } else if(intent.hasExtra(AppGlobals.NOTIF_FRND_REQ_RESP)) {
             message = intent.getExtras().getString(AppGlobals.NOTIF_FRND_REQ_RESP);
             updateFriends(context, message, AppGlobals.NOTIF_FRND_REQ_RESP);
+        } else if(intent.hasExtra(AppGlobals.CHAT_ROOM)) {
+            message = intent.getExtras().getString(AppGlobals.CHAT_ROOM);
+            getChatMessages(context, message);
         }else if(intent.hasExtra("received_messages")){
             try {
                 JSONArray array  = new JSONArray(intent.getExtras().getString("received_messages"));

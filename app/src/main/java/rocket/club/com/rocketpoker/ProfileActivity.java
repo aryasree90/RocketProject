@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,6 +24,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -41,6 +44,7 @@ public class ProfileActivity extends ActionBarActivity {
     Button gotoHome, clear;
     ImageView profileImage;
     EditText fullName, email, nickName, dob;
+    TextView skipProfile;
     ConnectionDetector connectionDetector = null;
     MaterialBetterSpinner gameTypeSpinner = null, genderSpinner = null;
     ArrayAdapter<String> gameTypeAdapter = null, genderAdapter = null;
@@ -76,6 +80,7 @@ public class ProfileActivity extends ActionBarActivity {
         nickName = (EditText) findViewById(R.id.nickName);
         dob = (EditText) findViewById(R.id.DOB);
         profileImage = (ImageView) findViewById(R.id.userProfilePic);
+        skipProfile = (TextView) findViewById(R.id.skipProfile);
 
         String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
 
@@ -115,6 +120,9 @@ public class ProfileActivity extends ActionBarActivity {
                     case R.id.DOB:
                         showDialog(DATE_DIALOG_ID);
                         break;
+                    case R.id.skipProfile:
+                        gotoHomeActivity();
+                        break;
                 }
             }
         };
@@ -123,6 +131,7 @@ public class ProfileActivity extends ActionBarActivity {
         clear.setOnClickListener(clickListener);
         profileImage.setOnClickListener(clickListener);
         dob.setOnClickListener(clickListener);
+        skipProfile.setOnClickListener(clickListener);
     }
 
     private void saveProfileDetails() {

@@ -3,6 +3,7 @@ package rocket.club.com.rocketpoker;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,11 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -83,6 +84,10 @@ public class LandingActivity extends AppCompatActivity
             appGlobals.currentFragmentClass = HomeFragment.class;
 
         setFragment(appGlobals.currentFragmentClass);
+
+        AppGlobals.tempActivity = this;
+        appGlobals.startLocationIntent(context);
+
     }
 
     private void setClickListener() {
@@ -92,14 +97,15 @@ public class LandingActivity extends AppCompatActivity
             public void onClick(View v) {
                 switch(v.getId()) {
                     case R.id.chat_room_img:
-                        Toast.makeText(context, "Chat Room Coming Soon", Toast.LENGTH_LONG).show();
+                        Intent chatRoomIntent = new Intent(context, ChatRoomActivity.class);
+                        startActivity(chatRoomIntent);
                         break;
                     case R.id.invite_to_play:
                         Toast.makeText(context, "Invite Your Friends to club by one click", Toast.LENGTH_LONG).show();
                         break;
                     case R.id.rocket_img:
-                        Class fragmentClass = AboutFragment.class;
-                        setFragment(fragmentClass);
+                        Class fragmentAbout = AboutFragment.class;
+                        setFragment(fragmentAbout);
                         break;
                     case R.id.profileImage:
                         Intent profileIntent = new Intent(context, ProfileActivity.class);
@@ -176,12 +182,13 @@ public class LandingActivity extends AppCompatActivity
 
         switch(menuItem.getItemId()) {
             case R.id.my_home:
-                Toast.makeText(context, "My Home", Toast.LENGTH_LONG).show();
                 fragmentClass = HomeFragment.class;
                 break;
             case R.id.my_friends:
-                Toast.makeText(context, "My Friends", Toast.LENGTH_LONG).show();
                 fragmentClass = FriendsFragment.class;
+                break;
+            case R.id.location:
+                fragmentClass = LocationFragment.class;
                 break;
             case R.id.about_us:
                 fragmentClass = AboutFragment.class;

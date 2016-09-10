@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (connectionDetector.isConnectingToInternet()) {
                                     appGlobals.sharedPref.setLoginMobile(canonicalMobile);
                                     LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
-                                    loginAsync.execute(mobile);
+                                    loginAsync.execute(canonicalMobile);
                                 } else
                                     Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
                             }

@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
         eventList = (ViewPager) view.findViewById(R.id.eventList);
         emptyEvent = (TextView) view.findViewById(R.id.emptyEventItem);
 
-        if(mResources.length == 0) {
+        if(mResources.length != 0) {
             eventList.setVisibility(View.VISIBLE);
             emptyEvent.setVisibility(View.GONE);
             eventAdapter = new EventListAdapter(context, mResources);

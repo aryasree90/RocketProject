@@ -10,8 +10,13 @@ import android.graphics.BitmapFactory;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import rocket.club.com.rocketpoker.classes.ChatListClass;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.NotifClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
@@ -86,9 +91,52 @@ public final class CommonUtilities {
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in updateFriends " + e.toString(), LogClass.ERROR_MSG);
         }
-        Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
+        /*Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
         intent.putExtra(EXTRA_MESSAGE, message);
-        context.sendBroadcast(intent);
+        context.sendBroadcast(intent);*/
+    }
+
+    static void getChatMessages(Context context, String message) {
+
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        try {
+            appGlobals.logClass.setLogMsg(TAG, "Chat Message " + message, LogClass.DEBUG_MSG);
+
+            JSONArray msgArr = new JSONArray(message);
+            JSONObject msgObj = msgArr.getJSONObject(0);
+
+            String msgId = msgObj.getString("msgId");
+
+            JSONObject msgDet = new JSONObject(msgObj.getString("msgJson"));
+            String timeStamp = msgDet.getString("time");
+
+            ChatListClass newChatList = new ChatListClass();
+            newChatList.setMsgId(msgId);
+            newChatList.setTime(Long.parseLong(timeStamp));
+            newChatList.setMsg(msgDet.getString("msg"));
+            newChatList.setSenderMob(msgDet.getString("senderMob"));
+
+            if(msgDet.has("location")) {
+                Gson gson = new Gson();
+                LocationClass locClass = gson.fromJson(msgDet.getString("location"), LocationClass.class);
+                newChatList.setLocation(locClass);
+            }
+
+            DBHelper db = new DBHelper(context);
+            db.insertMessages(newChatList);
+
+            if(AppGlobals.inChatRoom) {
+                Intent autoIntent = new Intent(AppGlobals.CHAT_ROOM);
+                autoIntent.putExtra(ChatRoomActivity.CHAT_MESSAGE, message);
+                context.sendBroadcast(autoIntent);
+            } else {
+                String notifMsg = "You have received a message from " + newChatList.getSenderMob();
+                generateNotification(context, notifMsg);
+            }
+
+        } catch(Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "Exception in response" + e.toString(), LogClass.ERROR_MSG);
+        }
     }
 
     private static void generateNotification(Context ctx, String message) {

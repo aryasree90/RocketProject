@@ -3,6 +3,10 @@ package rocket.club.com.rocketpoker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.JsonObject;
+
+import rocket.club.com.rocketpoker.classes.LocationClass;
+
 public class SharedPref {
 
     SharedPreferences pref;
@@ -13,6 +17,7 @@ public class SharedPref {
     private final String USERID = "userId";
     private final String LOGGEDIN = "loggedIn";
     private final String VALIDATION_CODE = "ValidationCode";
+    private final String LOCATION = "Location";
 
     public SharedPref(Context ctx) {
         pref = ctx.getSharedPreferences("MySharedPref", ctx.MODE_PRIVATE);
@@ -45,6 +50,11 @@ public class SharedPref {
         editor.commit();
     }
 
+    public void setLocation(String loc) {
+        editor.putString(LOCATION, loc);
+        editor.commit();
+    }
+
     public String getLoginMobile() {
         return pref.getString(LOGIN_MOBILE, "null");
     }
@@ -63,5 +73,9 @@ public class SharedPref {
 
     public String getValidationCode() {
         return pref.getString(VALIDATION_CODE, null);
+    }
+
+    public String getLocation() {
+        return pref.getString(LOCATION, null);
     }
 }

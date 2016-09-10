@@ -131,7 +131,6 @@ public class FriendsFragment extends Fragment {
                         createDialog();
                         break;
                     case R.id.acceptFriend:
-
                             friendNotFoundTxt.setVisibility(View.GONE);
                             if(searchAFriend.isEmpty()) {
                                 appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
