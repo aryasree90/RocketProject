@@ -226,6 +226,10 @@ public class ProfileActivity extends ActionBarActivity {
                     public void onResponse(String response) {
                         if(task.equals(appGlobals.UPDATE_PROFILE)) {
                             if (response.trim().equals("success")) {
+
+                                String uName = fullName.getText().toString();
+                                appGlobals.sharedPref.setUserName(uName);
+
                                 Toast.makeText(context, getString(R.string.profile_update_success), Toast.LENGTH_LONG).show();
                                 gotoHomeActivity();
                             } else {
@@ -267,6 +271,7 @@ public class ProfileActivity extends ActionBarActivity {
         ProfileDetailsClass profileDetails = profileJson.fromJson(response, ProfileDetailsClass[].class)[0];
 
         fullName.setText(profileDetails.getName());
+        appGlobals.sharedPref.setUserName(profileDetails.getName());
         email.setText(profileDetails.getEmail());
         nickName.setText(profileDetails.getNickname());
         dob.setText(profileDetails.getDob());

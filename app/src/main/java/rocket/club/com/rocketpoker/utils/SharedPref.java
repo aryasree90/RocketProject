@@ -18,6 +18,7 @@ public class SharedPref {
     private final String LOGGEDIN = "loggedIn";
     private final String VALIDATION_CODE = "ValidationCode";
     private final String LOCATION = "Location";
+    private final String USER_NAME = "userName";
 
     public SharedPref(Context ctx) {
         pref = ctx.getSharedPreferences("MySharedPref", ctx.MODE_PRIVATE);
@@ -55,6 +56,11 @@ public class SharedPref {
         editor.commit();
     }
 
+    public void setUserName(String uname) {
+        editor.putString(USER_NAME, uname);
+        editor.commit();
+    }
+
     public String getLoginMobile() {
         return pref.getString(LOGIN_MOBILE, "null");
     }
@@ -77,5 +83,9 @@ public class SharedPref {
 
     public String getLocation() {
         return pref.getString(LOCATION, null);
+    }
+
+    public String getUserName() {
+        return pref.getString(USER_NAME, "");
     }
 }

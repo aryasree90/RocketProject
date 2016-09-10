@@ -1,6 +1,7 @@
 package rocket.club.com.rocketpoker.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,6 +115,10 @@ public class NewFriendListAdapter extends PagerAdapter {
                         if(response.equals("Success")) {
                             DBHelper db = new DBHelper(mContext);
                             db.updateContacts(status, frnd_mob);
+
+                            Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ);
+                            mContext.sendBroadcast(autoIntent);
+
                         } else {
                             appGlobals.toastMsg(mContext, mContext.getString(R.string.unable_to_connect_server), appGlobals.LENGTH_LONG);
                         }

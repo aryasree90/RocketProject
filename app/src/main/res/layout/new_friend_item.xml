@@ -5,7 +5,6 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:background="@drawable/rounded_cornered_layout"
     android:padding="5dp"
     android:weightSum="1">
 

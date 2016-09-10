@@ -142,7 +142,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         try {
             unregisterReceiver(mHandleMessageReceiver);
-            GCMRegistrar.onDestroy(this);
         } catch (Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error > " + e.getMessage(), LogClass.ERROR_MSG);
         }

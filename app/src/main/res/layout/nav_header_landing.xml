@@ -9,7 +9,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingBottom="20dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="20dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
    <de.hdodenhof.circleimageview.CircleImageView
@@ -17,10 +17,11 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
-       android:visibility="gone"
+        android:visibility="gone"
         android:src="@drawable/default_profile" />
 
     <TextView
+        android:id="@+id/textName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -29,7 +30,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="6dp"

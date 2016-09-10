@@ -11,6 +11,7 @@
     <string name="btn_clear1">Clear</string>
     <string name="btn_clear">C</string>
     <string name="login_invalid_num">Enter a valid Number</string>
+    <string name="login_invalid_country_code">Invalid Country Code</string>
     <string name="enter_all">Enter all Fields</string>
     <string name="no_internet">Please connect to working Internet connection</string>
     <string name="validation_msg">Validation Sms from </string>

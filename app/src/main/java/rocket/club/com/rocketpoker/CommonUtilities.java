@@ -81,12 +81,17 @@ public final class CommonUtilities {
                 list.add(userDetails);
                 db.insertContactDetails(list);
                 notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_rec);
+
+                Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ);
+                context.sendBroadcast(autoIntent);
+
             } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
                 db.updateContacts(userDetails.getStatus(), notif.getSender());
                 if(userDetails.getStatus() == 1) {
                     notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_accept);
                 }
             }
+
             generateNotification(context, notifMsg);
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in updateFriends " + e.toString(), LogClass.ERROR_MSG);
