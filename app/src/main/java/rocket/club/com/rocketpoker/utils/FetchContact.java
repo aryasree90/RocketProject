@@ -132,7 +132,6 @@ public class FetchContact {
         Phonenumber.PhoneNumber phNumberProto = null;
         try {
             String countryIso = getCountryIso(context);
-            countryIso = "IN";
             if(TextUtils.isEmpty(countryIso)) {
                 countryIso = Locale.getDefault().getCountry();
             }

@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -32,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
+import com.hbb20.CountryCodePicker;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editMobileNum, otp1, otp2, otp3, otp4;
     Button btnLogin, btnClear, btnContinue, btnClear1;
     LinearLayout loginLayout = null, otpLayout = null;
+    CountryCodePicker countryCodePicker = null;
 
     public static final String pageType = "PageType";
     public static final String loginPage = "LoginPage";
@@ -65,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle.containsKey(pageType))
@@ -80,6 +85,8 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeWidgets() {
         context = getApplicationContext();
         appGlobals = AppGlobals.getInstance(context);
+
+        countryCodePicker = (CountryCodePicker) findViewById(R.id.ccp);
 
         editMobileNum = (EditText) findViewById(R.id.edit_mobile_num);
         btnLogin = (Button) findViewById(R.id.btn_login);
@@ -153,10 +160,12 @@ public class LoginActivity extends AppCompatActivity {
 
                 switch(view.getId()) {
                     case R.id.btn_login:
+                        String countryCode = countryCodePicker.getSelectedCountryCode();
                         String mobile = editMobileNum.getText().toString();
 
                         if(!TextUtils.isEmpty(mobile)) {
-                            String canonicalMobile = FetchContact.getCanonicalPhoneNumber(context, mobile, appGlobals);
+                            String canonicalMobile = countryCode + mobile;
+//                            String canonicalMobile = FetchContact.getCanonicalPhoneNumber(context, newMob, appGlobals);
                             if(TextUtils.isEmpty(canonicalMobile)) {
                                 appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_SHORT);
                             } else {
@@ -332,7 +341,7 @@ public class LoginActivity extends AppCompatActivity {
             unregisterReceiver(mHandleMessageReceiver);
             GCMRegistrar.onDestroy(this);
         } catch (Exception e) {
-            appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error > " + e.getMessage(), LogClass.ERROR_MSG);
+            appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error : " + e.getMessage(), LogClass.ERROR_MSG);
         }
         super.onDestroy();
     }

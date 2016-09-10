@@ -18,9 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
+
+import org.w3c.dom.Text;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -41,6 +44,7 @@ public class LandingActivity extends AppCompatActivity
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
     CircleImageView circularImageView;
+    TextView textName, textNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,12 @@ public class LandingActivity extends AppCompatActivity
         View headerView = getLayoutInflater().inflate(R.layout.nav_header_landing, navigationView, false);
         navigationView.addHeaderView(headerView);
 
-       circularImageView = (CircleImageView) headerView.findViewById(R.id.profileImage);
+        circularImageView = (CircleImageView) headerView.findViewById(R.id.profileImage);
+        textName = (TextView) headerView.findViewById(R.id.textName);
+        textNum = (TextView) headerView.findViewById(R.id.textNum);
+
+        textName.setText(appGlobals.sharedPref.getUserName());
+        textNum.setText(appGlobals.sharedPref.getLoginMobile());
 
         if(appGlobals.currentFragmentClass == null)
             appGlobals.currentFragmentClass = HomeFragment.class;
@@ -108,6 +117,8 @@ public class LandingActivity extends AppCompatActivity
                         setFragment(fragmentAbout);
                         break;
                     case R.id.profileImage:
+                    case R.id.textName:
+                    case R.id.textNum:
                         Intent profileIntent = new Intent(context, ProfileActivity.class);
                         startActivity(profileIntent);
                         finish();
@@ -123,6 +134,8 @@ public class LandingActivity extends AppCompatActivity
         imgChatRoom.setOnClickListener(clickListener);
         imgAddFriend.setOnClickListener(clickListener);
         circularImageView.setOnClickListener(clickListener);
+        textName.setOnClickListener(clickListener);
+        textNum.setOnClickListener(clickListener);
     }
 
     @Override
@@ -163,6 +176,10 @@ public class LandingActivity extends AppCompatActivity
                 appGlobals.sharedPref.setLoginMobile("");
                 appGlobals.sharedPref.setRegId("");
                 GCMRegistrar.setRegisteredOnServer(context, false);
+
+                Intent loginActivity = new Intent(context, LoginActivity.class);
+                startActivity(loginActivity);
+                this.finish();
                 break;
         }
 
