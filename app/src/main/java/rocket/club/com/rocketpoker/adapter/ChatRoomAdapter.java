@@ -2,6 +2,7 @@ package rocket.club.com.rocketpoker.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,9 @@ import java.util.List;
 
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.ChatListClass;
+import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
+import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 
 /**
@@ -29,6 +32,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.MyView
     AppGlobals appGlobals = null;
     final private String TAG = "ChatRoomAdapter";
     String loginNum = "";
+    Context context = null;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -53,6 +57,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.MyView
 
     public ChatRoomAdapter(List<ChatListClass> chatList, Context context) {
         this.chatList = chatList;
+        this.context = context;
         appGlobals = AppGlobals.getInstance(context);
 
         loginNum = appGlobals.sharedPref.getLoginMobile();
@@ -81,7 +86,18 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.MyView
             holder.sentMsgLayout.setVisibility(View.GONE);
             holder.receivedMsgLayout.setVisibility(View.VISIBLE);
 
-            holder.rec_senderId.setText(itemList.getSenderMob());
+            DBHelper db = new DBHelper(context);
+            ContactClass contactClass = db.getContacts(itemList.getSenderMob());
+
+            String senderName = "";
+
+            if(contactClass != null && !TextUtils.isEmpty(contactClass.getContactName())) {
+                senderName = contactClass.getContactName();
+            } else {
+                senderName = itemList.getSenderMob();
+            }
+
+            holder.rec_senderId.setText(senderName);
             holder.rec_msg.setText(itemList.getMsg());
             holder.rec_time.setText(time);
         }

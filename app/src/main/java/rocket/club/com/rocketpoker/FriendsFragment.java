@@ -2,8 +2,10 @@ package rocket.club.com.rocketpoker;
 
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -60,6 +62,7 @@ public class FriendsFragment extends Fragment {
     TextView friendName, friendMobile,friendNotFoundTxt;
     ArrayList<UserDetails> list = null;
     String searchAFriend = "";
+    List<FriendsListClass> friendsList = new ArrayList<FriendsListClass>();
 
     View.OnClickListener clickListener = null;
     private final String TAG = "Friends Fragment";
@@ -103,8 +106,18 @@ public class FriendsFragment extends Fragment {
             }
         });
 
-        List<FriendsListClass> friendsList = new ArrayList<FriendsListClass>();
+        fetchFriendList();
+
+        mAdapter = new FriendListAdapter(friendsList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        friendsListView.setLayoutManager(mLayoutManager);
+        friendsListView.setItemAnimator(new DefaultItemAnimator());
+        friendsListView.setAdapter(mAdapter);
+    }
+
+    private void fetchFriendList() {
         try {
+            friendsList.clear();
             DBHelper db = new DBHelper(context);
             ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.ALL_FRIENDS);
             for(ContactClass contactClass : contactList) {
@@ -115,11 +128,6 @@ public class FriendsFragment extends Fragment {
             e.printStackTrace();
         }
 
-        mAdapter = new FriendListAdapter(friendsList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-        friendsListView.setLayoutManager(mLayoutManager);
-        friendsListView.setItemAnimator(new DefaultItemAnimator());
-        friendsListView.setAdapter(mAdapter);
     }
 
     private void setClickListener() {
@@ -264,5 +272,33 @@ public class FriendsFragment extends Fragment {
         searchFriend.setEnabled(true);
         friendNotFoundTxt.setVisibility(View.GONE);
         dialog.cancel();
+    }
+
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent.getAction().equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
+                fetchFriendList();
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter frndReqMsgFilter = new IntentFilter(AppGlobals.NOTIF_FRND_REQ_RESP);
+        context.registerReceiver(mHandleMessageReceiver, frndReqMsgFilter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroy();
+        try {
+            context.unregisterReceiver(mHandleMessageReceiver);
+        } catch (Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error > " + e.getMessage(), LogClass.ERROR_MSG);
+        }
     }
 }

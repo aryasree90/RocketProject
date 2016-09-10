@@ -90,9 +90,11 @@ public final class CommonUtilities {
                 if(userDetails.getStatus() == 1) {
                     notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_accept);
                 }
+                Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ_RESP);
+                context.sendBroadcast(autoIntent);
             }
-
-            generateNotification(context, notifMsg);
+            Intent notificationIntent = new Intent(context, LandingActivity.class);
+            generateNotification(context, notifMsg, notificationIntent);
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in updateFriends " + e.toString(), LogClass.ERROR_MSG);
         }
@@ -136,7 +138,8 @@ public final class CommonUtilities {
                 context.sendBroadcast(autoIntent);
             } else {
                 String notifMsg = "You have received a message from " + newChatList.getSenderMob();
-                generateNotification(context, notifMsg);
+                Intent notificationIntent = new Intent(context, ChatRoomActivity.class);
+                generateNotification(context, notifMsg, notificationIntent);
             }
 
         } catch(Exception e) {
@@ -144,12 +147,12 @@ public final class CommonUtilities {
         }
     }
 
-    private static void generateNotification(Context ctx, String message) {
+    private static void generateNotification(Context ctx, String message, Intent notificationIntent) {
 
         final int NOTIF_REQ_CODE = 11;
         final int NOTIF_ID = 111;
 
-        Intent notificationIntent = new Intent(ctx, LandingActivity.class);
+
         PendingIntent contentIntent = PendingIntent.getActivity(ctx, NOTIF_REQ_CODE, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
