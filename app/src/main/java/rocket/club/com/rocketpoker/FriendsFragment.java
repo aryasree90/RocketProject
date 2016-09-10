@@ -108,7 +108,7 @@ public class FriendsFragment extends Fragment {
             DBHelper db = new DBHelper(context);
             ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.ALL_FRIENDS);
             for(ContactClass contactClass : contactList) {
-                String name = contactClass.getContactName() + "-" + contactClass.getStatus();
+                String name = contactClass.getContactName();
                 friendsList.add(new FriendsListClass(name, contactClass.getPhoneNumber(), "image"));
             }
         } catch(Exception e) {

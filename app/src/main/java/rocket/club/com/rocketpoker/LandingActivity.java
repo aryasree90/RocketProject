@@ -178,6 +178,7 @@ public class LandingActivity extends AppCompatActivity
                 GCMRegistrar.setRegisteredOnServer(context, false);
 
                 Intent loginActivity = new Intent(context, LoginActivity.class);
+                loginActivity.putExtra(LoginActivity.pageType, LoginActivity.loginPage);
                 startActivity(loginActivity);
                 this.finish();
                 break;

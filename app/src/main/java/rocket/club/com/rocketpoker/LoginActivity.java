@@ -163,23 +163,28 @@ public class LoginActivity extends AppCompatActivity {
                         String countryCode = countryCodePicker.getSelectedCountryCode();
                         String mobile = editMobileNum.getText().toString();
 
-                        if(!TextUtils.isEmpty(mobile)) {
-                            String canonicalMobile = countryCode + mobile;
-//                            String canonicalMobile = FetchContact.getCanonicalPhoneNumber(context, newMob, appGlobals);
-                            if(TextUtils.isEmpty(canonicalMobile)) {
-                                appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_SHORT);
-                            } else {
-                                if (connectionDetector.isConnectingToInternet()) {
-                                    appGlobals.sharedPref.setLoginMobile(canonicalMobile);
-                                    LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
-                                    loginAsync.execute(canonicalMobile);
-                                } else
-                                    Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_SHORT);
+                        if(TextUtils.isEmpty(countryCode)) {
+                            appGlobals.toastMsg(context, getString(R.string.login_invalid_country_code), appGlobals.LENGTH_SHORT);
+                            return;
                         }
 
+                        if(TextUtils.isEmpty(mobile)) {
+                            appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_SHORT);
+                            return;
+                        }
+
+                        String canonicalMobile = countryCode + mobile;
+//                      String canonicalMobile = FetchContact.getCanonicalPhoneNumber(context, newMob, appGlobals);
+                        if(TextUtils.isEmpty(canonicalMobile)) {
+                            appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_SHORT);
+                        } else {
+                            if (connectionDetector.isConnectingToInternet()) {
+                                appGlobals.sharedPref.setLoginMobile(canonicalMobile);
+                                LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
+                                loginAsync.execute(canonicalMobile);
+                            } else
+                                Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case R.id.btn_clear:
                         clearEditText();
