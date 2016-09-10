@@ -309,10 +309,13 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void clearFields() {
-        profileImage.setImageResource(R.drawable.default_profile);
+        //profileImage.setImageResource(R.drawable.default_profile);
         fullName.setText("");
         email.setText("");
         nickName.setText("");
+        dob.setText("");
+        genderSpinner.setText("");
+        gameTypeSpinner.setText("");
 
 
     }
