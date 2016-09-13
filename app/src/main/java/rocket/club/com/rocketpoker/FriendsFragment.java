@@ -238,8 +238,7 @@ public class FriendsFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
-    private void createDialog()
-    {
+    private void createDialog() {
         dialog=new Dialog(context);
         dialog.setContentView(R.layout.activity_add_new_friend);
 

@@ -19,6 +19,8 @@ public class SharedPref {
     private final String VALIDATION_CODE = "ValidationCode";
     private final String LOCATION = "Location";
     private final String USER_NAME = "userName";
+    private final String COMMON_NOTIF = "commonNotif";
+    private final String CHAT_NOTIF = "chatNotif";
 
     public SharedPref(Context ctx) {
         pref = ctx.getSharedPreferences("MySharedPref", ctx.MODE_PRIVATE);
@@ -61,6 +63,16 @@ public class SharedPref {
         editor.commit();
     }
 
+    public void setCommonNotif(boolean commonNotif) {
+        editor.putBoolean(COMMON_NOTIF, commonNotif);
+        editor.commit();
+    }
+
+    public void setChatNotif(boolean chatNotif) {
+        editor.putBoolean(CHAT_NOTIF, chatNotif);
+        editor.commit();
+    }
+
     public String getLoginMobile() {
         return pref.getString(LOGIN_MOBILE, "null");
     }
@@ -87,5 +99,13 @@ public class SharedPref {
 
     public String getUserName() {
         return pref.getString(USER_NAME, "");
+    }
+
+    public boolean getCommonNotif() {
+        return pref.getBoolean(COMMON_NOTIF, true);
+    }
+
+    public boolean getChatNotif() {
+        return pref.getBoolean(CHAT_NOTIF, true);
     }
 }

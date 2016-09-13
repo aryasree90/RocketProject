@@ -179,7 +179,8 @@ public class AppGlobals {
                 permissionsMissing.add(permission);
                 final String[] array = new String[permissionsMissing.size()];
                 permissionsMissing.toArray(array);
-                ActivityCompat.requestPermissions(tempActivity, array, 111);
+                if(tempActivity != null)
+                    ActivityCompat.requestPermissions(tempActivity, array, 111);
             }
         }
         appGlobals.logClass.setLogMsg(TAG, "Permission is granted", LogClass.DEBUG_MSG);

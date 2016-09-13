@@ -11,7 +11,8 @@
     <string name="btn_clear1">Clear</string>
     <string name="btn_clear">C</string>
     <string name="login_invalid_num">Enter a valid Number</string>
-    <string name="login_invalid_country_code">Invalid Country Code</string>
+    <string name="login_invalid_country_code">Invalid Country Code
+    </string>
     <string name="enter_all">Enter all Fields</string>
     <string name="no_internet">Please connect to working Internet connection</string>
     <string name="validation_msg">Validation Sms from </string>
@@ -59,6 +60,9 @@
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
     <string name="otp_info">Automatically fetching OTP.\nPlease wait.</string>
+    <string name="settings_title">SETTINGS</string>
+    <string name="settings_notification">Notification</string>
+    <string name="settings_chat">Chat Notification</string>
 
     <string name="unable_to_connect_server">Unable to Connect to Server</string>
 
@@ -69,6 +73,9 @@
     <string name="search_with_mob">Search with Mobile Number</string>
     <string name="go_search">Go</string>
     <string name="friend_not_found">Unable to find the number</string>
+    <string name="common_notif_msg">Common Notification</string>
+    <string name="chat_notif_msg">Chat Notification</string>
+    <string name="okButton">Ok</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_home">HomeActivity</string>

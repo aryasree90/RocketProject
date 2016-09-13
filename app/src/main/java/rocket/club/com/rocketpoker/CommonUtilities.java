@@ -93,8 +93,11 @@ public final class CommonUtilities {
                 Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ_RESP);
                 context.sendBroadcast(autoIntent);
             }
-            Intent notificationIntent = new Intent(context, LandingActivity.class);
-            generateNotification(context, notifMsg, notificationIntent);
+
+            if(appGlobals.sharedPref.getCommonNotif()) {
+                Intent notificationIntent = new Intent(context, LandingActivity.class);
+                generateNotification(context, notifMsg, notificationIntent);
+            }
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in updateFriends " + e.toString(), LogClass.ERROR_MSG);
         }
@@ -136,7 +139,7 @@ public final class CommonUtilities {
                 Intent autoIntent = new Intent(AppGlobals.CHAT_ROOM);
                 autoIntent.putExtra(ChatRoomActivity.CHAT_MESSAGE, message);
                 context.sendBroadcast(autoIntent);
-            } else {
+            } else if(appGlobals.sharedPref.getChatNotif()){
                 String notifMsg = "You have received a message from " + newChatList.getSenderMob();
                 Intent notificationIntent = new Intent(context, ChatRoomActivity.class);
                 generateNotification(context, notifMsg, notificationIntent);
