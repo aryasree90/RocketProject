@@ -71,6 +71,8 @@ public class AppGlobals {
     public ConnectionDetector connectionDetector = null;
     final long oneSecond = 1000;
     final long oneMinute = 60 * oneSecond;
+    public ArrayList<String> selectedNums = new ArrayList<>();
+    public ArrayList<Integer> selectedPos = new ArrayList<>();
 
     private LocationService.LocationResult locationResult = null;
     LocationService locationService = null;
@@ -93,6 +95,8 @@ public class AppGlobals {
     public final String FETCH_PROFILE = "2";
 
     //Friend Request
+    public static final int FRIEND_LIST = 1;
+    public static final int INVITE_TO_CLUB = 2;
     public final String NEW_FRND_REQ = "1";
     public final String REPLY_FRND_REQ = "2";
     public final String SEARCH_FRND = "3";
@@ -106,6 +110,7 @@ public class AppGlobals {
     public static final String NOTIF_FRND_REQ = "frnd_req";
     public static final String NOTIF_FRND_REQ_RESP = "frnd_req_resp";
     public static final String CHAT_ROOM = "chat_room";
+    public static final String INVITE_TO_PLAY = "invite_to_play";
 
 
     public static final String AUTO_SMS_READER =

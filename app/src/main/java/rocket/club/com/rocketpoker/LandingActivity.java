@@ -92,7 +92,7 @@ public class LandingActivity extends AppCompatActivity
         if(appGlobals.currentFragmentClass == null)
             appGlobals.currentFragmentClass = HomeFragment.class;
 
-        setFragment(appGlobals.currentFragmentClass);
+        setFragment(appGlobals.currentFragmentClass, null);
 
         AppGlobals.tempActivity = this;
         appGlobals.startLocationIntent(context);
@@ -111,10 +111,15 @@ public class LandingActivity extends AppCompatActivity
                         break;
                     case R.id.invite_to_play:
                         Toast.makeText(context, "Invite Your Friends to club by one click", Toast.LENGTH_LONG).show();
+
+                        Class fragmentInvite = FriendsFragment.class;
+                        Bundle args = new Bundle();
+                        args.putInt("type", AppGlobals.INVITE_TO_CLUB);
+                        setFragment(fragmentInvite, args);
                         break;
                     case R.id.rocket_img:
                         Class fragmentAbout = AboutFragment.class;
-                        setFragment(fragmentAbout);
+                        setFragment(fragmentAbout, null);
                         break;
                     case R.id.profileImage:
                     case R.id.textName:
@@ -150,7 +155,7 @@ public class LandingActivity extends AppCompatActivity
                     super.onBackPressed();
                     //additional code
                 } else {
-                    setFragment(HomeFragment.class);
+                    setFragment(HomeFragment.class, null);
                 }
             } else {
                 getFragmentManager().popBackStack();
@@ -197,6 +202,7 @@ public class LandingActivity extends AppCompatActivity
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Class fragmentClass = null;
+        Bundle args = null;
 
         switch(menuItem.getItemId()) {
             case R.id.my_home:
@@ -204,6 +210,8 @@ public class LandingActivity extends AppCompatActivity
                 break;
             case R.id.my_friends:
                 fragmentClass = FriendsFragment.class;
+                args = new Bundle();
+                args.putInt("type", AppGlobals.FRIEND_LIST);
                 break;
             case R.id.location:
                 fragmentClass = LocationFragment.class;
@@ -219,7 +227,7 @@ public class LandingActivity extends AppCompatActivity
         }
 
         if(fragmentClass != null) {
-            setFragment(fragmentClass);
+            setFragment(fragmentClass, args);
             // Highlight the selected item has been done by NavigationView
             menuItem.setChecked(true);
             // Set action bar title
@@ -229,10 +237,12 @@ public class LandingActivity extends AppCompatActivity
         drawer.closeDrawers();
     }
 
-    private void setFragment(Class setClass) {
+    private void setFragment(Class setClass, Bundle args) {
         Fragment fragment = null;
         try {
             fragment = (Fragment) setClass.newInstance();
+            if(args != null)
+                fragment.setArguments(args);
             appGlobals.currentFragmentClass = setClass;
         } catch (Exception e) {
             e.printStackTrace();

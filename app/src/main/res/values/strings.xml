@@ -69,6 +69,7 @@
     <string name="content_description">Image</string>
     <string name="sign_out">Sign Out</string>
     <string name="add_new_friend">Add New Friend</string>
+    <string name="invite_to_play">Invite To Play</string>
     <string name="search_friends">Search Friends</string>
     <string name="search_with_mob">Search with Mobile Number</string>
     <string name="go_search">Go</string>
