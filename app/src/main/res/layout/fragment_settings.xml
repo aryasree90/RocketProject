@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+   <!-- <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/settings_title"
         android:paddingTop="20dp"
         android:gravity="center_horizontal"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textSize="20sp"/>
+        android:textSize="20sp"/> -->
 
     <LinearLayout
         android:id="@+id/notifLayout"
@@ -40,7 +40,10 @@
             android:textOn="" />
 
     </LinearLayout>
-
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
     <LinearLayout
         android:id="@+id/muteChatLayout"
         android:orientation="horizontal"
@@ -69,4 +72,57 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
+    <LinearLayout
+        android:id="@+id/profileLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="0.85"
+            android:textSize="15sp"
+            android:text="@string/profile"/>
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
+
+
+    <LinearLayout
+        android:id="@+id/signoutLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="0.85"
+            android:textSize="15sp"
+            android:text="@string/sign_out"/>
+
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
 </LinearLayout>

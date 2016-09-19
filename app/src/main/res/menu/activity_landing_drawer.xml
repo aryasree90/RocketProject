@@ -26,9 +26,9 @@
             android:icon="@mipmap/ic_settings"
             android:title="@string/settings" />
     </group>
-
-
     <item android:title="@string/app_name">
+
+
         <menu>
             <group android:checkableBehavior="single"
                 android:id="@+id/common_group">

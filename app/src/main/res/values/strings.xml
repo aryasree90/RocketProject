@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rocket</string>
+    <string name="app_name">Rockets</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -26,6 +26,7 @@
     <string name="game_type">Game Type</string>
     <string name="nick_name">Nick Name</string>
     <string name="gender">Gender</string>
+   <string name="profile">Profile</string>
     <string name="dob">Date Of Birth</string>
     <string name="save">Save</string>
     <string name="accept">Accept</string>

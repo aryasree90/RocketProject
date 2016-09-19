@@ -44,23 +44,27 @@
                     <ImageButton
                         android:id="@+id/chat_room_img"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="25dp"
                         android:layout_weight="0.1"
                         android:scaleType="fitXY"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="10dp"
                         android:contentDescription="@string/content_description"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/chatroom"/>
+                        android:src="@mipmap/ic_chat"/>
+
+                    <!--  -->
 
                     <ImageButton
                         android:id="@+id/invite_to_play"
-                        android:layout_marginTop="5dp"
                         android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_height="35dp"
                         android:layout_weight="0.1"
                         android:scaleType="fitXY"
+                        android:layout_marginRight="10dp"
                         android:contentDescription="@string/content_description"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/invite"/>
+                        android:src="@mipmap/ic_invitetoplay"/>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
