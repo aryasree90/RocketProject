@@ -110,9 +110,9 @@ public class LandingActivity extends AppCompatActivity
                         startActivity(chatRoomIntent);
                         break;
                     case R.id.invite_to_play:
-                        Toast.makeText(context, "Invite Your Friends to club by one click", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(context, "Invite Your Friends to club by one click", Toast.LENGTH_LONG).show();
 
-                        Class fragmentInvite = FriendsFragment.class;
+                        Class fragmentInvite = InvitationListFragment.class;
                         Bundle args = new Bundle();
                         args.putInt("type", AppGlobals.INVITE_TO_CLUB);
                         setFragment(fragmentInvite, args);
