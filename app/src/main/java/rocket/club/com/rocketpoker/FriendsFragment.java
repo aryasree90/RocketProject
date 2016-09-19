@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +45,7 @@ import java.util.Map;
 import rocket.club.com.rocketpoker.adapter.FriendListAdapter;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
+import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -68,6 +73,8 @@ public class FriendsFragment extends Fragment {
     private final String TAG = "Friends Fragment";
     final String FRIEND_REQ_URL = AppGlobals.SERVER_URL + "frndReq.php";
     final String FRIEND_SEARCH_URL = AppGlobals.SERVER_URL + "searchFriend.php";
+    final String INVITE_TO_PLAY_URL = AppGlobals.SERVER_URL + "inviteToPlay.php";
+    private int pageType = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,8 +92,21 @@ public class FriendsFragment extends Fragment {
         context = getActivity();
         appGlobals = AppGlobals.getInstance(context);
 
+        appGlobals.selectedNums.clear();
+        appGlobals.selectedPos.clear();
+        Bundle bundle = getArguments();
+        pageType = bundle.getInt("type");
+
         friendsListView = (RecyclerView) view.findViewById(R.id.friends_recycler_view);
         addNewFriend = (Button) view.findViewById(R.id.add_new_friend);
+
+        if(pageType == AppGlobals.FRIEND_LIST) {
+            addNewFriend.setText(getString(R.string.add_new_friend));
+        } else {
+            setTimeSlotDialog();
+            addNewFriend.setText(getString(R.string.invite_to_play));
+        }
+
         searchFriend = (EditText) view.findViewById(R.id.search_friend);
 
         searchFriend.addTextChangedListener(new TextWatcher() {
@@ -108,7 +128,7 @@ public class FriendsFragment extends Fragment {
 
         fetchFriendList();
 
-        mAdapter = new FriendListAdapter(friendsList);
+        mAdapter = new FriendListAdapter(friendsList, pageType, context);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         friendsListView.setLayoutManager(mLayoutManager);
         friendsListView.setItemAnimator(new DefaultItemAnimator());
@@ -136,7 +156,31 @@ public class FriendsFragment extends Fragment {
             public void onClick(View v) {
                 switch(v.getId()) {
                     case R.id.add_new_friend:
-                        createDialog();
+                        if (pageType == AppGlobals.FRIEND_LIST) {
+                            createDialog();
+                        } else {
+                            Toast.makeText(context, appGlobals.selectedNums.size() + " ", Toast.LENGTH_LONG).show();
+
+                            String listMob = "";
+                            for(String mob : appGlobals.selectedNums) {
+                                if(!TextUtils.isEmpty(listMob))
+                                    listMob += "::";
+                                listMob += mob;
+                            }
+                            appGlobals.selectedNums.clear();
+                            appGlobals.selectedPos.clear();
+
+                            String game = "game type";
+                            String schedule = "Time comes here";
+
+                            Map<String, String> frnd_map = new HashMap<String, String>();
+                            frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                            frnd_map.put("invite_list", listMob);
+                            frnd_map.put("game", game);
+                            frnd_map.put("schedule", schedule);
+
+                            serverCall(frnd_map, INVITE_TO_PLAY_URL);
+                        }
                         break;
                     case R.id.acceptFriend:
                             friendNotFoundTxt.setVisibility(View.GONE);
@@ -218,6 +262,8 @@ public class FriendsFragment extends Fragment {
                                 searchAFriend = "";
                                 searchFriend.requestFocus();
                             }
+                        } else if(URL.equals(INVITE_TO_PLAY_URL)) {
+                            Toast.makeText(context, response, Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -229,13 +275,17 @@ public class FriendsFragment extends Fragment {
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
                 return map;
             }
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    private void setTimeSlotDialog() {
+        dialog = new Dialog(context);
+        dialog.setContentView();
     }
 
     private void createDialog() {

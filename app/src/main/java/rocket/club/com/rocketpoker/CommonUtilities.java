@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.classes.ChatListClass;
+import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.NotifClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
@@ -148,6 +150,15 @@ public final class CommonUtilities {
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in response" + e.toString(), LogClass.ERROR_MSG);
         }
+    }
+
+    static void getInviteToPlay(Context context, String message) {
+
+        Gson gson = new Gson();
+        GameInvite gameInvite = gson.fromJson(message, GameInvite.class);
+
+        Log.d("__________", "____________" + gameInvite.getSenderMob() + " " + gameInvite.getGame() + " " + gameInvite.getSchedule());
+
     }
 
     private static void generateNotification(Context ctx, String message, Intent notificationIntent) {
