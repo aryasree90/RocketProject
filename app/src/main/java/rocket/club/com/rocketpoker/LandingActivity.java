@@ -110,9 +110,9 @@ public class LandingActivity extends AppCompatActivity
                         startActivity(chatRoomIntent);
                         break;
                     case R.id.invite_to_play:
-                        Toast.makeText(context, "Invite Your Friends to club by one click", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(context, "Invite Your Friends to club by one click", Toast.LENGTH_LONG).show();
 
-                        Class fragmentInvite = FriendsFragment.class;
+                        Class fragmentInvite = InvitationListFragment.class;
                         Bundle args = new Bundle();
                         args.putInt("type", AppGlobals.INVITE_TO_CLUB);
                         setFragment(fragmentInvite, args);
@@ -163,12 +163,12 @@ public class LandingActivity extends AppCompatActivity
         }
     }
 
-    @Override
+   /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.landing, menu);
         return true;
-    }
+    }  */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
