@@ -72,11 +72,19 @@
     <string name="add_new_friend">Add New Friend</string>
     <string name="invite_to_play">Invite To Play</string>
     <string name="search_friends">Search Friends</string>
+    <string name="set_game_time">Set Game Time</string>
     <string name="search_with_mob">Search with Mobile Number</string>
     <string name="go_search">Go</string>
     <string name="friend_not_found">Unable to find the number</string>
     <string name="common_notif_msg">Common Notification</string>
     <string name="chat_notif_msg">Chat Notification</string>
+    <string name="date_time">Select Date and Time</string>
+    <string name="confirm_time">Confirm</string>
+    <string name="select_friend">Select atleast 1 friend</string>
+    <string name="select_game">Select a game type</string>
+    <string name="select_time">Select time</string>
+    <string name="accepted">Accepted</string>
+    <string name="rejected">Rejected</string>
     <string name="okButton">Ok</string>
 
     <string name="title_activity_login">LoginActivity</string>

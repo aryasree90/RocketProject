@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
+import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -26,6 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String friendsTable = "friendsTable";
     public static final String messageTable = "messageTable";
+    public static final String gameInviteTable = "gameInviteTable";
 
     public static final String _id = "id";
     public static final String mobile = "frndMobile";
@@ -39,6 +41,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String time = "time";
     public static final String location = "location";
 
+    public static final String invite_list = "invite_list";
+    public static final String game = "game";
+    public static final String schedule = "schedule";
+    public static final String count = "count";
+    public static final String timeStamp = "timeStamp";
+
     public static final String CREATE_TABLE = "CREATE TABLE " + friendsTable + "(" + _id +
             " integer primary key autoincrement not null, " + mobile + " text, " + userName +
             " text, " + nickName + " text, " + status + " integer)";
@@ -46,6 +54,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_MSG_TABLE = "CREATE TABLE " + messageTable + "(" + _id +
             " integer primary key autoincrement not null, " + msgId + " integer, " + senderMob +
             " text, " + message + " text, " + time + " text, " + location + " integer)";
+
+    public static final String CREATE_GAME_INVITE = "CREATE TABLE " + gameInviteTable + "(" + _id +
+            " integer primary key autoincrement not null, " + senderMob + " text, " + invite_list +
+            " text, " + game + " text, " + schedule + " text, " + timeStamp + " text, " + count +
+            " integer, " + status + " integer)";
 
     public static final String SELECT_ALL_FRIENDS = "SELECT * FROM " + friendsTable;
     public static final String SELECT_PENDING = "SELECT * FROM " + friendsTable + " WHERE " +
@@ -58,6 +71,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String SELECT_ALL_MESSAGES = "SELECT * FROM " + messageTable;
 
+    public static final String SELECT_ALL_INVITATION = "SELECT * FROM " + gameInviteTable;
+
     public DBHelper(Context ctx) {
         super(ctx, DB_NAME, null, DB_VERSION);
     }
@@ -66,6 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE);
         db.execSQL(CREATE_MSG_TABLE);
+        db.execSQL(CREATE_GAME_INVITE);
     }
 
     @Override
@@ -239,5 +255,52 @@ public class DBHelper extends SQLiteOpenHelper {
         if(db != null)
             db.close();
         return chatList;
+    }
+
+    public boolean insertInvitationDetails(GameInvite gameInvite){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(this.senderMob, gameInvite.getSenderMob());
+        contentValues.put(this.invite_list, gameInvite.getInviteList());
+        contentValues.put(this.game, gameInvite.getGame());
+        contentValues.put(this.schedule, gameInvite.getSchedule());
+        contentValues.put(this.timeStamp, gameInvite.getTimeStamp());
+        contentValues.put(this.count, gameInvite.getCount());
+        contentValues.put(this.status, gameInvite.getStatus());
+        db.insert(gameInviteTable, null, contentValues);
+
+        if(db != null)
+            db.close();
+        return true;
+    }
+
+    public ArrayList<GameInvite> getInvitations() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery(SELECT_ALL_INVITATION, null );
+
+        ArrayList<GameInvite> gameInviteList = new ArrayList<GameInvite>();
+        if(res != null) {
+            res.moveToFirst();
+            while (!res.isAfterLast()) {
+                String inviteSenderMob = res.getString(res.getColumnIndex(senderMob));
+                String inviteList = res.getString(res.getColumnIndex(invite_list));
+                String inviteGame = res.getString(res.getColumnIndex(game));
+                String inviteSchedule = res.getString(res.getColumnIndex(schedule));
+                String inviteTime = res.getString(res.getColumnIndex(timeStamp));
+                int inviteCount = res.getInt(res.getColumnIndex(count));
+                int inviteStatus = res.getInt(res.getColumnIndex(status));
+
+                GameInvite gameInvite = new GameInvite(inviteSenderMob, inviteList, inviteGame, inviteSchedule, inviteTime, inviteCount, inviteStatus);
+
+                gameInviteList.add(gameInvite);
+
+                res.moveToNext();
+            }
+        }
+        if(db != null)
+            db.close();
+        return gameInviteList;
     }
 }

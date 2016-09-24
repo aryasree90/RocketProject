@@ -15,10 +15,6 @@
         android:layout_margin="5dp"
         android:weightSum="1">
 
-
-
-
-
         <EditText
             android:id="@+id/searchText"
             android:layout_width="0dp"

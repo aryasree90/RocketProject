@@ -101,6 +101,14 @@ public class AppGlobals {
     public final String REPLY_FRND_REQ = "2";
     public final String SEARCH_FRND = "3";
 
+    //Game Invite
+    public static final String SEND_INVITE = "1";
+    public static final String RES_INVITE = "2";
+
+    public static final int UNSELECT_GAME = 0;
+    public static final int ACCEPT_GAME = 1;
+    public static final int REJECT_GAME = 2;
+
     //Friends Database
     public static final int ACCEPTED_FRIENDS = 1;
     public static final int PENDING_FRIENDS = 2;

@@ -1,7 +1,9 @@
 package rocket.club.com.rocketpoker;
 
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +20,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -34,10 +39,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +70,7 @@ public class FriendsFragment extends Fragment {
 
     Dialog dialog = null;
     ImageButton searchBtn = null;
+
     LinearLayout showFriendDetails = null;
     TextView friendName, friendMobile,friendNotFoundTxt;
     ArrayList<UserDetails> list = null;
@@ -76,6 +84,10 @@ public class FriendsFragment extends Fragment {
     final String INVITE_TO_PLAY_URL = AppGlobals.SERVER_URL + "inviteToPlay.php";
     private int pageType = 1;
 
+    MaterialBetterSpinner selectGameType = null;
+    Button btnDateTime = null;
+    String selDateTime = "";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,6 +96,10 @@ public class FriendsFragment extends Fragment {
 
         initializeWidgets(view);
         setClickListener();
+
+        if(pageType == AppGlobals.INVITE_TO_CLUB) {
+            setTimeSlotDialog();
+        }
 
         return view;
     }
@@ -103,7 +119,6 @@ public class FriendsFragment extends Fragment {
         if(pageType == AppGlobals.FRIEND_LIST) {
             addNewFriend.setText(getString(R.string.add_new_friend));
         } else {
-            setTimeSlotDialog();
             addNewFriend.setText(getString(R.string.invite_to_play));
         }
 
@@ -159,27 +174,52 @@ public class FriendsFragment extends Fragment {
                         if (pageType == AppGlobals.FRIEND_LIST) {
                             createDialog();
                         } else {
-                            Toast.makeText(context, appGlobals.selectedNums.size() + " ", Toast.LENGTH_LONG).show();
+
+                            if(!appGlobals.isNetworkConnected(context)) {
+                                appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+                                break;
+                            }
 
                             String listMob = "";
-                            for(String mob : appGlobals.selectedNums) {
-                                if(!TextUtils.isEmpty(listMob))
+                            int count = appGlobals.selectedNums.size();
+                            for (String mob : appGlobals.selectedNums) {
+                                if (!TextUtils.isEmpty(listMob))
                                     listMob += "::";
                                 listMob += mob;
                             }
                             appGlobals.selectedNums.clear();
                             appGlobals.selectedPos.clear();
 
-                            String game = "game type";
-                            String schedule = "Time comes here";
+                            String game = selectGameType.getText().toString();
+                            String schedule = btnDateTime.getText().toString();
 
-                            Map<String, String> frnd_map = new HashMap<String, String>();
-                            frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                            frnd_map.put("invite_list", listMob);
-                            frnd_map.put("game", game);
-                            frnd_map.put("schedule", schedule);
+                            if (TextUtils.isEmpty(listMob)) {
+                                appGlobals.toastMsg(context, getString(R.string.select_friend), appGlobals.LENGTH_LONG);
+                            } else if (TextUtils.isEmpty(game)) {
+                                appGlobals.toastMsg(context, getString(R.string.select_game), appGlobals.LENGTH_LONG);
+                                setTimeSlotDialog();
+                            } else if (TextUtils.isEmpty(schedule)) {
+                                appGlobals.toastMsg(context, getString(R.string.select_time), appGlobals.LENGTH_LONG);
+                                setTimeSlotDialog();
+                            } else {
 
-                            serverCall(frnd_map, INVITE_TO_PLAY_URL);
+                                DBHelper db = new DBHelper(context);
+                                String timeStamp = "" +  System.currentTimeMillis();
+                                GameInvite gameInvite = new GameInvite(appGlobals.sharedPref.getLoginMobile(), listMob, game, schedule, timeStamp, count);
+
+                                db.insertInvitationDetails(gameInvite);
+
+                                Map<String, String> frnd_map = new HashMap<String, String>();
+                                frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                                frnd_map.put("invite_list", listMob);
+                                frnd_map.put("game", game);
+                                frnd_map.put("schedule", schedule);
+                                frnd_map.put("timeStamp", timeStamp);
+                                frnd_map.put("count", "" + count);
+                                frnd_map.put("task", AppGlobals.SEND_INVITE);
+
+                                serverCall(frnd_map, INVITE_TO_PLAY_URL);
+                            }
                         }
                         break;
                     case R.id.acceptFriend:
@@ -215,11 +255,61 @@ public class FriendsFragment extends Fragment {
                         search_map.put("frnd_mobile", searchAFriend);
                         serverCall(search_map, FRIEND_SEARCH_URL);
                         break;
+                    case R.id.selectDateTime:
+                            showDatePickerDialog();
+                        break;
+                    case R.id.confirmTime:
+                        if(dialog != null)
+                            dialog.cancel();
+                        break;
                 }
             }
         };
 
         addNewFriend.setOnClickListener(clickListener);
+    }
+
+    private void showDatePickerDialog() {
+
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener(){
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        selDateTime = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                        showTimePickerDialog();
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+    private void showTimePickerDialog() {
+        final Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        selDateTime += " " + hourOfDay + ":" + minute;
+
+                        btnDateTime.setText(selDateTime);
+
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
     }
 
     private void serverCall(final Map<String, String> map, final String URL) {
@@ -285,7 +375,29 @@ public class FriendsFragment extends Fragment {
 
     private void setTimeSlotDialog() {
         dialog = new Dialog(context);
-//dialog.setContentView();
+
+        dialog.setContentView(R.layout.activity_time_slot);
+
+        dialog.setTitle(getString(R.string.set_game_time));
+
+        selectGameType = (MaterialBetterSpinner) dialog.findViewById(R.id.selectGameType);
+        btnDateTime = (Button) dialog.findViewById(R.id.selectDateTime);
+        Button confirmBtn = (Button) dialog.findViewById(R.id.confirmTime);
+
+        String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
+
+        ArrayAdapter<String> gameTypeAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_dropdown_item_1line, GAME_LIST);
+        selectGameType = (MaterialBetterSpinner)
+                dialog.findViewById(R.id.selectGameType);
+        selectGameType.setAdapter(gameTypeAdapter);
+
+        selectGameType.setOnClickListener(clickListener);
+        btnDateTime.setOnClickListener(clickListener);
+        confirmBtn.setOnClickListener(clickListener);
+
+        dialog.show();
+
     }
 
     private void createDialog() {
