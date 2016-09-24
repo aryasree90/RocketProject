@@ -222,6 +222,9 @@ public class LandingActivity extends AppCompatActivity
             case R.id.settings:
                 fragmentClass = SettingsFragment.class;
                 break;
+            case R.id.contact_us:
+                fragmentClass = ContactFragment.class;
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }

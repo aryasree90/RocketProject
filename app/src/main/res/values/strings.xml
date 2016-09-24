@@ -26,7 +26,7 @@
     <string name="game_type">Game Type</string>
     <string name="nick_name">Nick Name</string>
     <string name="gender">Gender</string>
-   <string name="profile">Profile</string>
+    <string name="profile">Profile</string>
     <string name="dob">Date Of Birth</string>
     <string name="save">Save</string>
     <string name="accept">Accept</string>
@@ -98,7 +98,7 @@
     <string name="about_us">About Us</string>
     <string name="gallery">Gallery</string>
     <string name="calendar">Calendar</string>
-    <string name="contact_us">Contact Us</string>
+    <string name="contact_us">We Exist @</string>
 
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
@@ -123,6 +123,21 @@ tournaments weekly althroughout the year for players of all stack sizes. Irrespe
 pocket be sure to find yourself a welcoming spot at our action heavy board.</string>
 
     <string name="about_para3">See you at the tables!</string>
+
+    <!-- Contents contact of the club -->
+
+    <string name="contact_topic">CONTACT US</string>
+    <string name="contact_locate_topic">LOCATE US</string>
+    <string name="contact_locate_line1">"2011,3rd Floor,100 feet road,\n Above Indigo Nation,Indira Nagar,\n Bengaluru,Karnataka- 560038"</string>
+    <string name="contact_open_info">Timings</string>
+    <string name="contact_open_info_details">Open Always</string>
+    <string name="contact_phone">Ring Us @</string>
+    <string name="contact_column">:</string>
+    <string name="contact_phone_number">080 6066 0101</string>
+    <string name="contact_Adress">Reach Us @</string>
+    <string name="contact_Website">Website</string>
+    <string name="contact_Website_Info">www.rocketspokerroom.com</string>
+
 
     <!--Server String-->
     <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Server.</string>

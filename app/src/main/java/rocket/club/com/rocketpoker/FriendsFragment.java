@@ -285,7 +285,7 @@ public class FriendsFragment extends Fragment {
 
     private void setTimeSlotDialog() {
         dialog = new Dialog(context);
-dialog.setContentView();
+//dialog.setContentView();
     }
 
     private void createDialog() {

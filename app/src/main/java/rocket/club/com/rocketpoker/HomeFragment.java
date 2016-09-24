@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,6 +45,8 @@ public class HomeFragment extends Fragment {
     ViewPager eventList = null, serviceList = null, newFriendsList = null;
     TextView emptyFriend = null, emptyEvent = null, emptyService = null;
     DBHelper db = null;
+    Button addnewfriend;
+    LinearLayout emptyFriendlnr;
 
     ArrayList<ContactClass> userList = null;
 
@@ -64,8 +68,38 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         initializeWidgets(view);
-
+        setClickListener();
         return view;
+    }
+
+
+    private void setClickListener() {
+        clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.btn_addnewfriend:
+                        Class setClass = FriendsFragment.class;
+                        Fragment fragment = null;
+                        try {
+                            fragment = (Fragment) setClass.newInstance();
+                            Bundle args = new Bundle();
+                            args.putInt("type", AppGlobals.FRIEND_LIST);
+                            fragment.setArguments(args);
+                            appGlobals.currentFragmentClass = setClass;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        // Insert the fragment by replacing any existing fragment
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                        break;
+
+                }
+            }
+        };
+        addnewfriend.setOnClickListener(clickListener);
     }
 
     private void initializeWidgets(View view) {
@@ -76,6 +110,7 @@ public class HomeFragment extends Fragment {
 
         eventList = (ViewPager) view.findViewById(R.id.eventList);
         emptyEvent = (TextView) view.findViewById(R.id.emptyEventItem);
+        addnewfriend=(Button)view.findViewById(R.id.btn_addnewfriend);
 
         if(mResources.length != 0) {
             eventList.setVisibility(View.VISIBLE);
@@ -102,6 +137,7 @@ public class HomeFragment extends Fragment {
 
         newFriendsList = (ViewPager) view.findViewById(R.id.newFriendsList);
         emptyFriend = (TextView) view.findViewById(R.id.emptyFriendItem);
+        emptyFriendlnr = (LinearLayout) view.findViewById(R.id.linr_emptyfriendname);
 
         refreshFriendReqList();
     }
@@ -121,12 +157,12 @@ public class HomeFragment extends Fragment {
             userList = db.getContacts(AppGlobals.PENDING_FRIENDS);
             if(userList != null && userList.size() > 0) {
                 newFriendsList.setVisibility(View.VISIBLE);
-                emptyFriend.setVisibility(View.GONE);
+                emptyFriendlnr.setVisibility(View.GONE);
                 newFriendAdapter = new NewFriendListAdapter(context, userList, clickListener);
                 newFriendsList.setAdapter(newFriendAdapter);
             } else{
                 newFriendsList.setVisibility(View.GONE);
-                emptyFriend.setVisibility(View.VISIBLE);
+                emptyFriendlnr.setVisibility(View.VISIBLE);
             }
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception in broadcast receiver " + e.toString(), LogClass.ERROR_MSG);
