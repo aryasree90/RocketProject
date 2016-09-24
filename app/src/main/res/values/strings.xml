@@ -79,6 +79,12 @@
     <string name="common_notif_msg">Common Notification</string>
     <string name="chat_notif_msg">Chat Notification</string>
     <string name="date_time">Select Date and Time</string>
+    <string name="confirm_time">Confirm</string>
+    <string name="select_friend">Select atleast 1 friend</string>
+    <string name="select_game">Select a game type</string>
+    <string name="select_time">Select time</string>
+    <string name="accepted">Accepted</string>
+    <string name="rejected">Rejected</string>
     <string name="okButton">Ok</string>
 
     <string name="title_activity_login">LoginActivity</string>

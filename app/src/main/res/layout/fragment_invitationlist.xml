@@ -6,66 +6,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:weightSum="1"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:background="@color/colorBlueButton"
-        android:orientation="horizontal"
-        android:id="@+id/radioGroup">
-
-        <RadioButton
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="All"
-            android:textColor="@color/common_google_signin_btn_text_dark"
-            android:layout_marginLeft="2dp"
-            android:id="@+id/radioAll"
-             />
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Received"
-            android:textColor="@color/common_google_signin_btn_text_dark"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/radioReceived"/>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:weightSum="1"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:background="@color/colorBlueButton"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sent"
-            android:textColor="@color/common_google_signin_btn_text_dark"
-            android:layout_marginLeft="15dp"
-            android:id="@+id/radioSent"
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:layout_marginLeft="2dp"
+                    android:id="@+id/radioAll" />
 
-            />
-    </RadioGroup>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Received"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/radioReceived"/>
+
+                <RadioButton
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Sent"
+                   android:textColor="@color/common_google_signin_btn_text_dark"
+                   android:layout_marginLeft="15dp"
+                   android:id="@+id/radioSent" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inviteList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
     </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
-
-
-</LinearLayout>
-
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_invitetoplay"
@@ -74,7 +69,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@mipmap/ic_invitetoplay" />
-
-
 
 </android.support.design.widget.CoordinatorLayout>

@@ -154,10 +154,19 @@ public final class CommonUtilities {
 
     static void getInviteToPlay(Context context, String message) {
 
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, message, LogClass.DEBUG_MSG);
+
         Gson gson = new Gson();
         GameInvite gameInvite = gson.fromJson(message, GameInvite.class);
+        gameInvite.setStatus(AppGlobals.UNSELECT_GAME);
 
-        Log.d("__________", "____________" + gameInvite.getSenderMob() + " " + gameInvite.getGame() + " " + gameInvite.getSchedule());
+        DBHelper db = new DBHelper(context);
+        db.insertInvitationDetails(gameInvite);
+
+        String notifMsg = "You have received a Game Invitation from " + gameInvite.getSenderMob();
+        Intent notificationIntent = new Intent(context, InvitationListFragment.class);
+        generateNotification(context, notifMsg, notificationIntent);
 
     }
 

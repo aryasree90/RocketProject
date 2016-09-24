@@ -18,8 +18,17 @@
     <Button
         android:id="@+id/selectDateTime"
         android:padding="10dp"
-        android:layout_width="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/date_time"/>
+
+    <Button
+        android:id="@+id/confirmTime"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm_time"/>
 
 </LinearLayout>
