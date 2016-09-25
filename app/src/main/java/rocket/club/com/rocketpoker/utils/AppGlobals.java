@@ -119,7 +119,7 @@ public class AppGlobals {
     public static final String NOTIF_FRND_REQ_RESP = "frnd_req_resp";
     public static final String CHAT_ROOM = "chat_room";
     public static final String INVITE_TO_PLAY = "invite_to_play";
-
+    public static final String RESP_PLAY = "resp_play";
 
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";

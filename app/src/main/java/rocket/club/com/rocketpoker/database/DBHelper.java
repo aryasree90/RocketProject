@@ -73,6 +73,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String SELECT_ALL_INVITATION = "SELECT * FROM " + gameInviteTable;
 
+    public static final String SELECT_INVITATION = "SELECT * FROM " + gameInviteTable + " WHERE " +
+            timeStamp + "=?";
+
     public DBHelper(Context ctx) {
         super(ctx, DB_NAME, null, DB_VERSION);
     }
@@ -302,5 +305,50 @@ public class DBHelper extends SQLiteOpenHelper {
         if(db != null)
             db.close();
         return gameInviteList;
+    }
+
+    public void updateInviteStatus(GameInvite gameInvite) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor res = db.rawQuery(SELECT_INVITATION,  new String[]{gameInvite.getTimeStamp()});
+
+        if(res != null) {
+            res.moveToFirst();
+            String inviteList = res.getString(res.getColumnIndex(invite_list));
+
+            String[] invited = inviteList.split("::");
+
+            String updateList = "";
+            for(String item : invited) {
+
+                if(!TextUtils.isEmpty(updateList))
+                    updateList += "::";
+
+                if(item.equals(gameInvite.getSenderMob())) {
+                    updateList += item + ":" + gameInvite.getStatus();
+                } else {
+                    updateList += item;
+                }
+            }
+
+            final String where = timeStamp + "=" + gameInvite.getTimeStamp();
+            ContentValues cv = new ContentValues();
+            cv.put(invite_list, updateList);
+            db.update(gameInviteTable, cv, where, null);
+        }
+        if(db != null)
+            db.close();
+    }
+
+    public void updateGameStatus(GameInvite gameInvite) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        final String where = timeStamp + "=" + gameInvite.getTimeStamp();
+        ContentValues cv = new ContentValues();
+        cv.put(status, gameInvite.getStatus());
+        db.update(gameInviteTable, cv, where, null);
+
+        if(db != null)
+            db.close();
     }
 }

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,8 +44,12 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.w3c.dom.Text;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -283,7 +288,8 @@ public class FriendsFragment extends Fragment {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        selDateTime = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                        int month = monthOfYear + 1;
+                        selDateTime = checkTime(dayOfMonth) + "-" + checkTime(month) + "-" + year;
                         showTimePickerDialog();
                     }
                 }, mYear, mMonth, mDay);
@@ -302,14 +308,20 @@ public class FriendsFragment extends Fragment {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-
-                        selDateTime += " " + hourOfDay + ":" + minute;
-
+                        selDateTime += " " + checkTime(hourOfDay) + ":" + checkTime(minute);
                         btnDateTime.setText(selDateTime);
-
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
+    }
+
+    private String checkTime(int val) {
+        String finalVal = "";
+        if(val < 10)
+            finalVal = "0" + val;
+        else
+            finalVal = "" + val;
+        return finalVal;
     }
 
     private void serverCall(final Map<String, String> map, final String URL) {
@@ -356,7 +368,18 @@ public class FriendsFragment extends Fragment {
                                 searchFriend.requestFocus();
                             }
                         } else if(URL.equals(INVITE_TO_PLAY_URL)) {
-                            Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+                            Class fragmentInvite = InvitationListFragment.class;
+
+                            try {
+                                Fragment fragment = (Fragment) fragmentInvite.newInstance();
+                                appGlobals.currentFragmentClass = fragmentInvite;
+
+                                // Insert the fragment by replacing any existing fragment
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                            } catch (Exception e) {
+                                appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
+                            }
                         }
                     }
                 },
