@@ -20,6 +20,7 @@ import static rocket.club.com.rocketpoker.CommonUtilities.displayMessage;
 import static rocket.club.com.rocketpoker.CommonUtilities.updateFriends;
 import static rocket.club.com.rocketpoker.CommonUtilities.getChatMessages;
 import static rocket.club.com.rocketpoker.CommonUtilities.getInviteToPlay;
+import static rocket.club.com.rocketpoker.CommonUtilities.getResponseToPlay;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
@@ -77,6 +78,9 @@ public class GCMIntentService extends GCMBaseIntentService {
         } else if(intent.hasExtra(AppGlobals.INVITE_TO_PLAY)) {
             message = intent.getExtras().getString(AppGlobals.INVITE_TO_PLAY);
             getInviteToPlay(context, message);
+        } else if(intent.hasExtra(AppGlobals.RESP_PLAY)) {
+            message = intent.getExtras().getString(AppGlobals.RESP_PLAY);
+            getResponseToPlay(context, message);
         }else if(intent.hasExtra("received_messages")){
             try {
                 JSONArray array  = new JSONArray(intent.getExtras().getString("received_messages"));

@@ -90,7 +90,7 @@ public final class CommonUtilities {
             } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
                 db.updateContacts(userDetails.getStatus(), notif.getSender());
                 if(userDetails.getStatus() == 1) {
-                    notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_accept);
+                    notifMsg = notif.getSender() + context.getString(R.string.frnd_req_accept);
                 }
                 Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ_RESP);
                 context.sendBroadcast(autoIntent);
@@ -168,6 +168,17 @@ public final class CommonUtilities {
         Intent notificationIntent = new Intent(context, InvitationListFragment.class);
         generateNotification(context, notifMsg, notificationIntent);
 
+    }
+
+    static void getResponseToPlay(Context context, String message) {
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, message, LogClass.DEBUG_MSG);
+
+        Gson gson = new Gson();
+        GameInvite gameInvite = gson.fromJson(message, GameInvite.class);
+
+        DBHelper db = new DBHelper(context);
+        db.updateInviteStatus(gameInvite);
     }
 
     private static void generateNotification(Context ctx, String message, Intent notificationIntent) {
