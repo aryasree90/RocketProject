@@ -111,7 +111,11 @@
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
 
+
+    <string name="signout_heading">Sign Out</string>
+
     <string name="send_to">Send</string>
+    <string name="signoutNotify">Do you want to exit?</string>
 
 
     <!-- Contents about the club -->

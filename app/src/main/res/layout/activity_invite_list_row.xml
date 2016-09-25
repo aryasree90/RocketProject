@@ -65,7 +65,7 @@
         <Button
             android:id="@+id/accept"
             android:layout_width="0dp"
-            android:layout_height="@dimen/friend_btn"
+            android:layout_height="25dp"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:background="@drawable/rounded_cornered_green"
@@ -74,7 +74,7 @@
         <Button
             android:id="@+id/reject"
             android:layout_width="0dp"
-            android:layout_height="@dimen/friend_btn"
+            android:layout_height="25dp"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:background="@drawable/rounded_cornered_red"
