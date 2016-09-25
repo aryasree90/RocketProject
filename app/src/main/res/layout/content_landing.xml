@@ -58,14 +58,33 @@
                 android:id="@+id/newFriendsList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+            <LinearLayout
+                android:id="@+id/linr_emptyfriendname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
 
             <TextView
                 android:id="@+id/emptyFriendItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
                 android:text="@string/empty_frnd_req"/>
+
+                <Button
+                    android:id="@+id/btn_addnewfriend"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="@string/add_new_friend"
+                    android:background="@drawable/rounded_cornered_green"/>
+            </LinearLayout>
         </LinearLayout>
 
 

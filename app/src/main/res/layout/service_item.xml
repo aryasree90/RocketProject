@@ -12,7 +12,6 @@
         android:id="@+id/serviceContentLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:layout_weight="0.6">

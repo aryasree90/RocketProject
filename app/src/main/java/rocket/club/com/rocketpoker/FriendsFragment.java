@@ -398,6 +398,7 @@ public class FriendsFragment extends Fragment {
 
     private void setTimeSlotDialog() {
         dialog = new Dialog(context);
+
         dialog.setContentView(R.layout.activity_time_slot);
 
         dialog.setTitle(getString(R.string.set_game_time));
@@ -419,6 +420,7 @@ public class FriendsFragment extends Fragment {
         confirmBtn.setOnClickListener(clickListener);
 
         dialog.show();
+
     }
 
     private void createDialog() {
