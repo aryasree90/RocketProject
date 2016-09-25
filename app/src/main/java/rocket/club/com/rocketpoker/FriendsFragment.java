@@ -335,6 +335,8 @@ public class FriendsFragment extends Fragment {
                             }
                         } else if(URL.equals(FRIEND_SEARCH_URL)){
                             try {
+
+                                friendNotFoundTxt.setVisibility(View.GONE);
                                 Gson gson = new Gson();
                                 UserDetails userDetails = gson.fromJson(response, UserDetails.class);
 
@@ -350,6 +352,7 @@ public class FriendsFragment extends Fragment {
                                 searchFriend.setText("");
                                 friendNotFoundTxt.setVisibility(View.VISIBLE);
                                 searchAFriend = "";
+                                searchFriend.setEnabled(true);
                                 searchFriend.requestFocus();
                             }
                         } else if(URL.equals(INVITE_TO_PLAY_URL)) {

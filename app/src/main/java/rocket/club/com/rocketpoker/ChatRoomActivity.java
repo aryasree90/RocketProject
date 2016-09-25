@@ -130,7 +130,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         chatRecyclerView.setLayoutManager(mLayoutManager);
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(mAdapter);
-
+        chatRecyclerView.scrollToPosition(chatList.size()-1);
         AppGlobals.inChatRoom = true;
     }
 
@@ -180,6 +180,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 chatMsg.setText("");
                                 chatList.add(msgClass);
                                 mAdapter.notifyDataSetChanged();
+                                chatRecyclerView.scrollToPosition(chatList.size() - 1);
                             }
                         }
                         break;
@@ -266,6 +267,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     if(mAdapter != null && chatList != null) {
                         chatList.add(newChatList);
                         mAdapter.notifyDataSetChanged();
+                        chatRecyclerView.scrollToPosition(chatList.size()-1);
                     }
 
                 } catch(Exception e) {
