@@ -1,9 +1,12 @@
 package rocket.club.com.rocketpoker.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,10 +54,11 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
     final private String TAG = "GameInviteAdapter";
     String loginNum = "";
     Context context = null;
+    Dialog dialog = null;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public LinearLayout btnLayout;
+        public LinearLayout btnLayout, itemLayout;
         public TextView game_invite, owner, time, count, status;
         public Button accept, reject;
 
@@ -65,6 +71,7 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
             count = (TextView) view.findViewById(R.id.invitecount);
             status = (TextView) view.findViewById(R.id.invitestatus);
 
+            itemLayout = (LinearLayout) view.findViewById(R.id.itemLayout);
             btnLayout = (LinearLayout) view.findViewById(R.id.btnLayout);
             accept = (Button) view.findViewById(R.id.accept);
             reject = (Button) view.findViewById(R.id.reject);
@@ -93,10 +100,10 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
 
 //        String time = AppGlobals.convertTime(itemList.getTime());
 
+        Log.d("_____________", "________________ " + itemList.getInviteList());
         if(itemList.getSenderMob().equals(loginNum)) {
             holder.btnLayout.setVisibility(View.GONE);
             holder.status.setVisibility(View.GONE);
-            Log.d("________________", "__________________ " + itemList.getInviteList());
         } else {
             DBHelper db = new DBHelper(context);
             ContactClass contactClass = db.getContacts(itemList.getSenderMob());
@@ -133,12 +140,12 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
         setClickListener(holder, itemList);
     }
 
-    private void setClickListener(MyViewHolder holder, final GameInvite itemList) {
+    private void setClickListener(final MyViewHolder holder, final GameInvite itemList) {
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemList.setStatus(AppGlobals.ACCEPT_GAME);
-                serverCall(itemList);
+                serverCall(itemList, holder);
             }
         });
 
@@ -146,12 +153,49 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
             @Override
             public void onClick(View v) {
                 itemList.setStatus(AppGlobals.REJECT_GAME);
-                serverCall(itemList);
+                serverCall(itemList, holder);
             }
         });
+
+        /*holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog=new Dialog(context);
+                dialog.setContentView(R.layout.game_members_list);
+
+                dialog.setTitle(context.getString(R.string.list_friends));
+
+                ArrayList<String> items = new ArrayList<String>();
+                if(itemList.getCount() > 1) {
+                    String[] list = itemList.getInviteList().split("::");
+
+                    for(String listItem : list) {
+                        items.add(listItem);
+                    }
+                } else {
+                    items.add(itemList.getInviteList());
+                }
+
+                GameMembersAdapter mAdapter = new GameMembersAdapter(items, context);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+                RecyclerView listRecyclerView = (RecyclerView) dialog.findViewById(R.id.membersView);
+                listRecyclerView.setLayoutManager(mLayoutManager);
+                listRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                listRecyclerView.setAdapter(mAdapter);
+
+                Button okBtn = (Button) dialog.findViewById(R.id.okBtn);
+                okBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                dialog.show();
+            }
+        });*/
     }
 
-    private void serverCall(final GameInvite itemList) {
+    private void serverCall(final GameInvite itemList, final MyViewHolder holder) {
 
         if(!appGlobals.isNetworkConnected(context)) {
             appGlobals.toastMsg(context, context.getString(R.string.no_internet), appGlobals.LENGTH_LONG);
@@ -167,6 +211,16 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
 
                         DBHelper db = new DBHelper(context);
                         db.updateGameStatus(itemList);
+
+                        holder.btnLayout.setVisibility(View.GONE);
+                        holder.status.setVisibility(View.VISIBLE);
+                        if(itemList.getStatus() == AppGlobals.ACCEPT_GAME) {
+                            holder.status.setText(context.getString(R.string.accepted));
+                            holder.status.setTextColor(Color.GREEN);
+                        } else {
+                            holder.status.setText(context.getString(R.string.rejected));
+                            holder.status.setTextColor(Color.RED);
+                        }
                     }
                 },
                 new Response.ErrorListener() {

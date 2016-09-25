@@ -165,7 +165,8 @@ public final class CommonUtilities {
         db.insertInvitationDetails(gameInvite);
 
         String notifMsg = "You have received a Game Invitation from " + gameInvite.getSenderMob();
-        Intent notificationIntent = new Intent(context, InvitationListFragment.class);
+        Intent notificationIntent = new Intent(context, LandingActivity.class);
+        appGlobals.currentFragmentClass = InvitationListFragment.class;
         generateNotification(context, notifMsg, notificationIntent);
 
     }

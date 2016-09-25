@@ -72,6 +72,7 @@
     <string name="add_new_friend">Add New Friend</string>
     <string name="invite_to_play">Invite To Play</string>
     <string name="search_friends">Search Friends</string>
+    <string name="list_friends">Game Members</string>
     <string name="set_game_time">Set Game Time</string>
     <string name="search_with_mob">Search with Mobile Number</string>
     <string name="go_search">Go</string>
@@ -85,6 +86,7 @@
     <string name="select_time">Select time</string>
     <string name="accepted">Accepted</string>
     <string name="rejected">Rejected</string>
+    <string name="no_resp">No Response</string>
     <string name="okButton">Ok</string>
 
     <string name="title_activity_login">LoginActivity</string>
