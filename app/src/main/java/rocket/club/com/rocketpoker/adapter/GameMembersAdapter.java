@@ -62,22 +62,19 @@ public class GameMembersAdapter  extends RecyclerView.Adapter<GameMembersAdapter
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String item = itemList.get(position);
 
-        Log.d("_____", "_____ " + item);
-
         String memberId = "";//item.split(":")[0];
-        String memberStatusId = "";//item.split(":")[1];
+        int memberStatusId = 0;//item.split(":")[1];
 
         if(item.contains(":")) {
 
             memberId = item.split(":")[0];
-            memberStatusId = item.split(":")[1].trim();
+            memberStatusId = Integer.parseInt(item.split(":")[1].trim());
 
             holder.memberId.setText(memberId);
-Log.d("__________", "________________ " + memberId + " " + memberStatusId);
             String memberStatus = "";
-            if (memberStatusId.equals(AppGlobals.ACCEPT_GAME)) {
+            if (memberStatusId == AppGlobals.ACCEPT_GAME) {
                 memberStatus = context.getString(R.string.accepted);
-            } else if (memberStatusId.equals(AppGlobals.REJECT_GAME)) {
+            } else if (memberStatusId == AppGlobals.REJECT_GAME) {
                 memberStatus = context.getString(R.string.rejected);
             }
             holder.status.setText(memberStatus);

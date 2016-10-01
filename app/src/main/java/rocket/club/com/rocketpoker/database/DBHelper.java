@@ -316,6 +316,9 @@ public class DBHelper extends SQLiteOpenHelper {
             res.moveToFirst();
             String inviteList = res.getString(res.getColumnIndex(invite_list));
 
+            if(!inviteList.contains("::"))
+                inviteList += "::";
+
             String[] invited = inviteList.split("::");
 
             String updateList = "";

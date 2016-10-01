@@ -1,13 +1,17 @@
 package rocket.club.com.rocketpoker;
 
+import android.*;
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -58,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin, btnClear, btnContinue, btnClear1;
     LinearLayout loginLayout = null, otpLayout = null;
     CountryCodePicker countryCodePicker = null;
+    String canonicalMobile = "";
 
     public static final String pageType = "PageType";
     public static final String loginPage = "LoginPage";
@@ -173,15 +178,19 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                         }
 
-                        String canonicalMobile = countryCode + mobile;
+                        canonicalMobile = countryCode + mobile;
 //                      String canonicalMobile = FetchContact.getCanonicalPhoneNumber(context, newMob, appGlobals);
                         if(TextUtils.isEmpty(canonicalMobile)) {
                             appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_SHORT);
                         } else {
                             if (connectionDetector.isConnectingToInternet()) {
-                                appGlobals.sharedPref.setLoginMobile(canonicalMobile);
-                                LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
-                                loginAsync.execute(canonicalMobile);
+
+                                if(!appGlobals.checkLocationPermission(context, AppGlobals.SEND_SMS)) {
+                                    ActivityCompat.requestPermissions(LoginActivity.this,
+                                            new String[]{AppGlobals.SEND_SMS}, AppGlobals.REQUEST_CODE_SMS);
+                                } else {
+                                    startLoginAsync();
+                                }
                             } else
                                 Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
                         }
@@ -223,6 +232,14 @@ public class LoginActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(clickListener);
         btnClear1.setOnClickListener(clickListener);
 
+    }
+
+    private void startLoginAsync() {
+        if(!TextUtils.isEmpty(canonicalMobile)) {
+            appGlobals.sharedPref.setLoginMobile(canonicalMobile);
+            LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
+            loginAsync.execute(canonicalMobile);
+        }
     }
 
     private void clearEditText() {
@@ -327,7 +344,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<String,String>();
-                Log.d(TAG, mobile);
                 map.put("mobile", mobile);
                 return map;
             }
@@ -349,5 +365,21 @@ public class LoginActivity extends AppCompatActivity {
             appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error : " + e.getMessage(), LogClass.ERROR_MSG);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case AppGlobals.REQUEST_CODE_SMS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLoginAsync();
+                }
+                return;
+            }
+        }
     }
 }

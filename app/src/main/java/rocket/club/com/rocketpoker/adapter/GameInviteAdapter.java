@@ -3,6 +3,7 @@ package rocket.club.com.rocketpoker.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,9 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -157,12 +160,17 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
             }
         });
 
-        /*holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog=new Dialog(context);
                 dialog.setContentView(R.layout.game_members_list);
-
+                WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = size.x;
+                int height = size.y;
                 dialog.setTitle(context.getString(R.string.list_friends));
 
                 ArrayList<String> items = new ArrayList<String>();
@@ -190,9 +198,16 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
                         dialog.cancel();
                     }
                 });
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = height/2;
+
                 dialog.show();
+                dialog.getWindow().setAttributes(lp);
             }
-        });*/
+        });
     }
 
     private void serverCall(final GameInvite itemList, final MyViewHolder holder) {

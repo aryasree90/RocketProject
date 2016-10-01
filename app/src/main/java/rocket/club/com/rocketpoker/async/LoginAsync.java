@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -115,7 +116,7 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
     }
 
 
-    private void validateUser(final String mobile) {
+    /*private void validateUser(final String mobile) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
                 new Response.Listener<String>() {
@@ -138,7 +139,6 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<String,String>();
-                Log.d(TAG, mobile);
                 map.put("mobile", mobile);
                 return map;
             }
@@ -146,7 +146,7 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
 
         RequestQueue requestQueue = Volley.newRequestQueue(ctx);
         requestQueue.add(stringRequest);
-    }
+    }*/
 
     private void sendValidationSms(String mobile) {
 
@@ -170,9 +170,9 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
             appGlobals.logClass.setLogMsg(TAG, "Validation Msg " + validMsg + " to " + mobNum, LogClass.DEBUG_MSG);
 
             try {
-                ActivityCompat.requestPermissions(loginActivity, new String[]{Manifest.permission.SEND_SMS}, 1);
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(mobNum, null, validMsg, null, null);
+
             } catch (Exception e) {
                 appGlobals.logClass.setLogMsg(TAG, "Exception while sending Validation Msg " + e.toString(), LogClass.DEBUG_MSG);
             }
@@ -183,6 +183,8 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
 
         appGlobals.logClass.setLogMsg(TAG, "Completed sendValidationSms", LogClass.DEBUG_MSG);
     }
+
+
 
     public static boolean isTabletDevice(Context context) {
         TelephonyManager telephony = (TelephonyManager) context

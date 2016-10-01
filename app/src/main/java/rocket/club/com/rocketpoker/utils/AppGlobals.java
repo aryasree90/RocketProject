@@ -78,7 +78,7 @@ public class AppGlobals {
     LocationService locationService = null;
     public static boolean inChatRoom = false;
 
-    public final static int PERMISSION_REQ_CODE = 111;
+//    public final static int PERMISSION_REQ_CODE = 111;
 
     //Location
     public final String UPDATE_LOCATION = "1";
@@ -87,8 +87,13 @@ public class AppGlobals {
     public final String LNG = "lng";
     public final String LOC_NAME = "loc_name";
 
-    public static final String ACCESS_COARSE_LOC = "Manifest.permission.ACCESS_COARSE_LOCATION";
-    public static final String ACCESS_FINE_LOC = "Manifest.permission.ACCESS_FINE_LOCATION";
+    public static final String SEND_SMS = android.Manifest.permission.SEND_SMS;
+    public static final String ACCESS_COARSE_LOC = android.Manifest.permission.ACCESS_COARSE_LOCATION;
+    public static final String ACCESS_FINE_LOC = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    public static final String CALL_PHONE = android.Manifest.permission.CALL_PHONE;
+
+    public static final int REQUEST_CODE_SMS = 100;
+    public static final int REQUEST_CODE_LOCATION = 101;
 
     //Profile
     public final String UPDATE_PROFILE = "1";
@@ -186,17 +191,11 @@ public class AppGlobals {
             }
 
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                appGlobals.logClass.setLogMsg(TAG, "Permission is not granted", LogClass.DEBUG_MSG);
-
-                final ArrayList<String> permissionsMissing = new ArrayList<>();
-                permissionsMissing.add(permission);
-                final String[] array = new String[permissionsMissing.size()];
-                permissionsMissing.toArray(array);
-                if(tempActivity != null)
-                    ActivityCompat.requestPermissions(tempActivity, array, 111);
+                appGlobals.logClass.setLogMsg(TAG, "Permission is not granted for " + permission, LogClass.DEBUG_MSG);
+                return false;
             }
         }
-        appGlobals.logClass.setLogMsg(TAG, "Permission is granted", LogClass.DEBUG_MSG);
+        appGlobals.logClass.setLogMsg(TAG, "Permission is granted for " + permission, LogClass.DEBUG_MSG);
         return true;
     }
 

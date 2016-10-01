@@ -1,11 +1,14 @@
 package rocket.club.com.rocketpoker;
 
+import android.*;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -95,8 +98,31 @@ public class LandingActivity extends AppCompatActivity
         setFragment(appGlobals.currentFragmentClass, null);
 
         AppGlobals.tempActivity = this;
-        appGlobals.startLocationIntent(context);
 
+        if(!appGlobals.checkLocationPermission(context, AppGlobals.ACCESS_COARSE_LOC)
+                || !appGlobals.checkLocationPermission(context, AppGlobals.ACCESS_FINE_LOC)) {
+            ActivityCompat.requestPermissions(LandingActivity.this,
+                    new String[]{AppGlobals.ACCESS_COARSE_LOC, AppGlobals.ACCESS_FINE_LOC},
+                    AppGlobals.REQUEST_CODE_LOCATION);
+        } else {
+            appGlobals.startLocationIntent(context);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case AppGlobals.REQUEST_CODE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    appGlobals.startLocationIntent(context);
+                }
+                return;
+            }
+        }
     }
 
     private void setClickListener() {

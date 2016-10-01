@@ -11,13 +11,13 @@
         android:id="@+id/membersView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9" />
+        android:layout_weight="0.8" />
 
     <Button
         android:id="@+id/okBtn"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_weight="0.2"
         android:text="@string/okButton"/>
 
 </LinearLayout>

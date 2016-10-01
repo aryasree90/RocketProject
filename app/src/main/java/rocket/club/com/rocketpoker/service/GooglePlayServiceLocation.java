@@ -174,8 +174,8 @@ public class GooglePlayServiceLocation implements LocationListener,
 		if (Engine.IS_INTERNAL_RELEASE) {// This log is not print now.
 			Engine.engObj.eLogger
 					.info("GooglePlayServiceLocationClient::onDisconnected()::ENTRY:: ");
-			
-			Engine.engObj.eLogger.info("Reached onDisconntected of GooglePlayServiceLocation " + ConfigurationReader.getCurrentTime());	
+
+			Engine.engObj.eLogger.info("Reached onDisconntected of GooglePlayServiceLocation " + ConfigurationReader.getCurrentTime());
 		}
 	}*/
 
@@ -203,7 +203,7 @@ public class GooglePlayServiceLocation implements LocationListener,
 
 	/**
 	 * Report location updates to the UI.
-	 * 
+	 *
 	 * @param location
 	 *            The updated location.
 	 */
