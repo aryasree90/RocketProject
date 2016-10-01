@@ -7,6 +7,7 @@ import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -17,6 +18,8 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -180,6 +183,25 @@ public class AppGlobals {
     public static String convertTime(long timeStamp) {
         String time = (String) DateFormat.format("hh:mm a", timeStamp);
         return time;
+    }
+
+    public int getScreenHeight(Context context) {
+        Point point = getPoint(context);
+        return point.y;
+    }
+
+    public int getScreenWidth(Context context) {
+        Point point = getPoint(context);
+        return point.x;
+    }
+
+    public Point getPoint(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point point = new Point();
+        display.getSize(point);
+
+        return point;
     }
 
     public static boolean checkLocationPermission(Context context, String permission) {

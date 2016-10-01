@@ -165,12 +165,7 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
             public void onClick(View v) {
                 dialog=new Dialog(context);
                 dialog.setContentView(R.layout.game_members_list);
-                WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-                Display display = wm.getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                int width = size.x;
-                int height = size.y;
+
                 dialog.setTitle(context.getString(R.string.list_friends));
 
                 ArrayList<String> items = new ArrayList<String>();
@@ -202,7 +197,7 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = height/2;
+                lp.height = appGlobals.getScreenHeight(context)/2;
 
                 dialog.show();
                 dialog.getWindow().setAttributes(lp);
