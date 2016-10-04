@@ -222,7 +222,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
 
         googleMap.addMarker(new MarkerOptions()
                 .position(markerLatLng)
-                .title(locName)).setSnippet(snippet);
+                .title(locName));
 
     }
 

@@ -138,6 +138,8 @@ public class SettingsFragment extends Fragment {
         okButton.setOnClickListener(onClickListener);
 
         dialog.show();
+
+        appGlobals.setDialogLayoutParams(dialog, context, false, true);
     }
 
     private void createSignOutDialog() {

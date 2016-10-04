@@ -67,6 +67,7 @@ public class InvitationListFragment extends Fragment {
         recBtn = (RadioButton) view.findViewById(R.id.radioReceived);
         sentBtn = (RadioButton) view.findViewById(R.id.radioSent);
 
+
         DBHelper db = new DBHelper(context);
         fullInviteList = db.getInvitations();
 

@@ -271,6 +271,7 @@ public class ProfileActivity extends ActionBarActivity {
         ProfileDetailsClass profileDetails = profileJson.fromJson(response, ProfileDetailsClass[].class)[0];
 
         fullName.setText(profileDetails.getName());
+        fullName.setEnabled(true);
         appGlobals.sharedPref.setUserName(profileDetails.getName());
         email.setText(profileDetails.getEmail());
         nickName.setText(profileDetails.getNickname());

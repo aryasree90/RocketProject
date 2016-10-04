@@ -194,13 +194,9 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
                     }
                 });
 
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(dialog.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = appGlobals.getScreenHeight(context)/2;
-
                 dialog.show();
-                dialog.getWindow().setAttributes(lp);
+
+                appGlobals.setDialogLayoutParams(dialog, context, false, true);
             }
         });
     }

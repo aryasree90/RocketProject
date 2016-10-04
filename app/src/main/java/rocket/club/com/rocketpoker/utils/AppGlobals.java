@@ -2,6 +2,7 @@ package rocket.club.com.rocketpoker.utils;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.Context;
@@ -202,6 +203,23 @@ public class AppGlobals {
         display.getSize(point);
 
         return point;
+    }
+
+    public void setDialogLayoutParams(Dialog dialog, Context context, boolean setWidth, boolean setHeight) {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+
+        if(setWidth)
+            lp.width = getScreenHeight(context)/2;
+        else
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+        if(setHeight)
+            lp.height = getScreenHeight(context)/2;
+        else
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+        dialog.getWindow().setAttributes(lp);
     }
 
     public static boolean checkLocationPermission(Context context, String permission) {

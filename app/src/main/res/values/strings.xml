@@ -88,6 +88,8 @@
     <string name="rejected">Rejected</string>
     <string name="no_resp">No Response</string>
     <string name="okButton">Ok</string>
+    <string name="already_frnd">%1$s is already your friend</string>
+    <string name="req_to_own_num">You cannot send request to same login number</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_home">HomeActivity</string>

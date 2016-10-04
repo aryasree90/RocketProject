@@ -229,11 +229,22 @@ public class FriendsFragment extends Fragment {
                         break;
                     case R.id.acceptFriend:
                             friendNotFoundTxt.setVisibility(View.GONE);
-                            /*if(searchAFriend.isEmpty()) {
-                                appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
-                                return;
-                            }*/
 
+                            String frndMob = friendMobile.getText().toString();
+
+                        DBHelper db = new DBHelper(context);
+                        ContactClass contactFrnd = db.getContacts(frndMob);
+
+                        if(contactFrnd != null) {
+                            String param = "";
+                            if(!TextUtils.isEmpty(contactFrnd.getContactName())) {
+                                param = contactFrnd.getContactName();
+                            } else {
+                                param = contactFrnd.getPhoneNumber();
+                            }
+                            String alreadyFrnd = getString(R.string.already_frnd, param);
+                            Toast.makeText(context, alreadyFrnd, Toast.LENGTH_LONG).show();
+                        } else {
                             Map<String, String> frnd_map = new HashMap<String, String>();
                             frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             frnd_map.put("frnd_mobile", friendMobile.getText().toString());
@@ -241,6 +252,7 @@ public class FriendsFragment extends Fragment {
 
                             serverCall(frnd_map, FRIEND_REQ_URL);
                             resetDialog();
+                        }
                         break;
                     case R.id.rejectFriend:
                         resetDialog();
@@ -252,13 +264,15 @@ public class FriendsFragment extends Fragment {
                         if(searchAFriend.isEmpty()) {
                             appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
                             return;
+                        } else if (appGlobals.sharedPref.getLoginMobile().contains(searchAFriend)) {
+                            appGlobals.toastMsg(context, getString(R.string.req_to_own_num), appGlobals.LENGTH_LONG);
+                        } else {
+                            searchFriend.setEnabled(false);
+                            Map<String, String> search_map = new HashMap<String, String>();
+                            search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                            search_map.put("frnd_mobile", searchAFriend);
+                            serverCall(search_map, FRIEND_SEARCH_URL);
                         }
-
-                        searchFriend.setEnabled(false);
-                        Map<String,String> search_map = new HashMap<String,String>();
-                        search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                        search_map.put("frnd_mobile", searchAFriend);
-                        serverCall(search_map, FRIEND_SEARCH_URL);
                         break;
                     case R.id.selectDateTime:
                             showDatePickerDialog();
@@ -423,6 +437,8 @@ public class FriendsFragment extends Fragment {
         confirmBtn.setOnClickListener(clickListener);
 
         dialog.show();
+
+        appGlobals.setDialogLayoutParams(dialog, context, false, true);
 
     }
 
