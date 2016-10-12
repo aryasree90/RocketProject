@@ -110,6 +110,11 @@ public class AppGlobals {
     public final String REPLY_FRND_REQ = "2";
     public final String SEARCH_FRND = "3";
 
+    //Info Type
+    public static final String EVENT_INFO = "1";
+    public static final String SERVICE_INFO = "2";
+    public static final String LIVE_UPDATE_INFO = "3";
+
     //Game Invite
     public static final String SEND_INVITE = "1";
     public static final String RES_INVITE = "2";
@@ -420,8 +425,7 @@ public class AppGlobals {
         try {
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
         } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(context, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
     }
 }

@@ -123,7 +123,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             DBHelper db = new DBHelper(context);
             chatList = db.getMessages();
         } catch(Exception e) {
-            e.printStackTrace();
+            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
         mAdapter = new ChatRoomAdapter(chatList, context);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);

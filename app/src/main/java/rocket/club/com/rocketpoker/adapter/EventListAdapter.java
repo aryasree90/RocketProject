@@ -11,8 +11,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import rocket.club.com.rocketpoker.EventDetailActivity;
 import rocket.club.com.rocketpoker.R;
+import rocket.club.com.rocketpoker.classes.InfoDetails;
+import rocket.club.com.rocketpoker.utils.AppGlobals;
 
 public class EventListAdapter extends PagerAdapter {
 
@@ -21,20 +25,20 @@ public class EventListAdapter extends PagerAdapter {
     RelativeLayout itemLayout;
 
     LayoutInflater mLayoutInflater;
-    int[] mResources;
+    ArrayList<InfoDetails> infoList = null;
     View.OnClickListener itemClickListener;
 
     private final String TAG = "EventListAdapter";
 
-    public EventListAdapter(Context context, int[] mRes) {
+    public EventListAdapter(Context context, ArrayList<InfoDetails> infoList) {
         this.context = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mResources=mRes;
+        this.infoList = infoList;
     }
 
     @Override
     public int getCount() {
-        return mResources.length;
+        return infoList.size();
     }
 
     @Override
@@ -50,8 +54,11 @@ public class EventListAdapter extends PagerAdapter {
         itemImage = (ImageView) itemView.findViewById(R.id.eventImageView);
         TextView headerText = (TextView) itemView.findViewById(R.id.eventHeaderText);
 
-        itemImage.setImageResource(mResources[position]);
-        setItemClickListener(position);
+        InfoDetails infoItem = infoList.get(position);
+
+        itemImage.setImageResource(R.drawable.event1);
+        headerText.setText(infoItem.getInfoTitle());
+        setItemClickListener(position, infoItem);
 
         container.addView(itemView);
         return itemView;
@@ -62,7 +69,7 @@ public class EventListAdapter extends PagerAdapter {
         container.removeView((RelativeLayout) object);
     }
 
-    private void setItemClickListener(int pos) {
+    private void setItemClickListener(final int pos, InfoDetails infoItem) {
         itemClickListener = new View.OnClickListener() {
 
             @Override
@@ -71,6 +78,8 @@ public class EventListAdapter extends PagerAdapter {
                     case R.id.eventItemLayout:
                     case R.id.eventImageView:
                         Intent eventActivity = new Intent(context, EventDetailActivity.class);
+                        eventActivity.putExtra(EventDetailActivity.ACTIVITY_TYPE, AppGlobals.EVENT_INFO);
+                        eventActivity.putExtra(EventDetailActivity.ITEM_POS, pos);
                         context.startActivity(eventActivity);
                         break;
                 }

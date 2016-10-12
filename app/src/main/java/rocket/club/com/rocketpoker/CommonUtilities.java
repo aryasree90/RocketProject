@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.GameInvite;
+import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.NotifClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
@@ -180,6 +181,17 @@ public final class CommonUtilities {
 
         DBHelper db = new DBHelper(context);
         db.updateInviteStatus(gameInvite);
+    }
+
+    static void getRocketsInfo(Context context, String message) {
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, message, LogClass.DEBUG_MSG);
+
+        Gson gson = new Gson();
+        InfoDetails infoDetails = gson.fromJson(message, InfoDetails.class);
+
+        DBHelper db = new DBHelper(context);
+        db.insertInfoDetails(infoDetails);
     }
 
     private static void generateNotification(Context ctx, String message, Intent notificationIntent) {

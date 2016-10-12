@@ -16,6 +16,9 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
+
 
 /**
  * Created by Admin on 8/15/2016.
@@ -23,6 +26,7 @@ import android.util.Log;
 public class LocationTracker extends Service implements LocationListener {
 
     private final Context mContext;
+    private final String TAG = "LocationTracker";
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -52,6 +56,7 @@ public class LocationTracker extends Service implements LocationListener {
     }
 
     public Location getLocation() {
+        AppGlobals appGlobals = AppGlobals.getInstance(mContext);
         try {
             locationManager = (LocationManager) mContext
                     .getSystemService(LOCATION_SERVICE);
@@ -71,7 +76,6 @@ public class LocationTracker extends Service implements LocationListener {
                 // First get location from Network Provider
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    Log.d("Network", "Network");
                     if (locationManager != null) {
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -91,7 +95,6 @@ public class LocationTracker extends Service implements LocationListener {
                                     LocationManager.GPS_PROVIDER,
                                     MIN_TIME_BW_UPDATES,
                                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                            Log.d("GPS Enabled", "GPS Enabled");
                             if (locationManager != null) {
                                 location = locationManager
                                         .getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -106,7 +109,7 @@ public class LocationTracker extends Service implements LocationListener {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
 
         return location;

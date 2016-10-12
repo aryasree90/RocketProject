@@ -165,7 +165,7 @@ public class FriendsFragment extends Fragment {
                 friendsList.add(new FriendsListClass(name, contactClass.getPhoneNumber(), "image"));
             }
         } catch(Exception e) {
-            e.printStackTrace();
+            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
 
     }
@@ -243,7 +243,7 @@ public class FriendsFragment extends Fragment {
                                 param = contactFrnd.getPhoneNumber();
                             }
                             String alreadyFrnd = getString(R.string.already_frnd, param);
-                            Toast.makeText(context, alreadyFrnd, Toast.LENGTH_LONG).show();
+                            appGlobals.toastMsg(context, alreadyFrnd, appGlobals.LENGTH_LONG);
                         } else {
                             Map<String, String> frnd_map = new HashMap<String, String>();
                             frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());

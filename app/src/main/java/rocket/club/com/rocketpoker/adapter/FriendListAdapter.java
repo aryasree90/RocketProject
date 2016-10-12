@@ -124,11 +124,10 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if(results == null)
-                    Log.d(TAG, "Result is null");
-                Log.d(TAG, "Results found " + results.count);
-                friendsList = (ArrayList<FriendsListClass>) results.values;
-                notifyDataSetChanged();
+                if(results != null) {
+                    friendsList = (ArrayList<FriendsListClass>) results.values;
+                    notifyDataSetChanged();
+                }
 
             }
         };

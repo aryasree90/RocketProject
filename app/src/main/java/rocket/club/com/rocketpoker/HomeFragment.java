@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +15,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gcm.GCMRegistrar;
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.adapter.EventListAdapter;
 import rocket.club.com.rocketpoker.adapter.NewFriendListAdapter;
 import rocket.club.com.rocketpoker.adapter.ServiceListAdapter;
-import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
-import rocket.club.com.rocketpoker.classes.LocationClass;
-import rocket.club.com.rocketpoker.classes.UserDetails;
+import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
@@ -88,7 +79,7 @@ public class HomeFragment extends Fragment {
                             fragment.setArguments(args);
                             appGlobals.currentFragmentClass = setClass;
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
                         }
 
                         // Insert the fragment by replacing any existing fragment
@@ -112,10 +103,12 @@ public class HomeFragment extends Fragment {
         emptyEvent = (TextView) view.findViewById(R.id.emptyEventItem);
         addnewfriend=(Button)view.findViewById(R.id.btn_addnewfriend);
 
-        if(mResources.length != 0) {
+        ArrayList<InfoDetails> infoList = db.getRocketsInfo(AppGlobals.EVENT_INFO);
+
+        if(!infoList.isEmpty()) {
             eventList.setVisibility(View.VISIBLE);
             emptyEvent.setVisibility(View.GONE);
-            eventAdapter = new EventListAdapter(context, mResources);
+            eventAdapter = new EventListAdapter(context, infoList);
             eventList.setAdapter(eventAdapter);
         } else {
             eventList.setVisibility(View.GONE);

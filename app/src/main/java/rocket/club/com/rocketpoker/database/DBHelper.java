@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.GameInvite;
+import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -28,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String friendsTable = "friendsTable";
     public static final String messageTable = "messageTable";
     public static final String gameInviteTable = "gameInviteTable";
+    public static final String rocketsInfoTable = "rocketsInfoTable";
 
     public static final String _id = "id";
     public static final String mobile = "frndMobile";
@@ -47,6 +49,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String count = "count";
     public static final String timeStamp = "timeStamp";
 
+    public static final String infoImage = "infoImage";
+    public static final String infoTitle = "infoTitle";
+    public static final String infoSubTitle = "infoSubTitle";
+    public static final String infoLikeStatus = "infoLikeStatus";
+    public static final String infoEditor = "infoEditor";
+    public static final String infoTimeStamp = "infoTimeStamp";
+    public static final String infoMsgType = "infoMsgType";
+
     public static final String CREATE_TABLE = "CREATE TABLE " + friendsTable + "(" + _id +
             " integer primary key autoincrement not null, " + mobile + " text, " + userName +
             " text, " + nickName + " text, " + status + " integer)";
@@ -59,6 +69,11 @@ public class DBHelper extends SQLiteOpenHelper {
             " integer primary key autoincrement not null, " + senderMob + " text, " + invite_list +
             " text, " + game + " text, " + schedule + " text, " + timeStamp + " text, " + count +
             " integer, " + status + " integer)";
+
+    public static final String CREATE_ROCKETS_INFO = "CREATE TABLE " + rocketsInfoTable + "(" + _id +
+            " integer primary key autoincrement not null, " + infoImage + " text, " + infoTitle +
+            " text, " + infoSubTitle + " text, " + infoLikeStatus + " text, " + infoEditor + " text, "
+            + infoTimeStamp + " text, " + infoMsgType + " integer)";
 
     public static final String SELECT_ALL_FRIENDS = "SELECT * FROM " + friendsTable;
     public static final String SELECT_PENDING = "SELECT * FROM " + friendsTable + " WHERE " +
@@ -76,6 +91,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SELECT_INVITATION = "SELECT * FROM " + gameInviteTable + " WHERE " +
             timeStamp + "=?";
 
+    public static final String SELECT_ROCKETS_INFO = "SELECT * FROM " + rocketsInfoTable + " WHERE " +
+            infoMsgType + "=?";
+
     public DBHelper(Context ctx) {
         super(ctx, DB_NAME, null, DB_VERSION);
     }
@@ -85,6 +103,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE);
         db.execSQL(CREATE_MSG_TABLE);
         db.execSQL(CREATE_GAME_INVITE);
+        db.execSQL(CREATE_ROCKETS_INFO);
     }
 
     @Override
@@ -353,5 +372,57 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if(db != null)
             db.close();
+    }
+
+    public boolean insertInfoDetails(InfoDetails infoDetails){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(this.infoImage, infoDetails.getInfoImage());
+        contentValues.put(this.infoTitle, infoDetails.getInfoTitle());
+        contentValues.put(this.infoSubTitle, infoDetails.getInfoSubTitle());
+        contentValues.put(this.infoLikeStatus, infoDetails.getInfoLikeStatus());
+        contentValues.put(this.infoEditor, infoDetails.getInfoEditor());
+        contentValues.put(this.infoTimeStamp, infoDetails.getInfoTimeStamp());
+        contentValues.put(this.infoMsgType, infoDetails.getInfoMsgType());
+        db.insert(rocketsInfoTable, null, contentValues);
+
+        if(db != null)
+            db.close();
+        return true;
+    }
+
+    public ArrayList<InfoDetails> getRocketsInfo(String searchMsgType) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery(SELECT_ROCKETS_INFO, new String[]{searchMsgType});
+
+        ArrayList<InfoDetails> infoList = new ArrayList<InfoDetails>();
+
+        if(res != null) {
+            res.moveToFirst();
+            while (!res.isAfterLast()) {
+                String image = res.getString(res.getColumnIndex(infoImage));
+                String title = res.getString(res.getColumnIndex(infoTitle));
+                String subTitle = res.getString(res.getColumnIndex(infoSubTitle));
+                String likeStatus = res.getString(res.getColumnIndex(infoLikeStatus));
+                String editor = res.getString(res.getColumnIndex(infoEditor));
+                String timeStamp = res.getString(res.getColumnIndex(infoTimeStamp));
+                String msgType = res.getString(res.getColumnIndex(infoMsgType));
+
+                InfoDetails info = new InfoDetails(image, title, subTitle, likeStatus, editor,
+                        timeStamp, msgType);
+
+                infoList.add(info);
+            }
+        }
+        if(db != null)
+            db.close();
+
+        if(infoList.isEmpty()) {
+
+        }
+
+        return infoList;
     }
 }

@@ -191,8 +191,9 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     startLoginAsync();
                                 }
-                            } else
-                                Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                            } else {
+                                appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+                            }
                         }
                         break;
                     case R.id.btn_clear:
@@ -220,7 +221,7 @@ public class LoginActivity extends AppCompatActivity {
                                 appGlobals.toastMsg(context, getString(R.string.invalid_otp), Toast.LENGTH_LONG);
                             }
                         } else {
-                            Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                            appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
                         }
                         break;
                 }
@@ -330,14 +331,14 @@ public class LoginActivity extends AppCompatActivity {
                             Intent loginIntent = new Intent(context, ProfileActivity.class);
                             startActivity(loginIntent);
                         }else{
-                            Toast.makeText(context, getString(R.string.validation_failed),Toast.LENGTH_LONG).show();
+                            appGlobals.toastMsg(context, getString(R.string.validation_failed), appGlobals.LENGTH_LONG);
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, getString(R.string.validation_failed),Toast.LENGTH_LONG).show();
+                        appGlobals.toastMsg(context, getString(R.string.validation_failed), appGlobals.LENGTH_LONG);
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
                     }
                 }){

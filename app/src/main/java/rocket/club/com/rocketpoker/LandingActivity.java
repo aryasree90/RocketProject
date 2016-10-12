@@ -30,6 +30,7 @@ import org.w3c.dom.Text;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 public class LandingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -150,9 +151,6 @@ public class LandingActivity extends AppCompatActivity
                         startActivity(profileIntent);
                         finish();
                         break;
-                    case R.id.fab:
-                        Toast.makeText(context, "Coming soon...", Toast.LENGTH_LONG).show();
-                        break;
                 }
             }
         };
@@ -198,7 +196,7 @@ public class LandingActivity extends AppCompatActivity
 
         switch(id) {
             case R.id.action_sign_out:
-                Toast.makeText(LandingActivity.this, "Sign out", Toast.LENGTH_LONG).show();
+                appGlobals.toastMsg(context, getString(R.string.sign_out), appGlobals.LENGTH_LONG);
                 appGlobals.sharedPref.setLogInStatus(false);
                 appGlobals.sharedPref.setLoginMobile("");
                 appGlobals.sharedPref.setRegId("");
@@ -241,6 +239,14 @@ public class LandingActivity extends AppCompatActivity
             case R.id.about_us:
                 fragmentClass = AboutFragment.class;
                 break;
+            case R.id.services:
+                fragmentClass = null;
+                Intent fragmentActivity = new Intent(context, EventDetailActivity.class);
+                fragmentActivity.putExtra(EventDetailActivity.ACTIVITY_TYPE, AppGlobals.SERVICE_INFO);
+                fragmentActivity.putExtra(EventDetailActivity.ITEM_POS, 0);
+                fragmentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(fragmentActivity);
+                break;
             case R.id.settings:
                 fragmentClass = SettingsFragment.class;
                 break;
@@ -270,7 +276,7 @@ public class LandingActivity extends AppCompatActivity
                 fragment.setArguments(args);
             appGlobals.currentFragmentClass = setClass;
         } catch (Exception e) {
-            e.printStackTrace();
+            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
 
         // Insert the fragment by replacing any existing fragment

@@ -22,6 +22,10 @@
             android:icon="@mipmap/ic_transactions"
             android:title="@string/transactions" />
         <item
+            android:id="@+id/services"
+            android:icon="@mipmap/ic_locate_us"
+            android:title="@string/services" />
+        <item
             android:id="@+id/settings"
             android:icon="@mipmap/ic_settings"
             android:title="@string/settings" />

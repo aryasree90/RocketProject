@@ -109,13 +109,13 @@ public class ProfileActivity extends ActionBarActivity {
                         if(connectionDetector.isConnectingToInternet())
                             saveProfileDetails();
                         else
-                            Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                            appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
                         break;
                     case R.id.btn_clear:
                         clearFields();
                         break;
                     case R.id.userProfilePic:
-                        Toast.makeText(context, "TODO", Toast.LENGTH_SHORT).show();
+                        appGlobals.toastMsg(context, "TODO", appGlobals.LENGTH_LONG);
                         break;
                     case R.id.DOB:
                         showDialog(DATE_DIALOG_ID);
@@ -164,7 +164,7 @@ public class ProfileActivity extends ActionBarActivity {
             boolean matchFound = m.matches();
             if (!matchFound) {
                 validation = false;
-                Toast.makeText(context, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+                appGlobals.toastMsg(context, getString(R.string.invalid_email), appGlobals.LENGTH_LONG);
             } else {
                 Calendar cur = Calendar.getInstance();
                 cur.setTimeInMillis(System.currentTimeMillis());
@@ -183,11 +183,11 @@ public class ProfileActivity extends ActionBarActivity {
 
                 if(!isAdult) {
                     validation = false;
-                    Toast.makeText(context, getString(R.string.below_age), Toast.LENGTH_LONG).show();
+                    appGlobals.toastMsg(context, getString(R.string.below_age), appGlobals.LENGTH_LONG);
                 }
             }
         } else {
-            Toast.makeText(context, getString(R.string.enter_all), Toast.LENGTH_LONG).show();
+            appGlobals.toastMsg(context, getString(R.string.enter_all), appGlobals.LENGTH_LONG);
         }
         return validation;
     }
@@ -230,10 +230,10 @@ public class ProfileActivity extends ActionBarActivity {
                                 String uName = fullName.getText().toString();
                                 appGlobals.sharedPref.setUserName(uName);
 
-                                Toast.makeText(context, getString(R.string.profile_update_success), Toast.LENGTH_LONG).show();
+                                appGlobals.toastMsg(context, getString(R.string.profile_update_success), appGlobals.LENGTH_LONG);
                                 gotoHomeActivity();
                             } else {
-                                Toast.makeText(context, getString(R.string.profile_update_failed), Toast.LENGTH_LONG).show();
+                                appGlobals.toastMsg(context, getString(R.string.profile_update_failed), appGlobals.LENGTH_LONG);
                             }
                         } else {
                             if (!response.trim().isEmpty()) {
@@ -251,7 +251,7 @@ public class ProfileActivity extends ActionBarActivity {
                         else
                             msg = getString(R.string.profile_fetch_error);
 
-                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        appGlobals.toastMsg(context, msg, appGlobals.LENGTH_LONG);
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
                     }
                 }) {

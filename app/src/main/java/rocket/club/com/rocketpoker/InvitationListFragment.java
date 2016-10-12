@@ -82,7 +82,7 @@ public class InvitationListFragment extends Fragment {
 
             showInviteList.addAll(fullInviteList);
         } catch(Exception e) {
-            e.printStackTrace();
+            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
 
         inviteAdapter = new GameInviteAdapter(showInviteList, context);

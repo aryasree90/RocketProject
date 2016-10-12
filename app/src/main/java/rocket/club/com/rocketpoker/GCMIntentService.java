@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 import static rocket.club.com.rocketpoker.CommonUtilities.displayMessage;
@@ -35,7 +36,8 @@ public class GCMIntentService extends GCMBaseIntentService {
      **/
     @Override
     protected void onRegistered(Context context, String registrationId) {
-        Log.i(TAG, "Device registered: regId = " + registrationId);
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Device registered: regId: " + registrationId, LogClass.INFO_MSG);
         //displayMessage(context, "Your device registred with GCM");
         ServerUtilities.register(context, registrationId);
     }
@@ -45,7 +47,8 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     protected void onUnregistered(Context context, String registrationId) {
-        Log.i(TAG, "Device unregistered");
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Device unregistered", LogClass.INFO_MSG);
         displayMessage(context, getString(R.string.gcm_unregistered));
         ServerUtilities.unregister(context, registrationId);
     }
@@ -55,7 +58,8 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     protected void onMessage(Context context, Intent intent) {
-        Log.i(TAG, "Received message");
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Received message ", LogClass.INFO_MSG);
 
         if(intent.hasExtra("userid")) {
             String userid = intent.getExtras().getString("userid");
@@ -92,8 +96,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 }
                 displayMessage(context, message);
             } catch (JSONException e) {
-                // TODO displaAuto-generated catch block
-                e.printStackTrace();
+                appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
             }
         }
 
@@ -107,7 +110,8 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     protected void onDeletedMessages(Context context, int total) {
-        Log.i(TAG, "Received deleted messages notification");
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Received deleted messages notification", LogClass.INFO_MSG);
         String message = getString(R.string.gcm_deleted, total);
         displayMessage(context, message);
         // notifies user
@@ -119,14 +123,15 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     public void onError(Context context, String errorId) {
-        Log.i(TAG, "Received error: " + errorId);
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Received error " + errorId, LogClass.INFO_MSG);
         displayMessage(context, getString(R.string.gcm_error, errorId));
     }
 
     @Override
     protected boolean onRecoverableError(Context context, String errorId) {
-        // log message
-        Log.i(TAG, "Received recoverable error: " + errorId);
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Received recoverable error " + errorId, LogClass.INFO_MSG);
         displayMessage(context, getString(R.string.gcm_recoverable_error,
                 errorId));
         return super.onRecoverableError(context, errorId);

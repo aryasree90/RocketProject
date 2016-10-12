@@ -86,7 +86,8 @@ public final class ServerUtilities {
      * Unregister this account/device pair within the server.
      */
     static void unregister(final Context context, final String regId) {
-        Log.i(TAG, "unregistering device (regId = " + regId + ")");
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Unregistering device: regId: " + regId, LogClass.INFO_MSG);
         String serverUrl = SERVER_URL + "/unregister";
         Map<String, String> params = new HashMap<String, String>();
         params.put("regId", regId);

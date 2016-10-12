@@ -101,9 +101,6 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         GameInvite itemList = gameInviteList.get(position);
 
-//        String time = AppGlobals.convertTime(itemList.getTime());
-
-        Log.d("_____________", "________________ " + itemList.getInviteList());
         if(itemList.getSenderMob().equals(loginNum)) {
             holder.btnLayout.setVisibility(View.GONE);
             holder.status.setVisibility(View.GONE);
