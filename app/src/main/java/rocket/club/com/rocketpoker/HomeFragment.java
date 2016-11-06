@@ -18,10 +18,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.adapter.EventListAdapter;
+import rocket.club.com.rocketpoker.adapter.LiveUpdateListAdapter;
 import rocket.club.com.rocketpoker.adapter.NewFriendListAdapter;
 import rocket.club.com.rocketpoker.adapter.ServiceListAdapter;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
+import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
@@ -31,10 +33,10 @@ public class HomeFragment extends Fragment {
     Context context = null;
     AppGlobals appGlobals = null;
     EventListAdapter eventAdapter = null;
-    ServiceListAdapter serviceAdapter = null;
+    LiveUpdateListAdapter liveUpdateAdapter = null;
     NewFriendListAdapter newFriendAdapter = null;
-    ViewPager eventList = null, serviceList = null, newFriendsList = null;
-    TextView emptyFriend = null, emptyEvent = null, emptyService = null;
+    ViewPager eventList = null, liveUpdateList = null, newFriendsList = null;
+    TextView emptyFriend = null, emptyEvent = null, emptyService = null, emptyUpdate = null;
     DBHelper db = null;
     Button addnewfriend;
     LinearLayout emptyFriendlnr;
@@ -115,17 +117,19 @@ public class HomeFragment extends Fragment {
             emptyEvent.setVisibility(View.VISIBLE);
         }
 
-        serviceList = (ViewPager) view.findViewById(R.id.serviceList);
-        emptyService = (TextView) view.findViewById(R.id.emptyServiceItem);
+        liveUpdateList = (ViewPager) view.findViewById(R.id.liveUpdateList);
+        emptyUpdate = (TextView) view.findViewById(R.id.emptyUpdateItem);
 
-        if(mResources.length != 0) {
-            serviceList.setVisibility(View.VISIBLE);
-            emptyService.setVisibility(View.GONE);
-            serviceAdapter = new ServiceListAdapter(context, mResources, clickListener);
-            serviceList.setAdapter(serviceAdapter);
+        ArrayList<LiveUpdateDetails> updateList = db.getRocketsLatestUpdate();
+
+        if(updateList.size() != 0) {
+            liveUpdateList.setVisibility(View.VISIBLE);
+            emptyUpdate.setVisibility(View.GONE);
+            liveUpdateAdapter = new LiveUpdateListAdapter(context, updateList, clickListener);
+            liveUpdateList.setAdapter(liveUpdateAdapter);
         } else {
-            serviceList.setVisibility(View.GONE);
-            emptyService.setVisibility(View.VISIBLE);
+            liveUpdateList.setVisibility(View.GONE);
+            emptyUpdate.setVisibility(View.VISIBLE);
         }
 
         newFriendsList = (ViewPager) view.findViewById(R.id.newFriendsList);

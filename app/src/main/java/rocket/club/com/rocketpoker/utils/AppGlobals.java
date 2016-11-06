@@ -136,17 +136,28 @@ public class AppGlobals {
     public static final int ACCEPT_GAME = 1;
     public static final int REJECT_GAME = 2;
 
+    //User Type
+    public static final int NORMAL_USER = 0;
+    public static final int EDITOR = 1;
+    public static final int CASHIER = 2;
+    public static final int ADMIN = 3;
+
     //Friends Database
     public static final int ACCEPTED_FRIENDS = 1;
     public static final int PENDING_FRIENDS = 2;
     public static final int ALL_FRIENDS = 3;
 
     //Notification keys
+    public static final String USER_TYPE = "user_type";
     public static final String NOTIF_FRND_REQ = "frnd_req";
     public static final String NOTIF_FRND_REQ_RESP = "frnd_req_resp";
     public static final String CHAT_ROOM = "chat_room";
     public static final String INVITE_TO_PLAY = "invite_to_play";
     public static final String RESP_PLAY = "resp_play";
+    public static final String CLUB_INFO = "club_info";
+    public static final String CLUB_LIVE_UPDATE = "live_update";
+
+
 
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";

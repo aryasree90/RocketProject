@@ -89,7 +89,7 @@
 
 
         <LinearLayout
-            android:id="@+id/serviceLayout"
+            android:id="@+id/liveUpdateLayout"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:orientation="horizontal"
@@ -100,17 +100,17 @@
             android:elevation="2dp">
 
             <android.support.v4.view.ViewPager
-                android:id="@+id/serviceList"
+                android:id="@+id/liveUpdateList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/emptyServiceItem"
+                android:id="@+id/emptyUpdateItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:text="@string/empty_service"/>
+                android:text="@string/empty_update"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

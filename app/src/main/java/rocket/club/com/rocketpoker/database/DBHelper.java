@@ -14,6 +14,7 @@ import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
+import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -30,6 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String messageTable = "messageTable";
     public static final String gameInviteTable = "gameInviteTable";
     public static final String rocketsInfoTable = "rocketsInfoTable";
+    public static final String rocketsLiveUpdateTable = "rocketsLiveUpdate";
 
     public static final String _id = "id";
     public static final String mobile = "frndMobile";
@@ -57,6 +59,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String infoTimeStamp = "infoTimeStamp";
     public static final String infoMsgType = "infoMsgType";
 
+    public static final String updateHeader = "updateHeader";
+    public static final String updateText1 = "updateText1";
+    public static final String updateText2 = "updateText2";
+    public static final String updateText3 = "updateText3";
+    public static final String updateComments = "updateComments";
+    public static final String updateTimeStamp = "updateTimeStamp";
+    public static final String updateMsgType = "updateMsgType";
+
     public static final String CREATE_TABLE = "CREATE TABLE " + friendsTable + "(" + _id +
             " integer primary key autoincrement not null, " + mobile + " text, " + userName +
             " text, " + nickName + " text, " + status + " integer)";
@@ -74,6 +84,11 @@ public class DBHelper extends SQLiteOpenHelper {
             " integer primary key autoincrement not null, " + infoImage + " text, " + infoTitle +
             " text, " + infoSubTitle + " text, " + infoLikeStatus + " text, " + infoEditor + " text, "
             + infoTimeStamp + " text, " + infoMsgType + " integer)";
+
+    public static final String CREATE_ROCKETS_LIVE_UPDATE = "CREATE TABLE " + rocketsLiveUpdateTable + "(" + _id +
+            " integer primary key autoincrement not null, " + updateHeader + " text, " + updateText1 +
+            " text, " + updateText2 + " text, " + updateText3 + " text, " + updateComments + " text, "
+            + updateTimeStamp + " text, " + updateMsgType + " integer)";
 
     public static final String SELECT_ALL_FRIENDS = "SELECT * FROM " + friendsTable;
     public static final String SELECT_PENDING = "SELECT * FROM " + friendsTable + " WHERE " +
@@ -94,6 +109,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SELECT_ROCKETS_INFO = "SELECT * FROM " + rocketsInfoTable + " WHERE " +
             infoMsgType + "=?";
 
+    public static final String SELECT_ROCKETS_LIVE_UPDATE = "SELECT * FROM " + rocketsLiveUpdateTable;
+
     public DBHelper(Context ctx) {
         super(ctx, DB_NAME, null, DB_VERSION);
     }
@@ -104,6 +121,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MSG_TABLE);
         db.execSQL(CREATE_GAME_INVITE);
         db.execSQL(CREATE_ROCKETS_INFO);
+        db.execSQL(CREATE_ROCKETS_LIVE_UPDATE);
     }
 
     @Override
@@ -419,10 +437,56 @@ public class DBHelper extends SQLiteOpenHelper {
         if(db != null)
             db.close();
 
-        if(infoList.isEmpty()) {
-
-        }
-
         return infoList;
     }
+
+    public boolean insertLiveUpdateDetails(LiveUpdateDetails liveUpdateDetails){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(this.updateHeader, liveUpdateDetails.getUpdateHeader());
+        contentValues.put(this.updateText1, liveUpdateDetails.getUpdateText1());
+        contentValues.put(this.updateText2, liveUpdateDetails.getUpdateText2());
+        contentValues.put(this.updateText3, liveUpdateDetails.getUpdateText3());
+        contentValues.put(this.updateComments, liveUpdateDetails.getUpdateComments());
+        contentValues.put(this.updateTimeStamp, liveUpdateDetails.getUpdateTimeStamp());
+        contentValues.put(this.updateMsgType, liveUpdateDetails.getUpdateType());
+        db.insert(rocketsLiveUpdateTable, null, contentValues);
+
+        if(db != null)
+            db.close();
+        return true;
+    }
+
+    public ArrayList<LiveUpdateDetails> getRocketsLatestUpdate() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery(SELECT_ROCKETS_LIVE_UPDATE, null);
+
+        ArrayList<LiveUpdateDetails> updateList = new ArrayList<LiveUpdateDetails>();
+
+        if(res != null) {
+            res.moveToFirst();
+            while (!res.isAfterLast()) {
+                String header = res.getString(res.getColumnIndex(updateHeader));
+                String text1 = res.getString(res.getColumnIndex(updateText1));
+                String text2 = res.getString(res.getColumnIndex(updateText2));
+                String text3 = res.getString(res.getColumnIndex(updateText3));
+                String comments = res.getString(res.getColumnIndex(updateComments));
+                String timeStamp = res.getString(res.getColumnIndex(updateTimeStamp));
+                int msgType = res.getInt(res.getColumnIndex(updateMsgType));
+
+                LiveUpdateDetails liveUpdate = new LiveUpdateDetails(msgType, header, text1, text2,
+                        text3, comments, timeStamp);
+
+                updateList.add(liveUpdate);
+            }
+        }
+        if(db != null)
+            db.close();
+
+        return updateList;
+    }
+
+
 }

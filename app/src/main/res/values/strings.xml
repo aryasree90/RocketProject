@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Rockets</string>
+    <string name="editor">Editor</string>
+    <string name="cashier">Cashier</string>
+    <string name="admin">Admin</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -42,6 +45,7 @@
     <string name="frnd_req_accept">&#160; accepted your friend request</string>
     <string name="empty_frnd_req">You have 0 Friend Request</string>
     <string name="empty_service">No Services</string>
+    <string name="empty_update">No Updates</string>
     <string name="empty_events">No Events</string>
     <string name="skip">Skip >></string>
     <string-array name="gender_list">
@@ -117,6 +121,10 @@
     <string name="gallery">Gallery</string>
     <string name="calendar">Calendar</string>
     <string name="contact_us">We Exist @</string>
+
+    <string name="edit_event">Add Event</string>
+    <string name="edit_service">Add Service</string>
+    <string name="edit_live_update">Add Live Update</string>
 
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>

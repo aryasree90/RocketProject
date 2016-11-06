@@ -191,6 +191,20 @@ public class LandingActivity extends AppCompatActivity
     }  */
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        int msgType = appGlobals.sharedPref.getUserType();
+
+        if(msgType == AppGlobals.EDITOR) {
+            menu.setGroupVisible(R.id.editor, true);
+        } else {
+            menu.setGroupVisible(R.id.editor, false);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 

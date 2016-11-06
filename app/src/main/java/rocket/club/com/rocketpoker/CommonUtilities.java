@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
+import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.NotifClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
@@ -56,6 +57,12 @@ public final class CommonUtilities {
     static void displayMessage(Context context, String message) {
         AppGlobals appGlobals = AppGlobals.getInstance(context);
         appGlobals.logClass.setLogMsg(TAG, "Control reached displayMessage " + message, LogClass.DEBUG_MSG);
+    }
+
+    static void updateUserType(Context context, String message) {
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, "Update user type " + message, LogClass.DEBUG_MSG);
+        appGlobals.sharedPref.setUserType(Integer.parseInt(message));
     }
 
     static void updateFriends(Context context, String message, String type) {
@@ -192,6 +199,17 @@ public final class CommonUtilities {
 
         DBHelper db = new DBHelper(context);
         db.insertInfoDetails(infoDetails);
+    }
+
+    static void getRocketsLiveUpdate(Context context, String message) {
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, message, LogClass.DEBUG_MSG);
+
+        Gson gson = new Gson();
+        LiveUpdateDetails liveUpdateDetails = gson.fromJson(message, LiveUpdateDetails.class);
+
+        DBHelper db = new DBHelper(context);
+        db.insertLiveUpdateDetails(liveUpdateDetails);
     }
 
     private static void generateNotification(Context ctx, String message, Intent notificationIntent) {

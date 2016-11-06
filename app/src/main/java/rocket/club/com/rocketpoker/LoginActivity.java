@@ -325,7 +325,14 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.trim().equals("success")){
+                        if(response.trim().startsWith("success")){
+                            if(response.contains(":")) {
+                                int userType = Integer.parseInt(response.split(":")[1]);
+                                appGlobals.sharedPref.setUserType(userType);
+                            } else {
+                                appGlobals.sharedPref.setUserType(AppGlobals.NORMAL_USER);
+                            }
+
                             appGlobals.sharedPref.setLogInStatus(true);
                             finish();
                             Intent loginIntent = new Intent(context, ProfileActivity.class);

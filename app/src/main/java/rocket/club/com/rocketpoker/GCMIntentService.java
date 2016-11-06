@@ -18,10 +18,13 @@ import rocket.club.com.rocketpoker.utils.LogClass;
 
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 import static rocket.club.com.rocketpoker.CommonUtilities.displayMessage;
+import static rocket.club.com.rocketpoker.CommonUtilities.updateUserType;
 import static rocket.club.com.rocketpoker.CommonUtilities.updateFriends;
 import static rocket.club.com.rocketpoker.CommonUtilities.getChatMessages;
 import static rocket.club.com.rocketpoker.CommonUtilities.getInviteToPlay;
 import static rocket.club.com.rocketpoker.CommonUtilities.getResponseToPlay;
+import static rocket.club.com.rocketpoker.CommonUtilities.getRocketsInfo;
+import static rocket.club.com.rocketpoker.CommonUtilities.getRocketsLiveUpdate;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
@@ -70,6 +73,9 @@ public class GCMIntentService extends GCMBaseIntentService {
         if(intent.hasExtra("price")) {
             message = intent.getExtras().getString("price");
             displayMessage(context, message);
+        } else if(intent.hasExtra(AppGlobals.USER_TYPE)) {
+            message = intent.getExtras().getString(AppGlobals.USER_TYPE);
+            updateUserType(context, message);
         } else if(intent.hasExtra(AppGlobals.NOTIF_FRND_REQ)) {
             message = intent.getExtras().getString(AppGlobals.NOTIF_FRND_REQ);
             updateFriends(context, message, AppGlobals.NOTIF_FRND_REQ);
@@ -85,6 +91,12 @@ public class GCMIntentService extends GCMBaseIntentService {
         } else if(intent.hasExtra(AppGlobals.RESP_PLAY)) {
             message = intent.getExtras().getString(AppGlobals.RESP_PLAY);
             getResponseToPlay(context, message);
+        } else if(intent.hasExtra(AppGlobals.CLUB_INFO)) {
+            message = intent.getExtras().getString(AppGlobals.CLUB_INFO);
+            getRocketsInfo(context, message);
+        } else if(intent.hasExtra(AppGlobals.CLUB_LIVE_UPDATE)) {
+            message = intent.getExtras().getString(AppGlobals.CLUB_LIVE_UPDATE);
+            getRocketsLiveUpdate(context, message);
         }else if(intent.hasExtra("received_messages")){
             try {
                 JSONArray array  = new JSONArray(intent.getExtras().getString("received_messages"));

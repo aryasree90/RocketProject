@@ -4,7 +4,6 @@
     <group android:checkableBehavior="single"
         android:id="@+id/user_group">
 
-
         <item
             android:id="@+id/my_home"
             android:icon="@mipmap/ic_home_black"
@@ -30,9 +29,29 @@
             android:icon="@mipmap/ic_settings"
             android:title="@string/settings" />
     </group>
+
+    <item
+        android:title="@string/editor">
+        <menu>
+            <group android:checkableBehavior="single"
+                android:id="@+id/editor">
+                <item
+                    android:id="@+id/edit_events"
+                    android:icon="@mipmap/ic_about_us"
+                    android:title="@string/edit_event" />
+                <item
+                    android:id="@+id/edit_services"
+                    android:icon="@mipmap/ic_contact_us"
+                    android:title="@string/edit_service" />
+                <item
+                    android:id="@+id/edit_live_update"
+                    android:icon="@mipmap/ic_contact_us"
+                    android:title="@string/edit_live_update" />
+            </group>
+        </menu>
+    </item>
+
     <item android:title="@string/app_name">
-
-
         <menu>
             <group android:checkableBehavior="single"
                 android:id="@+id/common_group">
