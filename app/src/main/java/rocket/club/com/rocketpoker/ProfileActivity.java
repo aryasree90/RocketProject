@@ -1,17 +1,33 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +43,10 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +69,10 @@ public class ProfileActivity extends ActionBarActivity {
     MaterialBetterSpinner gameTypeSpinner = null, genderSpinner = null;
     ArrayAdapter<String> gameTypeAdapter = null, genderAdapter = null;
     int year, month, day;
+    String imagePath = "";
     final String VALIDATION_URL = AppGlobals.SERVER_URL + "userProfile.php";
 
+    Dialog dialog = null;
     View.OnClickListener clickListener = null;
     private static final int CAMERA = 0;
     private static final int GALLERY = 1;
@@ -64,6 +86,7 @@ public class ProfileActivity extends ActionBarActivity {
 
         initializeWidgets();
         setClickListener();
+        checkPermission();
 
         fetchProfile();
     }
@@ -115,13 +138,41 @@ public class ProfileActivity extends ActionBarActivity {
                         clearFields();
                         break;
                     case R.id.userProfilePic:
-                        appGlobals.toastMsg(context, "TODO", appGlobals.LENGTH_LONG);
+                        createMediaDialog();
                         break;
                     case R.id.DOB:
                         showDialog(DATE_DIALOG_ID);
                         break;
                     case R.id.skipProfile:
                         gotoHomeActivity();
+                        break;
+                    case R.id.btnCamera:
+
+                        String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
+
+                        imagePath = appGlobals.getRocketsPath(context) + "/" + imgFileName;
+
+                        Uri mImageCaptureUri = Uri.fromFile(new File(imagePath));
+                        File file = new File(imagePath);
+                        try {
+                            file.createNewFile();
+                        } catch (IOException e) {
+
+                        }
+
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                        startActivityForResult(cameraIntent, CAMERA);
+                        resetMediaDialog();
+                        break;
+                    case R.id.btnGallery:
+
+                        Intent galleryIntent = new Intent();
+                        galleryIntent.setType("image/*");
+                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(galleryIntent, "Select File"),GALLERY);
+
+                        resetMediaDialog();
                         break;
                 }
             }
@@ -134,17 +185,86 @@ public class ProfileActivity extends ActionBarActivity {
         skipProfile.setOnClickListener(clickListener);
     }
 
-    private void saveProfileDetails() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        appGlobals.logClass.setLogMsg(TAG, "onActivityResult " + requestCode + " " + resultCode, LogClass.DEBUG_MSG);
+
+        if (resultCode == Activity.RESULT_OK) {
+
+            appGlobals.logClass.setLogMsg(TAG, "onActivityResult Reached in ", LogClass.DEBUG_MSG);
+
+
+            if(requestCode == GALLERY) {
+                Uri selectedImage = data.getData();
+
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imagePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                appGlobals.logClass.setLogMsg(TAG, "onActivityResult Gallery " + imagePath, LogClass.DEBUG_MSG);
+
+            } else if(requestCode == CAMERA) {
+                appGlobals.logClass.setLogMsg(TAG, "onActivityResult Camera " + imagePath, LogClass.DEBUG_MSG);
+            }
+
+            if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists()) {
+
+                new AsyncTask<String, Void, Uri>() {
+
+                    @Override
+                    protected Uri doInBackground(String... params) {
+
+                        /*String encodedImage = appGlobals.convertImageToBase64(imagePath);
+
+                        String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
+                        String imgPath = appGlobals.convertBase64ToImageFile(encodedImage, imgFileName, context);*/
+
+                        String imgFileName = appGlobals.getRocketsPath(context) + "/" +
+                                appGlobals.sharedPref.getLoginMobile() + ".jpg";
+
+                        if(appGlobals.createThumbnail(imagePath, imgFileName)) {
+                            imagePath = imgFileName;
+                            return Uri.fromFile(new File(imagePath));
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Uri uri) {
+                        super.onPostExecute(uri);
+                        if(uri != null)
+                            profileImage.setImageURI(uri);
+                    }
+                }.execute(imagePath);
+            }
+        }
+    }
+
+    private void saveProfileDetails() {
         final String userFullName = fullName.getText().toString();
         final String userEmail = email.getText().toString();
         final String userNickName = nickName.getText().toString();
         final String userGameType = gameTypeSpinner.getText().toString();
         final String userGender = genderSpinner.getText().toString();
         final String userDob = dob.getText().toString();
+        String userImage = "";
 
+        if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists())
+            userImage = appGlobals.convertImageToBase64(imagePath);
+Log.d("______________", "___________________ " + userImage.length());
+        Log.d("______________", "___________________ " + userImage);
         if(validateFields(userFullName, userEmail, userNickName, userGender, userGameType))
-            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob);
+            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob, userImage);
 
     }
 
@@ -194,7 +314,8 @@ public class ProfileActivity extends ActionBarActivity {
 
     private void updateProfile(final String userFullName, final String userEmail,
                                final String userNickName, final String userGender,
-                               final String userGameType, final String userDob) {
+                               final String userGameType, final String userDob,
+                               final String userImage) {
 
         Map<String,String> map = new HashMap<String,String>();
         map.put("fullName", userFullName);
@@ -203,6 +324,7 @@ public class ProfileActivity extends ActionBarActivity {
         map.put("gender", userGender);
         map.put("gameType", userGameType);
         map.put("dob", userDob);
+        map.put("image", userImage);
         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
         map.put("task", appGlobals.UPDATE_PROFILE);
 
@@ -278,6 +400,16 @@ public class ProfileActivity extends ActionBarActivity {
         dob.setText(profileDetails.getDob());
         gameTypeSpinner.setText(profileDetails.getGametype());
         genderSpinner.setText(profileDetails.getGender());
+
+        String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
+        File imageFile = new File(appGlobals.getRocketsPath(context) + "/" + imgFileName);
+Log.d("__________", "______________ " + profileDetails.getUser_pic());
+        if(!imageFile.exists() && !TextUtils.isEmpty(profileDetails.getUser_pic())) {
+            Log.d("__________", "______________ Reached in");
+            appGlobals.convertBase64ToImageFile(profileDetails.getUser_pic(), imgFileName, context);
+        }
+        Log.d("__________", "______________ Reached out");
+        profileImage.setImageURI(Uri.fromFile(imageFile));
     }
 
     @Override
@@ -322,7 +454,52 @@ public class ProfileActivity extends ActionBarActivity {
         dob.setText("");
         genderSpinner.setText("");
         gameTypeSpinner.setText("");
+    }
+
+    private void createMediaDialog() {
+        dialog=new Dialog(ProfileActivity.this);
+        dialog.setContentView(R.layout.media_option_layout);
+
+        dialog.setTitle(getString(R.string.select_media));
+
+        Button btnCamera = (Button) dialog.findViewById(R.id.btnCamera);
+        Button btnGallery = (Button) dialog.findViewById(R.id.btnGallery);
+
+        btnCamera.setOnClickListener(clickListener);
+        btnGallery.setOnClickListener(clickListener);
+
+        dialog.show();
+
+        appGlobals.setDialogLayoutParams(dialog, context, false, true);
+    }
+
+    private void resetMediaDialog() {
+        dialog.cancel();
+    }
 
 
+    private void checkPermission() {
+        if(!appGlobals.checkLocationPermission(context, AppGlobals.READ_EXTERNAL_STORAGE)
+                || !appGlobals.checkLocationPermission(context, AppGlobals.WRITE_EXTERNAL_STORAGE)) {
+            ActivityCompat.requestPermissions(ProfileActivity.this,
+                    new String[]{AppGlobals.READ_EXTERNAL_STORAGE, AppGlobals.WRITE_EXTERNAL_STORAGE},
+                    AppGlobals.REQUEST_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case AppGlobals.REQUEST_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    appGlobals.logClass.setLogMsg(TAG, "Permission Granted", LogClass.DEBUG_MSG);
+                }
+                return;
+            }
+        }
     }
 }

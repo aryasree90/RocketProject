@@ -92,7 +92,8 @@
     <string name="req_to_own_num">You cannot send request to same login number</string>
     <string name="event_details">Event Details</string>
     <string name="service_details">Service Details</string>
-
+    <string name="camera">Camera</string>
+    <string name="select_media">Select Media</string>
 
 
     <string name="title_activity_login">LoginActivity</string>

@@ -8,16 +8,22 @@ import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.Image;
+import android.media.ThumbnailUtils;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -33,6 +39,10 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,9 +105,12 @@ public class AppGlobals {
     public static final String ACCESS_COARSE_LOC = android.Manifest.permission.ACCESS_COARSE_LOCATION;
     public static final String ACCESS_FINE_LOC = android.Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String CALL_PHONE = android.Manifest.permission.CALL_PHONE;
+    public static final String READ_EXTERNAL_STORAGE = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    public static final String WRITE_EXTERNAL_STORAGE = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     public static final int REQUEST_CODE_SMS = 100;
     public static final int REQUEST_CODE_LOCATION = 101;
+    public static final int REQUEST_EXTERNAL_STORAGE = 102;
 
     //Profile
     public final String UPDATE_PROFILE = "1";
@@ -138,7 +151,7 @@ public class AppGlobals {
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";
 
-
+    private final String ROCKETS = "Rockets";
 
     // methods
 
@@ -225,6 +238,99 @@ public class AppGlobals {
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
 
         dialog.getWindow().setAttributes(lp);
+    }
+
+    private static boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // We can read and write the media
+            return true;
+        }
+        // Media storage not present
+        return false;
+    }
+
+    public File getRocketsPath(Context context) {
+        File dir = null;
+        if (isExternalStorageAvailable()) {
+            // sdcard present
+            dir = new File(Environment.getExternalStorageDirectory(),
+                    ROCKETS);
+        } else {
+            // use cache directory
+            dir = new File(context.getCacheDir(), ROCKETS);
+        }
+        if (dir.exists() == false) {
+            dir.mkdirs();
+        }
+
+        createNoMediaFile(dir.getAbsolutePath());
+        return dir;
+    }
+
+    private static void createNoMediaFile(String filePath) {
+
+        File myFile = new File(filePath, ".nomedia");
+        try {
+            if (!myFile.exists())
+                myFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String convertImageToBase64(String imagePath) {
+        Bitmap bm = BitmapFactory.decodeFile(imagePath);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] byteArrayImage = baos.toByteArray();
+
+        if(bm != null)
+            bm = null;
+
+        return Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+    }
+
+    public boolean createThumbnail(String srcFileName, String destFileName) {
+
+        try {
+            Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
+
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(new File(destFileName));
+            thumbImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch(Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "Exception in createThumbnail " + e.toString(), LogClass.ERROR_MSG);
+            return false;
+        }
+        return true;
+
+    }
+
+    public String convertBase64ToImageFile(String encodedImage, String fileName, Context context) {
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        String imgFileName = "";
+        FileOutputStream out = null;
+        try {
+            imgFileName = appGlobals.getRocketsPath(context) + "/" + fileName;
+
+            out = new FileOutputStream(imgFileName);
+            decodedByte.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return imgFileName;
     }
 
     public static boolean checkLocationPermission(Context context, String permission) {
