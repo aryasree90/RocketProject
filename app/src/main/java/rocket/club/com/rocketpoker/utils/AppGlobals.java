@@ -157,8 +157,6 @@ public class AppGlobals {
     public static final String CLUB_INFO = "club_info";
     public static final String CLUB_LIVE_UPDATE = "live_update";
 
-
-
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";
 

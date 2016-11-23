@@ -22,6 +22,7 @@ import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.NotifClass;
+import rocket.club.com.rocketpoker.classes.TaskHolder;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -195,7 +196,7 @@ public final class CommonUtilities {
         appGlobals.logClass.setLogMsg(TAG, message, LogClass.DEBUG_MSG);
 
         Gson gson = new Gson();
-        InfoDetails infoDetails = gson.fromJson(message, InfoDetails.class);
+        InfoDetails[] infoDetails = gson.fromJson(message, InfoDetails[].class);
 
         DBHelper db = new DBHelper(context);
         db.insertInfoDetails(infoDetails);

@@ -16,6 +16,7 @@ import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
+import rocket.club.com.rocketpoker.classes.TaskHolder;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 
@@ -32,6 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String gameInviteTable = "gameInviteTable";
     public static final String rocketsInfoTable = "rocketsInfoTable";
     public static final String rocketsLiveUpdateTable = "rocketsLiveUpdate";
+    public static final String rocketsTasks = "rocketsTasks";
 
     public static final String _id = "id";
     public static final String mobile = "frndMobile";
@@ -67,6 +69,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String updateTimeStamp = "updateTimeStamp";
     public static final String updateMsgType = "updateMsgType";
 
+    public static final String taskImage = "taskImage";
+    public static final String taskType = "taskType";
+    public static final String taskHeader = "taskHeader";
+    public static final String taskSummary = "taskSummary";
+    public static final String taskTimeStamp = "taskTimeStamp";
+    public static final String editorMobile = "editorMobile";
+
     public static final String CREATE_TABLE = "CREATE TABLE " + friendsTable + "(" + _id +
             " integer primary key autoincrement not null, " + mobile + " text, " + userName +
             " text, " + nickName + " text, " + status + " integer)";
@@ -89,6 +98,11 @@ public class DBHelper extends SQLiteOpenHelper {
             " integer primary key autoincrement not null, " + updateHeader + " text, " + updateText1 +
             " text, " + updateText2 + " text, " + updateText3 + " text, " + updateComments + " text, "
             + updateTimeStamp + " text, " + updateMsgType + " integer)";
+
+    public static final String CREATE_ROCKETS_TASKS = "CREATE TABLE " + rocketsTasks + "(" + _id +
+            " integer primary key autoincrement not null, " + taskImage + " text, " + taskType +
+            " text, " + taskHeader + " text, " + taskSummary + " text, " + taskTimeStamp + " text, "
+            + editorMobile + " text)";
 
     public static final String SELECT_ALL_FRIENDS = "SELECT * FROM " + friendsTable;
     public static final String SELECT_PENDING = "SELECT * FROM " + friendsTable + " WHERE " +
@@ -122,6 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_GAME_INVITE);
         db.execSQL(CREATE_ROCKETS_INFO);
         db.execSQL(CREATE_ROCKETS_LIVE_UPDATE);
+        db.execSQL(CREATE_ROCKETS_TASKS);
     }
 
     @Override
@@ -318,7 +333,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<GameInvite> getInvitations() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_ALL_INVITATION, null );
+        Cursor res = db.rawQuery(SELECT_ALL_INVITATION, null);
 
         ArrayList<GameInvite> gameInviteList = new ArrayList<GameInvite>();
         if(res != null) {
@@ -392,19 +407,20 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
     }
 
-    public boolean insertInfoDetails(InfoDetails infoDetails){
+    public boolean insertInfoDetails(InfoDetails[] infoDetails){
         SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(this.infoImage, infoDetails.getInfoImage());
-        contentValues.put(this.infoTitle, infoDetails.getInfoTitle());
-        contentValues.put(this.infoSubTitle, infoDetails.getInfoSubTitle());
-        contentValues.put(this.infoLikeStatus, infoDetails.getInfoLikeStatus());
-        contentValues.put(this.infoEditor, infoDetails.getInfoEditor());
-        contentValues.put(this.infoTimeStamp, infoDetails.getInfoTimeStamp());
-        contentValues.put(this.infoMsgType, infoDetails.getInfoMsgType());
-        db.insert(rocketsInfoTable, null, contentValues);
-
+Log.d("____", "____________ infoDetails " + infoDetails.length);
+        for(InfoDetails infoDetail : infoDetails) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(this.infoImage, infoDetail.getInfoImage());
+            contentValues.put(this.infoTitle, infoDetail.getInfoTitle());
+            contentValues.put(this.infoSubTitle, infoDetail.getInfoSubTitle());
+            contentValues.put(this.infoLikeStatus, infoDetail.getInfoLikeStatus());
+            contentValues.put(this.infoEditor, infoDetail.getInfoEditor());
+            contentValues.put(this.infoTimeStamp, infoDetail.getInfoTimeStamp());
+            contentValues.put(this.infoMsgType, Integer.parseInt(infoDetail.getInfoMsgType()));
+            db.insert(rocketsInfoTable, null, contentValues);
+        }
         if(db != null)
             db.close();
         return true;
@@ -412,11 +428,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ArrayList<InfoDetails> getRocketsInfo(String searchMsgType) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor res = db.rawQuery(SELECT_ROCKETS_INFO, new String[]{searchMsgType});
-
         ArrayList<InfoDetails> infoList = new ArrayList<InfoDetails>();
-
+Log.d("_____", "_________________ res " + res.getCount());
         if(res != null) {
             res.moveToFirst();
             while (!res.isAfterLast()) {
@@ -432,8 +446,10 @@ public class DBHelper extends SQLiteOpenHelper {
                         timeStamp, msgType);
 
                 infoList.add(info);
+                res.moveToNext();
             }
         }
+
         if(db != null)
             db.close();
 
@@ -480,6 +496,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         text3, comments, timeStamp);
 
                 updateList.add(liveUpdate);
+                res.moveToNext();
             }
         }
         if(db != null)
@@ -488,5 +505,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return updateList;
     }
 
+    /*public boolean insertTaskDetails(TaskHolder newTask){
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(this.taskImage, newTask.getTaskImage());
+        contentValues.put(this.taskType, newTask.getTaskType());
+        contentValues.put(this.taskHeader, newTask.getTaskHeader());
+        contentValues.put(this.taskSummary, newTask.getTaskSummary());
+        contentValues.put(this.taskTimeStamp, newTask.getTaskTimeStamp());
+        contentValues.put(this.editorMobile, newTask.getEditorMobile());
+        db.insert(rocketsTasks, null, contentValues);
+
+        if(db != null)
+            db.close();
+        return true;
+    }*/
 }

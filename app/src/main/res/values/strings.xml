@@ -129,6 +129,8 @@
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
 
+    <string name="eventHeader">Event Header</string>
+    <string name="eventSummary">Event Summary</string>
 
     <string name="signout_heading">Sign Out</string>
 
