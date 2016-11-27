@@ -14,8 +14,7 @@
     <string name="btn_clear1">Clear</string>
     <string name="btn_clear">C</string>
     <string name="login_invalid_num">Enter a valid Number</string>
-    <string name="login_invalid_country_code">Invalid Country Code
-    </string>
+    <string name="login_invalid_country_code">Invalid Country Code</string>
     <string name="enter_all">Enter all Fields</string>
     <string name="no_internet">Please connect to working Internet connection</string>
     <string name="validation_msg">Validation Sms from </string>
@@ -62,6 +61,12 @@
         <item><string name="game6">Follow the Queen</string></item>
     </string-array>
 
+    <string-array name="live_update_list">
+        <item><string name="update1">Winner</string></item>
+        <item><string name="update2">Current running game</string></item>
+        <item><string name="update3">Yet to start</string></item>
+    </string-array>
+
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
     <string name="otp_info">Automatically fetching OTP.\nPlease wait.</string>
@@ -69,6 +74,10 @@
     <string name="settings_title">SETTINGS</string>
     <string name="settings_notification">Notification</string>
     <string name="settings_chat">Chat Notification</string>
+    <string name="update_header">Enter Header</string>
+    <string name="update_text">Enter text</string>
+    <string name="update_comments">Enter some comments</string>
+
 
     <string name="unable_to_connect_server">Unable to Connect to Server</string>
 
@@ -99,7 +108,7 @@
     <string name="service_details">Service Details</string>
     <string name="camera">Camera</string>
     <string name="select_media">Select Media</string>
-
+    <string name="live_update_type">Select Type</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_home">HomeActivity</string>

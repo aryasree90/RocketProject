@@ -277,6 +277,9 @@ public class LandingActivity extends AppCompatActivity
                 args = new Bundle();
                 args.putString(EventDetailActivity.ACTIVITY_TYPE, AppGlobals.SERVICE_INFO);
                 break;
+            case R.id.edit_live_update:
+                fragmentClass = AddLiveUpdateFragment.class;
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }
