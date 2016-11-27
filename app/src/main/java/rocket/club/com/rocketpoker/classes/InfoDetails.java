@@ -5,6 +5,7 @@ package rocket.club.com.rocketpoker.classes;
  */
 public class InfoDetails {
 
+    private String id;
     private String infoImage;
     private String infoTitle;
     private String infoSubTitle;
@@ -13,10 +14,11 @@ public class InfoDetails {
     private String infoTimeStamp;
     private String infoMsgType;
 
-    public InfoDetails(String infoImage, String infoTitle, String infoSubTitle,
+    public InfoDetails(String id, String infoImage, String infoTitle, String infoSubTitle,
                             String infoLikeStatus, String infoEditor, String infoTimeStamp,
                             String infoMsgType) {
 
+        this.id = id;
         this.infoImage = infoImage;
         this.infoTitle = infoTitle;
         this.infoSubTitle = infoSubTitle;
@@ -56,5 +58,9 @@ public class InfoDetails {
 
     public String getInfoMsgType() {
         return infoMsgType;
+    }
+
+    public String getId() {
+        return id;
     }
 }

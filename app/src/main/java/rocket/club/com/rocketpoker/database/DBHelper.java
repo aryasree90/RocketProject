@@ -409,7 +409,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean insertInfoDetails(InfoDetails[] infoDetails){
         SQLiteDatabase db = this.getWritableDatabase();
-Log.d("____", "____________ infoDetails " + infoDetails.length);
+
         for(InfoDetails infoDetail : infoDetails) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(this.infoImage, infoDetail.getInfoImage());
@@ -430,10 +430,11 @@ Log.d("____", "____________ infoDetails " + infoDetails.length);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery(SELECT_ROCKETS_INFO, new String[]{searchMsgType});
         ArrayList<InfoDetails> infoList = new ArrayList<InfoDetails>();
-Log.d("_____", "_________________ res " + res.getCount());
+
         if(res != null) {
             res.moveToFirst();
             while (!res.isAfterLast()) {
+                String infoId = res.getString(res.getColumnIndex(_id));
                 String image = res.getString(res.getColumnIndex(infoImage));
                 String title = res.getString(res.getColumnIndex(infoTitle));
                 String subTitle = res.getString(res.getColumnIndex(infoSubTitle));
@@ -442,7 +443,7 @@ Log.d("_____", "_________________ res " + res.getCount());
                 String timeStamp = res.getString(res.getColumnIndex(infoTimeStamp));
                 String msgType = res.getString(res.getColumnIndex(infoMsgType));
 
-                InfoDetails info = new InfoDetails(image, title, subTitle, likeStatus, editor,
+                InfoDetails info = new InfoDetails(infoId, image, title, subTitle, likeStatus, editor,
                         timeStamp, msgType);
 
                 infoList.add(info);

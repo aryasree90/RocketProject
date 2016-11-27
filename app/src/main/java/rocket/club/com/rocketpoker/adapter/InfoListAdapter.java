@@ -13,13 +13,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import rocket.club.com.rocketpoker.ConnectionDetector;
 import rocket.club.com.rocketpoker.EventDetailActivity;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 /**
  * Created by Admin on 10/12/2016.
@@ -35,18 +46,22 @@ public class InfoListAdapter extends PagerAdapter {
     View.OnClickListener itemClickListener;
     ConnectionDetector connectionDetector = null;
     View.OnClickListener clickListener = null;
+    final String VALIDATION_URL = AppGlobals.SERVER_URL + "likeEvent.php";
 
     AppGlobals appGlobals = null;
+    String activityType = null;
 
     private final String TAG = "InfoListAdapter";
 
-    public InfoListAdapter(Context context, ArrayList<InfoDetails> infoList, View.OnClickListener clickListener) {
+    public InfoListAdapter(Context context, ArrayList<InfoDetails> infoList,
+                           View.OnClickListener clickListener, String actType) {
         this.context = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.infoList = infoList;
         connectionDetector = new ConnectionDetector(context);
         appGlobals = AppGlobals.getInstance(context);
         this.clickListener = clickListener;
+        this.activityType = actType;
     }
 
     @Override
@@ -60,26 +75,41 @@ public class InfoListAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        View itemView = mLayoutInflater.inflate(R.layout.activity_event, container, false);
+    public Object instantiateItem(ViewGroup container, final int position) {
 
+        int layoutId = R.layout.activity_event;
+
+        if (activityType.equals(AppGlobals.EVENT_INFO)) {
+            layoutId = R.layout.activity_event;
+        } else if (activityType.equals(AppGlobals.SERVICE_INFO)) {
+            layoutId = R.layout.activity_service;
+        }
+
+        View itemView = mLayoutInflater.inflate(layoutId, container, false);
+
+        LinearLayout likeShareTool = (LinearLayout) itemView.findViewById(R.id.likeShareTool);
         likeImageBtn = (ImageButton) itemView.findViewById(R.id.likeImage);
         shareImageBtn = (ImageButton) itemView.findViewById(R.id.shareImage);
         eventHeader = (TextView) itemView.findViewById(R.id.eventHeaderText);
         eventSubHeader = (TextView) itemView.findViewById(R.id.eventSummaryText);
         eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
 
-        InfoDetails infoItem = infoList.get(position);
+        final InfoDetails infoItem = infoList.get(position);
 
         eventImage.setImageResource(R.drawable.event1);
 
         eventHeader.setText(infoItem.getInfoTitle());
         eventSubHeader.setText(infoItem.getInfoSubTitle());
 
-        if (infoItem.getInfoLikeStatus().equals("true")) {
-            likeImageBtn.setImageResource(R.mipmap.ic_favorite);
-        } else {
-            likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
+        if (activityType.equals(AppGlobals.EVENT_INFO)) {
+            likeShareTool.setVisibility(View.VISIBLE);
+            if (appGlobals.sharedPref.getLikeEventList().contains(infoItem.getId())) {
+                likeImageBtn.setImageResource(R.mipmap.ic_favorite);
+            } else {
+                likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
+            }
+        } else if(activityType.equals(AppGlobals.SERVICE_INFO)) {
+            likeShareTool.setVisibility(View.GONE);
         }
 
         likeImageBtn.setOnClickListener(clickListener);
@@ -94,6 +124,36 @@ public class InfoListAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((RelativeLayout) object);
+        container.removeView((LinearLayout) object);
+    }
+
+    private void serverCall(final Map<String,String> params) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().contains("success")) {
+
+                        } else {
+                            appGlobals.toastMsg(context, context.getString(R.string.pls_try_later), appGlobals.LENGTH_LONG);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 }

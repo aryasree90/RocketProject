@@ -15,16 +15,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import rocket.club.com.rocketpoker.adapter.EventListAdapter;
 import rocket.club.com.rocketpoker.adapter.InfoListAdapter;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 public class EventDetailActivity extends AppCompatActivity {
 
@@ -36,9 +47,13 @@ public class EventDetailActivity extends AppCompatActivity {
     View.OnClickListener clickListener = null;
     ConnectionDetector connectionDetector = null;
     ArrayList<InfoDetails> infoList = null;
+    InfoListAdapter infoAdapter = null;
 
     public static final String ACTIVITY_TYPE = "activityType";
     public static final String ITEM_POS = "itemPos";
+    private static final String TAG = "Event Detail Activity";
+
+    final String VALIDATION_URL = AppGlobals.SERVER_URL + "likeEvent.php";
 
     String activityType = AppGlobals.EVENT_INFO;
     int reqPos = 0;
@@ -98,16 +113,13 @@ public class EventDetailActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void initializeData() {
-
         if (!infoList.isEmpty()) {
             infoItemPager.setVisibility(View.VISIBLE);
             infoEmptyText.setVisibility(View.GONE);
-            InfoListAdapter infoAdapter = new InfoListAdapter(context, infoList, clickListener);
+            infoAdapter = new InfoListAdapter(context, infoList, clickListener, activityType);
             infoItemPager.setAdapter(infoAdapter);
         } else {
             infoItemPager.setVisibility(View.GONE);
@@ -129,22 +141,31 @@ public class EventDetailActivity extends AppCompatActivity {
                     int pos = Integer.parseInt(v.getTag().toString());
                     switch (v.getId()) {
                         case R.id.likeImage:
-
                             ImageView likeImageBtn = getLikeImageAt(pos);
                             if (likeImageBtn != null) {
                                 InfoDetails infoItem = infoList.get(pos);
-                                if (infoItem.getInfoLikeStatus().equals("false")) {
-                                    likeImageBtn.setImageResource(R.mipmap.ic_favorite);
-                                    infoItem.setInfoLikeStatus("true");
-                                } else {
+                                String likeEventList = appGlobals.sharedPref.getLikeEventList();
+                                String likeId = infoItem.getId() + ",";
+                                if (likeEventList.contains(infoItem.getId())) {
                                     likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
                                     infoItem.setInfoLikeStatus("false");
+                                    likeEventList = likeEventList.replace(likeId, "");
+                                } else {
+                                    likeImageBtn.setImageResource(R.mipmap.ic_favorite);
+                                    infoItem.setInfoLikeStatus("true");
+                                    likeEventList += likeId;
                                 }
+                                appGlobals.sharedPref.setLikeEventList(likeEventList);
+                                infoAdapter.notifyDataSetChanged();
+                                Map<String,String> map = new HashMap<String,String>();
+                                map.put("likeStatus", infoItem.getInfoLikeStatus());
+                                map.put("likeTimeStamp", infoItem.getInfoTimeStamp());
+                                map.put("likeId", infoItem.getId());
+                                serverCall(map);
                             }
 
                             break;
                         case R.id.shareImage:
-
                             TextView eventHeader = getShareTextAt(pos);
                             if (eventHeader != null) {
                                 String headerMsg = eventHeader.getText().toString();
@@ -164,6 +185,36 @@ public class EventDetailActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    private void serverCall(final Map<String,String> params) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().contains("success")) {
+
+                        } else {
+                            appGlobals.toastMsg(context, getString(R.string.pls_try_later), appGlobals.LENGTH_LONG);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
     private ImageView getLikeImageAt(int itemIndex) {

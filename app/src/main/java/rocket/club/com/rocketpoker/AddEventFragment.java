@@ -42,6 +42,7 @@ public class AddEventFragment extends Fragment {
     AppGlobals appGlobals = null;
     View.OnClickListener onClickListener = null;
 
+    String activityType = "";
     final String TAG = "AddEventFragment";
     ConnectionDetector connectionDetector = null;
     final String VALIDATION_URL = AppGlobals.SERVER_URL + "addEvents.php";
@@ -49,6 +50,7 @@ public class AddEventFragment extends Fragment {
     EditText headerText, summaryText;
     ImageView eventImage;
     Button save, clear;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,9 +68,24 @@ public class AddEventFragment extends Fragment {
         appGlobals = AppGlobals.getInstance(context);
         connectionDetector = new ConnectionDetector(context);
 
+        Bundle bundle = getArguments();
+        activityType = bundle.getString(EventDetailActivity.ACTIVITY_TYPE);
+
         eventImage = (ImageView) view.findViewById(R.id.eventImage);
         headerText = (EditText) view.findViewById(R.id.headerText);
         summaryText = (EditText) view.findViewById(R.id.summaryText);
+
+        TextView actTypeText = (TextView) view.findViewById(R.id.actType);
+
+        if (activityType.equals(AppGlobals.EVENT_INFO)) {
+            headerText.setHint(getString(R.string.eventHeader));
+            summaryText.setHint(getString(R.string.eventSummary));
+            actTypeText.setText(getString(R.string.addEvent));
+        } else {
+            headerText.setHint(getString(R.string.serviceHeader));
+            summaryText.setHint(getString(R.string.serviceSummary));
+            actTypeText.setText(getString(R.string.addService));
+        }
 
         save = (Button) view.findViewById(R.id.saveBtn);
         clear = (Button) view.findViewById(R.id.clearBtn);
@@ -95,7 +112,7 @@ public class AddEventFragment extends Fragment {
                             map.put("header", header);
                             map.put("summary", summary);
                             map.put("timeStamp", timeStamp);
-                            map.put("task", appGlobals.EVENT_INFO);
+                            map.put("task", activityType);
                             map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             serverCall(map);
                         } else {
@@ -125,6 +142,7 @@ public class AddEventFragment extends Fragment {
                     public void onResponse(String response) {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
                         CommonUtilities.getRocketsInfo(context, response);
+                        clearFields();
                     }
                 },
                 new Response.ErrorListener() {

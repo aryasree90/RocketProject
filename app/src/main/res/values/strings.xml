@@ -65,6 +65,7 @@
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
     <string name="otp_info">Automatically fetching OTP.\nPlease wait.</string>
+    <string name="pls_try_later">Please try later</string>
     <string name="settings_title">SETTINGS</string>
     <string name="settings_notification">Notification</string>
     <string name="settings_chat">Chat Notification</string>
@@ -131,6 +132,11 @@
 
     <string name="eventHeader">Event Header</string>
     <string name="eventSummary">Event Summary</string>
+    <string name="addEvent">Add New Event</string>
+
+    <string name="serviceHeader">Service Header</string>
+    <string name="serviceSummary">Service Summary</string>
+    <string name="addService">Add New Service</string>
 
     <string name="signout_heading">Sign Out</string>
 

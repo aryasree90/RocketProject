@@ -401,12 +401,10 @@ public class ProfileActivity extends ActionBarActivity {
 
         String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
         File imageFile = new File(appGlobals.getRocketsPath(context) + "/" + imgFileName);
-Log.d("__________", "______________ " + profileDetails.getUser_pic());
+
         if(!imageFile.exists() && !TextUtils.isEmpty(profileDetails.getUser_pic())) {
-            Log.d("__________", "______________ Reached in");
             appGlobals.convertBase64ToImageFile(profileDetails.getUser_pic(), imgFileName, context);
         }
-        Log.d("__________", "______________ Reached out");
         profileImage.setImageURI(Uri.fromFile(imageFile));
     }
 

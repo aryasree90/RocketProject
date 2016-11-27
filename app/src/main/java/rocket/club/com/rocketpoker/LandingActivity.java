@@ -269,6 +269,13 @@ public class LandingActivity extends AppCompatActivity
                 break;
             case R.id.edit_events:
                 fragmentClass = AddEventFragment.class;
+                args = new Bundle();
+                args.putString(EventDetailActivity.ACTIVITY_TYPE, AppGlobals.EVENT_INFO);
+                break;
+            case R.id.edit_services:
+                fragmentClass = AddEventFragment.class;
+                args = new Bundle();
+                args.putString(EventDetailActivity.ACTIVITY_TYPE, AppGlobals.SERVICE_INFO);
                 break;
             default:
                 fragmentClass = HomeFragment.class;
