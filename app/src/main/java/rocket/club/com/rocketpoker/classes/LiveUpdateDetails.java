@@ -5,50 +5,50 @@ package rocket.club.com.rocketpoker.classes;
  */
 public class LiveUpdateDetails {
 
-    private int updateType;
-    private String updateHeader;
-    private String updateText1;
-    private String updateText2;
-    private String updateText3;
-    private String updateComments;
-    private String updateTimeStamp;
+    private String type;
+    private String header;
+    private String text1;
+    private String text2;
+    private String text3;
+    private String comments;
+    private String timeStamp;
 
-    public LiveUpdateDetails(int type, String header, String text1, String text2, String text3,
+    public LiveUpdateDetails(String type, String header, String text1, String text2, String text3,
                               String comments, String timeStamp) {
-        this.updateType = type;
-        this.updateHeader = header;
-        this.updateText1 = text1;
-        this.updateText2 = text2;
-        this.updateText3 = text3;
-        this.updateComments = comments;
-        this.updateTimeStamp = timeStamp;
+        this.type = type;
+        this.header = header;
+        this.text1 = text1;
+        this.text2 = text2;
+        this.text3 = text3;
+        this.comments = comments;
+        this.timeStamp = timeStamp;
     }
 
-    public int getUpdateType() {
-        return updateType;
+    public String getUpdateType() {
+        return type;
     }
 
     public String getUpdateHeader() {
-        return updateHeader;
+        return header;
     }
 
     public String getUpdateText1() {
-        return updateText1;
+        return text1;
     }
 
     public String getUpdateText2() {
-        return updateText2;
+        return text2;
     }
 
     public String getUpdateText3() {
-        return updateText3;
+        return text3;
     }
 
     public String getUpdateComments() {
-        return updateComments;
+        return comments;
     }
 
     public String getUpdateTimeStamp() {
-        return updateTimeStamp;
+        return timeStamp;
     }
 }

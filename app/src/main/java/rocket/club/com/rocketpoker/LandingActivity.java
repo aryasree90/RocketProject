@@ -280,6 +280,9 @@ public class LandingActivity extends AppCompatActivity
             case R.id.edit_live_update:
                 fragmentClass = AddLiveUpdateFragment.class;
                 break;
+            case R.id.edit_game_type:
+                fragmentClass = AddGameTypeFragment.class;
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }

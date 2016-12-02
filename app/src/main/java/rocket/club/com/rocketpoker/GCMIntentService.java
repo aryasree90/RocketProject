@@ -18,6 +18,7 @@ import rocket.club.com.rocketpoker.utils.LogClass;
 
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 import static rocket.club.com.rocketpoker.CommonUtilities.displayMessage;
+import static rocket.club.com.rocketpoker.CommonUtilities.getRocketsNewGame;
 import static rocket.club.com.rocketpoker.CommonUtilities.updateUserType;
 import static rocket.club.com.rocketpoker.CommonUtilities.updateFriends;
 import static rocket.club.com.rocketpoker.CommonUtilities.getChatMessages;
@@ -97,6 +98,9 @@ public class GCMIntentService extends GCMBaseIntentService {
         } else if(intent.hasExtra(AppGlobals.CLUB_LIVE_UPDATE)) {
             message = intent.getExtras().getString(AppGlobals.CLUB_LIVE_UPDATE);
             getRocketsLiveUpdate(context, message);
+        } else if(intent.hasExtra(AppGlobals.CLUB_NEW_GAME)) {
+            message = intent.getExtras().getString(AppGlobals.CLUB_NEW_GAME);
+            getRocketsNewGame(context, message);
         }else if(intent.hasExtra("received_messages")){
             try {
                 JSONArray array  = new JSONArray(intent.getExtras().getString("received_messages"));

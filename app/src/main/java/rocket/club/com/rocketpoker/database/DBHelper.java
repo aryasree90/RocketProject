@@ -34,6 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String rocketsInfoTable = "rocketsInfoTable";
     public static final String rocketsLiveUpdateTable = "rocketsLiveUpdate";
     public static final String rocketsTasks = "rocketsTasks";
+    public static final String rocketsGameNameTable = "gameNameList";
 
     public static final String _id = "id";
     public static final String mobile = "frndMobile";
@@ -76,6 +77,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String taskTimeStamp = "taskTimeStamp";
     public static final String editorMobile = "editorMobile";
 
+    public static final String gameName = "gameName";
+
     public static final String CREATE_TABLE = "CREATE TABLE " + friendsTable + "(" + _id +
             " integer primary key autoincrement not null, " + mobile + " text, " + userName +
             " text, " + nickName + " text, " + status + " integer)";
@@ -104,6 +107,9 @@ public class DBHelper extends SQLiteOpenHelper {
             " text, " + taskHeader + " text, " + taskSummary + " text, " + taskTimeStamp + " text, "
             + editorMobile + " text)";
 
+    public static final String CREATE_GAME_NAME_TABLE = "CREATE TABLE " + rocketsGameNameTable + "(" + _id +
+            " integer primary key autoincrement not null, " + gameName + " text)";
+
     public static final String SELECT_ALL_FRIENDS = "SELECT * FROM " + friendsTable;
     public static final String SELECT_PENDING = "SELECT * FROM " + friendsTable + " WHERE " +
             status + "=0";
@@ -125,6 +131,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String SELECT_ROCKETS_LIVE_UPDATE = "SELECT * FROM " + rocketsLiveUpdateTable;
 
+    public static final String SELECT_ROCKETS_GAME_LIST = "SELECT * FROM " + rocketsGameNameTable;
+
     public DBHelper(Context ctx) {
         super(ctx, DB_NAME, null, DB_VERSION);
     }
@@ -137,6 +145,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ROCKETS_INFO);
         db.execSQL(CREATE_ROCKETS_LIVE_UPDATE);
         db.execSQL(CREATE_ROCKETS_TASKS);
+        db.execSQL(CREATE_GAME_NAME_TABLE);
     }
 
     @Override
@@ -457,18 +466,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return infoList;
     }
 
-    public boolean insertLiveUpdateDetails(LiveUpdateDetails liveUpdateDetails){
+    public boolean insertLiveUpdateDetails(LiveUpdateDetails[] liveUpdateDetailsList){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(this.updateHeader, liveUpdateDetails.getUpdateHeader());
-        contentValues.put(this.updateText1, liveUpdateDetails.getUpdateText1());
-        contentValues.put(this.updateText2, liveUpdateDetails.getUpdateText2());
-        contentValues.put(this.updateText3, liveUpdateDetails.getUpdateText3());
-        contentValues.put(this.updateComments, liveUpdateDetails.getUpdateComments());
-        contentValues.put(this.updateTimeStamp, liveUpdateDetails.getUpdateTimeStamp());
-        contentValues.put(this.updateMsgType, liveUpdateDetails.getUpdateType());
-        db.insert(rocketsLiveUpdateTable, null, contentValues);
+        for(LiveUpdateDetails liveUpdateDetails : liveUpdateDetailsList) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(this.updateHeader, liveUpdateDetails.getUpdateHeader());
+            contentValues.put(this.updateText1, liveUpdateDetails.getUpdateText1());
+            contentValues.put(this.updateText2, liveUpdateDetails.getUpdateText2());
+            contentValues.put(this.updateText3, liveUpdateDetails.getUpdateText3());
+            contentValues.put(this.updateComments, liveUpdateDetails.getUpdateComments());
+            contentValues.put(this.updateTimeStamp, liveUpdateDetails.getUpdateTimeStamp());
+            contentValues.put(this.updateMsgType, liveUpdateDetails.getUpdateType());
+            db.insert(rocketsLiveUpdateTable, null, contentValues);
+        }
 
         if(db != null)
             db.close();
@@ -491,7 +502,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 String text3 = res.getString(res.getColumnIndex(updateText3));
                 String comments = res.getString(res.getColumnIndex(updateComments));
                 String timeStamp = res.getString(res.getColumnIndex(updateTimeStamp));
-                int msgType = res.getInt(res.getColumnIndex(updateMsgType));
+                String msgType = res.getString(res.getColumnIndex(updateMsgType));
 
                 LiveUpdateDetails liveUpdate = new LiveUpdateDetails(msgType, header, text1, text2,
                         text3, comments, timeStamp);
@@ -506,20 +517,39 @@ public class DBHelper extends SQLiteOpenHelper {
         return updateList;
     }
 
-    /*public boolean insertTaskDetails(TaskHolder newTask){
+    public boolean insertNewGameDetails(String gameName){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(this.taskImage, newTask.getTaskImage());
-        contentValues.put(this.taskType, newTask.getTaskType());
-        contentValues.put(this.taskHeader, newTask.getTaskHeader());
-        contentValues.put(this.taskSummary, newTask.getTaskSummary());
-        contentValues.put(this.taskTimeStamp, newTask.getTaskTimeStamp());
-        contentValues.put(this.editorMobile, newTask.getEditorMobile());
-        db.insert(rocketsTasks, null, contentValues);
+        contentValues.put(this.gameName, gameName);
+        db.insert(rocketsGameNameTable, null, contentValues);
 
         if(db != null)
             db.close();
         return true;
-    }*/
+    }
+
+    public String[] getRocketsGameList() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery(SELECT_ROCKETS_GAME_LIST, null);
+
+//        ArrayList<String> gameList = new ArrayList<String>();
+        String[] gameList = new String[res.getCount()];
+        int i=0;
+        if(res != null) {
+            res.moveToFirst();
+            while (!res.isAfterLast()) {
+                String header = res.getString(res.getColumnIndex(gameName));
+                gameList[i] = header;
+                ++i;
+//                gameList.add(header);
+                res.moveToNext();
+            }
+        }
+        if(db != null)
+            db.close();
+
+        return gameList;
+    }
 }

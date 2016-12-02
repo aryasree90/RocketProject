@@ -47,6 +47,10 @@
                     android:id="@+id/edit_live_update"
                     android:icon="@mipmap/ic_contact_us"
                     android:title="@string/edit_live_update" />
+                <item
+                    android:id="@+id/edit_game_type"
+                    android:icon="@mipmap/ic_contact_us"
+                    android:title="@string/edit_game_type" />
             </group>
         </menu>
     </item>

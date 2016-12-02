@@ -45,7 +45,7 @@ public class AddEventFragment extends Fragment {
     String activityType = "";
     final String TAG = "AddEventFragment";
     ConnectionDetector connectionDetector = null;
-    final String VALIDATION_URL = AppGlobals.SERVER_URL + "addEvents.php";
+    final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
 
     EditText headerText, summaryText;
     ImageView eventImage;

@@ -2,6 +2,7 @@ package rocket.club.com.rocketpoker.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,14 +46,15 @@ public class LiveUpdateListAdapter extends PagerAdapter {
         int layout = R.layout.live_update_item;
 
         LiveUpdateDetails updateDetails = updateList.get(position);
+
         switch(updateDetails.getUpdateType()) {
-            case 1:
+            case "1":
                 layout = R.layout.live_update_item;
                 break;
-            case 2:
+            case "2":
                 layout = R.layout.live_update_item;
                 break;
-            case 3:
+            case "3":
                 layout = R.layout.live_update_item;
                 break;
         }

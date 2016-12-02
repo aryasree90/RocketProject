@@ -1,23 +1,16 @@
 package rocket.club.com.rocketpoker;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -32,24 +25,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import rocket.club.com.rocketpoker.adapter.InfoListAdapter;
-import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
-public class AddLiveUpdateFragment extends Fragment {
+/**
+ * Created by Admin on 11/28/2016.
+ */
+public class AddGameTypeFragment extends Fragment {
 
     Context context;
     AppGlobals appGlobals = null;
     View.OnClickListener clickListener = null;
     ConnectionDetector connectionDetector = null;
-    private static final String TAG = "AddLiveUpdateFragment";
+    private static final String TAG = "AddGameTypeFragment";
 
-    MaterialBetterSpinner updateTypeSpinner = null;
-    ArrayAdapter<String> updateTypeAdapter = null;
-    EditText header, text1, text2, text3, comments;
+    EditText gameType;
     Button save, clear;
 
     final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
@@ -57,7 +49,7 @@ public class AddLiveUpdateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_new_live_update, container, false);
+        View view = inflater.inflate(R.layout.activity_new_game, container, false);
 
         initializeWidgets(view);
         setClickListener();
@@ -71,18 +63,7 @@ public class AddLiveUpdateFragment extends Fragment {
         appGlobals = AppGlobals.getInstance(context);
         connectionDetector = new ConnectionDetector(context);
 
-        String[] UPDATE_LIST = getResources().getStringArray(R.array.live_update_list);
-
-        updateTypeAdapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_dropdown_item_1line, UPDATE_LIST);
-        updateTypeSpinner = (MaterialBetterSpinner) view.findViewById(R.id.updateType);
-        updateTypeSpinner.setAdapter(updateTypeAdapter);
-
-        header = (EditText) view.findViewById(R.id.updateHeader);
-        text1 = (EditText) view.findViewById(R.id.updateText1);
-        text2 = (EditText) view.findViewById(R.id.updateText2);
-        text3 = (EditText) view.findViewById(R.id.updateText3);
-        comments = (EditText) view.findViewById(R.id.updateComments);
+        gameType = (EditText) view.findViewById(R.id.gameName);
 
         save = (Button) view.findViewById(R.id.saveBtn);
         clear = (Button) view.findViewById(R.id.clearBtn);
@@ -96,37 +77,20 @@ public class AddLiveUpdateFragment extends Fragment {
                 switch(v.getId()) {
                     case R.id.saveBtn:
 
-                        String updateType = updateTypeSpinner.getText().toString();
-                        String updateHeader = header.getText().toString();
-                        String updateText1 = text1.getText().toString();
-                        String updateText2 = text2.getText().toString();
-                        String updateText3 = text3.getText().toString();
-                        String updateComments = comments.getText().toString();
+                        String game = gameType.getText().toString();
 
-                        if(TextUtils.isEmpty(updateType)) {
-                            appGlobals.toastMsg(context, "Select a type", appGlobals.LENGTH_LONG);
-                            return;
-                        } else if(TextUtils.isEmpty(updateHeader)) {
-                            appGlobals.toastMsg(context, "Enter Header", appGlobals.LENGTH_LONG);
+                        if(TextUtils.isEmpty(game)) {
+                            appGlobals.toastMsg(context, "Enter a Game", appGlobals.LENGTH_LONG);
                             return;
                         }
 
                         String curTime = "" + System.currentTimeMillis();
 
-                        LiveUpdateDetails updateDetails = new LiveUpdateDetails(updateType,
-                                updateHeader, updateText1, updateText2, updateText3,
-                                updateComments, curTime);
-
                         Map<String,String> map = new HashMap<String,String>();
-                        map.put("type", updateType);
-                        map.put("header", updateHeader);
-                        map.put("text1", updateText1);
-                        map.put("text2", updateText2);
-                        map.put("text3", updateText3);
-                        map.put("comments", updateComments);
+                        map.put("header", game);
                         map.put("timeStamp", curTime);
                         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                        map.put("task", AppGlobals.LIVE_UPDATE_INFO);
+                        map.put("task", AppGlobals.NEW_GAME);
 
                         serverCall(map);
 
@@ -142,12 +106,7 @@ public class AddLiveUpdateFragment extends Fragment {
     }
 
     private void clearFields() {
-        updateTypeSpinner.setText("");
-        header.setText("");
-        text1.setText("");
-        text2.setText("");
-        text3.setText("");
-        comments.setText("");
+        gameType.setText("");
     }
 
     private void serverCall(final Map<String,String> params) {
@@ -157,7 +116,7 @@ public class AddLiveUpdateFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
-                        CommonUtilities.getRocketsLiveUpdate(context, response);
+                        CommonUtilities.getRocketsNewGame(context, response);
                         clearFields();
                     }
                 },

@@ -54,6 +54,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import rocket.club.com.rocketpoker.classes.ProfileDetailsClass;
+import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -105,7 +106,9 @@ public class ProfileActivity extends ActionBarActivity {
         profileImage = (ImageView) findViewById(R.id.userProfilePic);
         skipProfile = (TextView) findViewById(R.id.skipProfile);
 
-        String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
+//        String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
+        DBHelper db = new DBHelper(context);
+        String[] GAME_LIST = db.getRocketsGameList();
 
         gameTypeAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, GAME_LIST);

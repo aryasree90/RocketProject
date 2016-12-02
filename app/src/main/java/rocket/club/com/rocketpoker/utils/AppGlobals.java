@@ -77,6 +77,7 @@ public class AppGlobals {
     // variables
 
     public static final String SERVER_URL = "http://45.79.130.11/rocketPoker/";
+    public static final String EDITORS_URL = "addEvents.php";
     public boolean enableLog = true;
     public int chunkSize = 100;
     public final int LENGTH_LONG = 1;
@@ -127,6 +128,7 @@ public class AppGlobals {
     public static final String EVENT_INFO = "1";
     public static final String SERVICE_INFO = "2";
     public static final String LIVE_UPDATE_INFO = "3";
+    public static final String NEW_GAME = "4";
 
     //Game Invite
     public static final String SEND_INVITE = "1";
@@ -155,7 +157,8 @@ public class AppGlobals {
     public static final String INVITE_TO_PLAY = "invite_to_play";
     public static final String RESP_PLAY = "resp_play";
     public static final String CLUB_INFO = "club_info";
-    public static final String CLUB_LIVE_UPDATE = "live_update";
+    public static final String CLUB_LIVE_UPDATE = "club_live_update";
+    public static final String CLUB_NEW_GAME = "club_new_game";
 
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";

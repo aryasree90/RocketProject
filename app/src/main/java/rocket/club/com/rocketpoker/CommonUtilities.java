@@ -10,6 +10,9 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -207,10 +210,25 @@ public final class CommonUtilities {
         appGlobals.logClass.setLogMsg(TAG, message, LogClass.DEBUG_MSG);
 
         Gson gson = new Gson();
-        LiveUpdateDetails liveUpdateDetails = gson.fromJson(message, LiveUpdateDetails.class);
+        LiveUpdateDetails[] liveUpdateDetailsList = gson.fromJson(message, LiveUpdateDetails[].class);
 
         DBHelper db = new DBHelper(context);
-        db.insertLiveUpdateDetails(liveUpdateDetails);
+        db.insertLiveUpdateDetails(liveUpdateDetailsList);
+    }
+
+    static void getRocketsNewGame(Context context, String message) {
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+        appGlobals.logClass.setLogMsg(TAG, message, LogClass.DEBUG_MSG);
+
+        Gson gson = new Gson();
+        JsonParser parser = new JsonParser();
+        JsonArray gameArr = parser.parse(message).getAsJsonArray();
+        JsonObject gameObj = gameArr.get(0).getAsJsonObject();
+
+        String gameName = gameObj.get("gameName").getAsString();
+
+        DBHelper db = new DBHelper(context);
+        db.insertNewGameDetails(gameName);
     }
 
     private static void generateNotification(Context ctx, String message, Intent notificationIntent) {

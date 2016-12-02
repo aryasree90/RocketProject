@@ -77,6 +77,7 @@
     <string name="update_header">Enter Header</string>
     <string name="update_text">Enter text</string>
     <string name="update_comments">Enter some comments</string>
+    <string name="game_name">Enter Game Name</string>
 
 
     <string name="unable_to_connect_server">Unable to Connect to Server</string>
@@ -135,6 +136,7 @@
     <string name="edit_event">Add Event</string>
     <string name="edit_service">Add Service</string>
     <string name="edit_live_update">Add Live Update</string>
+    <string name="edit_game_type">Add New Game</string>
 
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
