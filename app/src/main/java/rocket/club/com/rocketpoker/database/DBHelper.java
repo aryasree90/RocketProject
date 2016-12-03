@@ -518,14 +518,25 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertNewGameDetails(String gameName){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase readDb = this.getReadableDatabase();
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(this.gameName, gameName);
-        db.insert(rocketsGameNameTable, null, contentValues);
+        String gameSearch = "SELECT * FROM " + rocketsGameNameTable + " WHERE " + this.gameName +
+                " = '" + gameName + "';";
+        Cursor res = readDb.rawQuery(gameSearch, null);
 
-        if(db != null)
-            db.close();
+        if(res == null || res.getCount() == 0) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(this.gameName, gameName);
+            db.insert(rocketsGameNameTable, null, contentValues);
+
+            if (db != null)
+                db.close();
+        }
+
+        if(readDb != null)
+            readDb.close();
+
         return true;
     }
 

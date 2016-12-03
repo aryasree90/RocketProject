@@ -55,6 +55,19 @@
         </menu>
     </item>
 
+    <item
+        android:title="@string/admin">
+        <menu>
+            <group android:checkableBehavior="single"
+                android:id="@+id/admin">
+                <item
+                    android:id="@+id/role_assign"
+                    android:icon="@mipmap/ic_contact_us"
+                    android:title="@string/admin_assign_role" />
+            </group>
+        </menu>
+    </item>
+
     <item android:title="@string/app_name">
         <menu>
             <group android:checkableBehavior="single"

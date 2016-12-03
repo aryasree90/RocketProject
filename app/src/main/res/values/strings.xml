@@ -138,6 +138,8 @@
     <string name="edit_live_update">Add Live Update</string>
     <string name="edit_game_type">Add New Game</string>
 
+    <string name="admin_assign_role">Assign Role</string>
+
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
 

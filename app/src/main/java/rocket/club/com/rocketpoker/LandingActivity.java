@@ -194,11 +194,17 @@ public class LandingActivity extends AppCompatActivity
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         int msgType = appGlobals.sharedPref.getUserType();
-
+Log.d("______________", "________________ " + msgType);
         if(msgType == AppGlobals.EDITOR) {
             menu.setGroupVisible(R.id.editor, true);
         } else {
             menu.setGroupVisible(R.id.editor, false);
+        }
+
+        if(msgType == AppGlobals.ADMIN) {
+            menu.setGroupVisible(R.id.admin, true);
+        } else {
+            menu.setGroupVisible(R.id.admin, false);
         }
 
         return super.onPrepareOptionsMenu(menu);

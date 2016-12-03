@@ -39,6 +39,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.w3c.dom.Text;
@@ -72,6 +76,7 @@ public class ProfileActivity extends ActionBarActivity {
     int year, month, day;
     String imagePath = "";
     final String VALIDATION_URL = AppGlobals.SERVER_URL + "userProfile.php";
+    final String GAME_LIST_URL = AppGlobals.SERVER_URL + "fetchFromTable.php";
 
     Dialog dialog = null;
     View.OnClickListener clickListener = null;
@@ -107,14 +112,7 @@ public class ProfileActivity extends ActionBarActivity {
         skipProfile = (TextView) findViewById(R.id.skipProfile);
 
 //        String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
-        DBHelper db = new DBHelper(context);
-        String[] GAME_LIST = db.getRocketsGameList();
-
-        gameTypeAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, GAME_LIST);
-        gameTypeSpinner = (MaterialBetterSpinner)
-                findViewById(R.id.gameType);
-        gameTypeSpinner.setAdapter(gameTypeAdapter);
+        loadGameNameSpinner();
 
         String[] GENDER_LIST = getResources().getStringArray(R.array.gender_list);
 
@@ -123,6 +121,12 @@ public class ProfileActivity extends ActionBarActivity {
         genderSpinner = (MaterialBetterSpinner)
                 findViewById(R.id.gender);
         genderSpinner.setAdapter(genderAdapter);
+
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+        map.put("table", "rocketGames");
+
+        serverCall(map, "", GAME_LIST_URL);
     }
 
     private void setClickListener() {
@@ -329,7 +333,7 @@ public class ProfileActivity extends ActionBarActivity {
         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
         map.put("task", appGlobals.UPDATE_PROFILE);
 
-        serverCall(map, appGlobals.UPDATE_PROFILE);
+        serverCall(map, appGlobals.UPDATE_PROFILE, VALIDATION_URL);
     }
 
     private void fetchProfile() {
@@ -338,12 +342,12 @@ public class ProfileActivity extends ActionBarActivity {
         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
         map.put("task", appGlobals.FETCH_PROFILE);
 
-        serverCall(map, appGlobals.FETCH_PROFILE);
+        serverCall(map, appGlobals.FETCH_PROFILE, VALIDATION_URL);
     }
 
-    private void serverCall(final Map<String,String> params, final String task) {
+    private void serverCall(final Map<String,String> params, final String task, String url) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -358,10 +362,22 @@ public class ProfileActivity extends ActionBarActivity {
                             } else {
                                 appGlobals.toastMsg(context, getString(R.string.profile_update_failed), appGlobals.LENGTH_LONG);
                             }
-                        } else {
+                        } else if(task.equals(appGlobals.FETCH_PROFILE)) {
                             if (!response.trim().isEmpty()) {
                                 setProfileDetails(response);
                             }
+                        } else if(TextUtils.isEmpty(task)) {
+                            JsonParser parser = new JsonParser();
+                            JsonArray jsonArr = parser.parse(response).getAsJsonArray();
+
+                            DBHelper db = new DBHelper(context);
+                            for(JsonElement jsonElem : jsonArr) {
+                                JsonObject jsonObj = jsonElem.getAsJsonObject();
+                                String gameName = jsonObj.get("gameName").getAsString();
+
+                                db.insertNewGameDetails(gameName);
+                            }
+                            loadGameNameSpinner();
                         }
                     }
                 },
@@ -371,7 +387,7 @@ public class ProfileActivity extends ActionBarActivity {
                         String msg = "";
                         if(task.equals(appGlobals.UPDATE_PROFILE))
                             msg = getString(R.string.profile_update_failed);
-                        else
+                        else if(task.equals(appGlobals.FETCH_PROFILE))
                             msg = getString(R.string.profile_fetch_error);
 
                         appGlobals.toastMsg(context, msg, appGlobals.LENGTH_LONG);
@@ -386,6 +402,17 @@ public class ProfileActivity extends ActionBarActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    private void loadGameNameSpinner() {
+        DBHelper db = new DBHelper(context);
+        String[] GAME_LIST = db.getRocketsGameList();
+
+        gameTypeAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, GAME_LIST);
+        gameTypeSpinner = (MaterialBetterSpinner)
+                findViewById(R.id.gameType);
+        gameTypeSpinner.setAdapter(gameTypeAdapter);
     }
 
     private void setProfileDetails(String response) {
@@ -408,7 +435,9 @@ public class ProfileActivity extends ActionBarActivity {
         if(!imageFile.exists() && !TextUtils.isEmpty(profileDetails.getUser_pic())) {
             appGlobals.convertBase64ToImageFile(profileDetails.getUser_pic(), imgFileName, context);
         }
-        profileImage.setImageURI(Uri.fromFile(imageFile));
+
+        if(imageFile.exists())
+            profileImage.setImageURI(Uri.fromFile(imageFile));
     }
 
     @Override
