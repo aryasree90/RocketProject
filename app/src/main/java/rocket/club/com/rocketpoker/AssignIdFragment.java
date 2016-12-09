@@ -7,11 +7,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,12 +29,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.adapter.AdminRoleAdapter;
 import rocket.club.com.rocketpoker.classes.RegisterDetails;
+import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -40,24 +50,24 @@ public class AssignIdFragment extends Fragment {
     AppGlobals appGlobals;
     ConnectionDetector connectionDetector = null;
 
-    RegisterDetails[] registerDetails = null;
-    AdminRoleAdapter mAdapter = null;
-    EditText selectMember = null;
-    RecyclerView selectedMembersList = null;
+    EditText searchFriend;
+    ImageButton searchBtn;
+    LinearLayout memberDetails = null;
+    Button changeId, clearBtn;
+    TextView errorMsg, memberName, memberNum, memberId;
     View.OnClickListener clickListener = null;
 
-    ArrayList<RegisterDetails> changedMembers = new ArrayList<>();
+    final String URL = AppGlobals.SERVER_URL + "memberIdUpdate.php";
 
     private static final String TAG = "AssignIdFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_assign_role, container, false);
+        View view = inflater.inflate(R.layout.fragment_assign_id, container, false);
 
         initializeWidgets(view);
         setClickListener();
-        initializeData();
 
         return view;
     }
@@ -67,28 +77,17 @@ public class AssignIdFragment extends Fragment {
         appGlobals = AppGlobals.getInstance(context);
         connectionDetector = new ConnectionDetector(context);
 
-        selectMember = (EditText) view.findViewById(R.id.selectMember);
-        selectedMembersList = (RecyclerView) view.findViewById(R.id.selectedMembers);
+        memberDetails = (LinearLayout) view.findViewById(R.id.show_friend_details);
+        searchFriend = (EditText) view.findViewById(R.id.searchText);
+        searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
+        errorMsg = (TextView) view.findViewById(R.id.txt_friend_not_found);
 
-        registerDetails = new RegisterDetails[0];
+        memberId = (TextView) view.findViewById(R.id.member_id);
+        memberNum = (TextView) view.findViewById(R.id.friendNumber);
+        memberName = (TextView) view.findViewById(R.id.friendName);
 
-        selectMember.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mAdapter.getFilter().filter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
+        changeId = (Button) view.findViewById(R.id.changeId);
+        clearBtn = (Button) view.findViewById(R.id.clearBtn);
     }
 
     private void setClickListener() {
@@ -96,36 +95,87 @@ public class AssignIdFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
+                    case R.id.searchBtn:
 
+                        String searchAFriend = searchFriend.getText().toString();
+
+                        if(searchAFriend.isEmpty()) {
+                            appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
+                            return;
+                        } else if (appGlobals.sharedPref.getLoginMobile().contains(searchAFriend)) {
+                            appGlobals.toastMsg(context, getString(R.string.req_to_own_num), appGlobals.LENGTH_LONG);
+                        } else {
+                            searchFriend.setEnabled(false);
+                            Map<String, String> search_map = new HashMap<String, String>();
+                            search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                            search_map.put("frnd_mobile", searchAFriend);
+                            serverCall(search_map, FriendsFragment.FRIEND_SEARCH_URL);
+                        }
+
+                        break;
+                    case R.id.changeId:
+                        String memId = memberId.getText().toString();
+Log.d("_____________", "____________________ " + memId);
+                        if(memId.isEmpty()) {
+                            appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
+                            return;
+                        } else {
+                            Log.d("_____________", "____________________ reached in");
+                            Map<String, String> member_map = new HashMap<String, String>();
+                            member_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                            member_map.put("user_mob", memberNum.getText().toString());
+                            member_map.put("user_id", memId);
+                            serverCall(member_map, URL);
+                        }
+                        break;
+                    case R.id.clearBtn:
+                        clearFields();
+                        break;
                 }
             }
         };
+        searchBtn.setOnClickListener(clickListener);
+        changeId.setOnClickListener(clickListener);
+        clearBtn.setOnClickListener(clickListener);
     }
 
-    private void initializeData() {
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+    private void clearFields() {
+        memberDetails.setVisibility(View.GONE);
+        errorMsg.setVisibility(View.GONE);
 
-        String url = AppGlobals.SERVER_URL + "getRocketUserList.php";
-        serverCall(map, url, 1);
+        searchFriend.setEnabled(true);
+        searchFriend.setText("");
+        memberId.setText("");
+        memberNum.setText("");
+        memberName.setText("");
     }
 
-    private void serverCall(final Map<String, String> params, String url, final int caller) {
+    private void serverCall(final Map<String, String> params, final String url) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(caller == 1) {
-                            Gson gson = new Gson();
-                            registerDetails = gson.fromJson(response, RegisterDetails[].class);
+                        if(url.equals(FriendsFragment.FRIEND_SEARCH_URL)) {
+                            try {
+                                errorMsg.setVisibility(View.GONE);
+                                Gson gson = new Gson();
+                                UserDetails userDetails = gson.fromJson(response, UserDetails.class);
 
-                            mAdapter = new AdminRoleAdapter(registerDetails, context, changedMembers);
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-                            selectedMembersList.setLayoutManager(mLayoutManager);
-                            selectedMembersList.setItemAnimator(new DefaultItemAnimator());
-                            selectedMembersList.setAdapter(mAdapter);
-                        } else if(caller == 2) {
+                                memberId.setText(userDetails.getUserId());
+                                memberName.setText(userDetails.getUserName());
+                                memberNum.setText(userDetails.getMobile());
 
+                                memberDetails.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+                                appGlobals.toastMsg(context, getString(R.string.friend_not_found), appGlobals.LENGTH_LONG);
+                                searchFriend.setText("");
+                                errorMsg.setVisibility(View.VISIBLE);
+                                searchFriend.setEnabled(true);
+                                searchFriend.requestFocus();
+                                appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
+                            }
+                        } else if(response.equals("success")){
+                            clearFields();
                         }
                     }
                 },
@@ -154,16 +204,5 @@ public class AssignIdFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        final String url = AppGlobals.SERVER_URL + "memberUpdateList.php";
-        for(RegisterDetails regDetails : changedMembers) {
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-            map.put("user_mob", regDetails.getReg_mob());
-            map.put("user_type", regDetails.getUser_type());
-            map.put("gcm_regid", regDetails.getGcm_regid());
-            map.put("user_id", regDetails.getUserId());
-
-            serverCall(map, url, 2);
-        }
     }
 }

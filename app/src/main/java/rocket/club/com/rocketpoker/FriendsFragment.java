@@ -85,7 +85,7 @@ public class FriendsFragment extends Fragment {
     View.OnClickListener clickListener = null;
     private final String TAG = "Friends Fragment";
     final String FRIEND_REQ_URL = AppGlobals.SERVER_URL + "frndReq.php";
-    final String FRIEND_SEARCH_URL = AppGlobals.SERVER_URL + "searchFriend.php";
+    public static final String FRIEND_SEARCH_URL = AppGlobals.SERVER_URL + "searchFriend.php";
     final String INVITE_TO_PLAY_URL = AppGlobals.SERVER_URL + "inviteToPlay.php";
     private int pageType = 1;
 

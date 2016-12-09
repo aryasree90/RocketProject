@@ -2,6 +2,7 @@ package rocket.club.com.rocketpoker.classes;
 
 public class UserDetails {
 
+    private String userId;
     private String nickName;
     private String mobile;
     private String userName;
@@ -37,5 +38,9 @@ public class UserDetails {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }
