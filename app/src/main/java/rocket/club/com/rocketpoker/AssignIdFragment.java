@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.adapter.AdminRoleAdapter;
@@ -39,7 +34,7 @@ import rocket.club.com.rocketpoker.utils.LogClass;
 /**
  * Created by Admin on 12/4/2016.
  */
-public class AssignRoleFragment extends Fragment {
+public class AssignIdFragment extends Fragment {
 
     Context context;
     AppGlobals appGlobals;
@@ -53,7 +48,7 @@ public class AssignRoleFragment extends Fragment {
 
     ArrayList<RegisterDetails> changedMembers = new ArrayList<>();
 
-    private static final String TAG = "AssignRoleFragment";
+    private static final String TAG = "AssignIdFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

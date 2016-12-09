@@ -27,6 +27,7 @@
     <string name="email">Email</string>
     <string name="game_type">Game Type</string>
     <string name="select_member_type">Select Member Type</string>
+    <string name="member_id">Member Id</string>
     <string name="nick_name">Nick Name</string>
     <string name="gender">Gender</string>
     <string name="profile">Profile</string>
@@ -149,6 +150,7 @@
     <string name="edit_game_type">Add New Game</string>
 
     <string name="admin_assign_role">Assign Role</string>
+    <string name="admin_assign_id">Assign Id</string>
 
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>

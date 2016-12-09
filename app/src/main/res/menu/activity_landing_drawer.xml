@@ -64,6 +64,10 @@
                     android:id="@+id/role_assign"
                     android:icon="@mipmap/ic_contact_us"
                     android:title="@string/admin_assign_role" />
+                <item
+                    android:id="@+id/id_assign"
+                    android:icon="@mipmap/ic_contact_us"
+                    android:title="@string/admin_assign_id" />
             </group>
         </menu>
     </item>
