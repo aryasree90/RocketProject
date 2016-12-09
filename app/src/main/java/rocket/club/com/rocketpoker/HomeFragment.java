@@ -138,6 +138,8 @@ public class HomeFragment extends Fragment {
         emptyFriendlnr = (LinearLayout) view.findViewById(R.id.linr_emptyfriendname);
 
         refreshFriendReqList();
+
+        appGlobals.toastMsg(context, "Type " + appGlobals.sharedPref.getUserType(),appGlobals.LENGTH_LONG);
     }
 
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {

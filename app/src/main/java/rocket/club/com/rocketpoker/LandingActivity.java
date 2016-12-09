@@ -194,7 +194,7 @@ public class LandingActivity extends AppCompatActivity
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         int msgType = appGlobals.sharedPref.getUserType();
-Log.d("______________", "________________ " + msgType);
+
         if(msgType == AppGlobals.EDITOR) {
             menu.setGroupVisible(R.id.editor, true);
         } else {
@@ -288,6 +288,9 @@ Log.d("______________", "________________ " + msgType);
                 break;
             case R.id.edit_game_type:
                 fragmentClass = AddGameTypeFragment.class;
+                break;
+            case R.id.role_assign:
+                fragmentClass = AssignRoleFragment.class;
                 break;
             default:
                 fragmentClass = HomeFragment.class;

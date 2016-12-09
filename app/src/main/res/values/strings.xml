@@ -26,6 +26,7 @@
     <string name="full_name">Full Name</string>
     <string name="email">Email</string>
     <string name="game_type">Game Type</string>
+    <string name="select_member_type">Select Member Type</string>
     <string name="nick_name">Nick Name</string>
     <string name="gender">Gender</string>
     <string name="profile">Profile</string>
@@ -47,6 +48,14 @@
     <string name="empty_update">No Updates</string>
     <string name="empty_events">No Events</string>
     <string name="skip">Skip >></string>
+
+    <string-array name="member_list">
+        <item><string name="set_normal">Normal User</string></item>
+        <item><string name="set_editor">Editor</string></item>
+        <item><string name="set_cashier">Cashier</string></item>
+        <item><string name="set_admin">Admin</string></item>
+    </string-array>
+
     <string-array name="gender_list">
         <item><string name="male">Male</string></item>
         <item><string name="female">Female</string></item>
@@ -87,6 +96,7 @@
     <string name="add_new_friend">Add New Friend</string>
     <string name="invite_to_play">Invite To Play</string>
     <string name="search_friends">Search Friends</string>
+    <string name="search_members">Search Members</string>
     <string name="list_friends">Game Members</string>
     <string name="set_game_time">Set Game Time</string>
     <string name="search_with_mob">Search with Mobile Number</string>
