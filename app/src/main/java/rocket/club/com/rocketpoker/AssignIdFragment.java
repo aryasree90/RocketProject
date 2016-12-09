@@ -115,12 +115,11 @@ public class AssignIdFragment extends Fragment {
                         break;
                     case R.id.changeId:
                         String memId = memberId.getText().toString();
-Log.d("_____________", "____________________ " + memId);
+
                         if(memId.isEmpty()) {
                             appGlobals.toastMsg(context, getString(R.string.login_invalid_num), appGlobals.LENGTH_LONG);
                             return;
                         } else {
-                            Log.d("_____________", "____________________ reached in");
                             Map<String, String> member_map = new HashMap<String, String>();
                             member_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             member_map.put("user_mob", memberNum.getText().toString());
