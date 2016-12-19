@@ -61,6 +61,7 @@ import rocket.club.com.rocketpoker.classes.ProfileDetailsClass;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
+import rocket.club.com.rocketpoker.utils.MultiSelectionSpinner;
 
 public class ProfileActivity extends ActionBarActivity {
 
@@ -69,10 +70,11 @@ public class ProfileActivity extends ActionBarActivity {
     Button gotoHome, clear;
     ImageView profileImage;
     EditText fullName, email, nickName, dob;
-    TextView skipProfile;
+    TextView skipProfile, rocketId;
     ConnectionDetector connectionDetector = null;
     MaterialBetterSpinner gameTypeSpinner = null, genderSpinner = null;
     ArrayAdapter<String> gameTypeAdapter = null, genderAdapter = null;
+    MultiSelectionSpinner gameTypeMultiSpinner = null;
     int year, month, day;
     String imagePath = "";
     final String VALIDATION_URL = AppGlobals.SERVER_URL + "userProfile.php";
@@ -110,6 +112,7 @@ public class ProfileActivity extends ActionBarActivity {
         dob = (EditText) findViewById(R.id.DOB);
         profileImage = (ImageView) findViewById(R.id.userProfilePic);
         skipProfile = (TextView) findViewById(R.id.skipProfile);
+        rocketId = (TextView) findViewById(R.id.rocketId);
 
 //        String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
         loadGameNameSpinner();
@@ -261,7 +264,7 @@ public class ProfileActivity extends ActionBarActivity {
         final String userFullName = fullName.getText().toString();
         final String userEmail = email.getText().toString();
         final String userNickName = nickName.getText().toString();
-        final String userGameType = gameTypeSpinner.getText().toString();
+        final String userGameType = gameTypeMultiSpinner.getSelectedItemsAsString();
         final String userGender = genderSpinner.getText().toString();
         final String userDob = dob.getText().toString();
         String userImage = "";
@@ -410,9 +413,15 @@ public class ProfileActivity extends ActionBarActivity {
 
         gameTypeAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, GAME_LIST);
-        gameTypeSpinner = (MaterialBetterSpinner)
+        /*gameTypeSpinner = (MaterialBetterSpinner)
                 findViewById(R.id.gameType);
-        gameTypeSpinner.setAdapter(gameTypeAdapter);
+        gameTypeSpinner.setAdapter(gameTypeAdapter);*/
+
+        gameTypeMultiSpinner = (MultiSelectionSpinner)
+                findViewById(R.id.gameType);
+
+        gameTypeMultiSpinner.setItems(GAME_LIST);
+
     }
 
     private void setProfileDetails(String response) {
@@ -420,13 +429,17 @@ public class ProfileActivity extends ActionBarActivity {
         Gson profileJson = new Gson();
         ProfileDetailsClass profileDetails = profileJson.fromJson(response, ProfileDetailsClass[].class)[0];
 
+        rocketId.setText(getString(R.string.rocket_id) + " : " + profileDetails.getUserId());
         fullName.setText(profileDetails.getName());
         fullName.setEnabled(true);
         appGlobals.sharedPref.setUserName(profileDetails.getName());
         email.setText(profileDetails.getEmail());
         nickName.setText(profileDetails.getNickname());
         dob.setText(profileDetails.getDob());
-        gameTypeSpinner.setText(profileDetails.getGametype());
+//        gameTypeSpinner.setText(profileDetails.getGametype());
+        String selected[] = profileDetails.getGametype().split(", ");
+        gameTypeMultiSpinner.setSelection(selected);
+
         genderSpinner.setText(profileDetails.getGender());
 
         String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";

@@ -23,6 +23,7 @@
     <string name="profile_update_success">Profile Updated</string>
     <string name="profile_update_failed">Profile not updated</string>
     <string name="profile_fetch_error">Error in Fetching Profile Details</string>
+    <string name="rocket_id">Rocket Id</string>
     <string name="full_name">Full Name</string>
     <string name="email">Email</string>
     <string name="game_type">Game Type</string>

@@ -27,6 +27,17 @@
             android:src="@drawable/logo"/>
 
         <TextView
+            android:id="@+id/rocketId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rocket_id"
+            android:textSize="16sp"
+            android:textColor="@color/common_plus_signin_btn_text_light_disabled"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="left"/>
+
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/full_name"
@@ -95,13 +106,21 @@
             android:textColorHint="#05ab9a"
             app:met_floatingLabel="normal" />
 
-        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+        <rocket.club.com.rocketpoker.utils.MultiSelectionSpinner
             android:id="@+id/gameType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/game_type"
             android:textColorHint="#05ab9a"
             app:met_floatingLabel="normal" />
+
+        <!--<com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/gameType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/game_type"
+            android:textColorHint="#05ab9a"
+            app:met_floatingLabel="normal" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
