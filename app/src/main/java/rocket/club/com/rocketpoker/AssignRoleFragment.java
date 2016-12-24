@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,6 +51,7 @@ public class AssignRoleFragment extends Fragment {
     EditText selectMember = null;
     RecyclerView selectedMembersList = null;
     View.OnClickListener clickListener = null;
+    ProgressDialog progressDialog = null;
 
     ArrayList<RegisterDetails> changedMembers = new ArrayList<>();
 
@@ -112,6 +114,7 @@ public class AssignRoleFragment extends Fragment {
         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
 
         String url = AppGlobals.SERVER_URL + "getRocketUserList.php";
+        progressDialog = appGlobals.showDialog(context, getString(R.string.search_member));
         serverCall(map, url, 1);
     }
 
@@ -132,13 +135,14 @@ public class AssignRoleFragment extends Fragment {
                         } else if(caller == 2) {
 
                         }
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override
@@ -167,6 +171,8 @@ public class AssignRoleFragment extends Fragment {
             map.put("user_type", regDetails.getUser_type());
             map.put("gcm_regid", regDetails.getGcm_regid());
             map.put("user_id", regDetails.getUserId());
+
+            progressDialog = appGlobals.showDialog(context, getString(R.string.assign_detail));
 
             serverCall(map, url, 2);
         }

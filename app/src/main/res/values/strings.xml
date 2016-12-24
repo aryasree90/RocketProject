@@ -220,4 +220,22 @@ pocket be sure to find yourself a welcoming spot at our action heavy board.</str
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!-- Progress Dialog Messages -->
+    <string name="load_home_page">Loading Home Page</string>
+    <string name="fetch_profile">Fetching Profile Details</string>
+    <string name="save_profile">Saving Profile Details</string>
+    <string name="save_new_event">Saving New Event</string>
+    <string name="save_new_summary">Saving New Summary</string>
+    <string name="save_new_game">Saving New Game</string>
+    <string name="save_live_update">Saving Live Update</string>
+    <string name="search_member">Searching Members</string>
+    <string name="assign_detail">Updating Details</string>
+    <string name="saving">Saving</string>
+    <string name="send_invitation">Sending Invitation</string>
+    <string name="load_map">Loading Map</string>
+    <string name="validating_user">Validating User</string>
+    <string name="logging_in">Logging In</string>
+
 </resources>

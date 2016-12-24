@@ -1,6 +1,7 @@
 package rocket.club.com.rocketpoker;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class EventDetailActivity extends AppCompatActivity {
     ConnectionDetector connectionDetector = null;
     ArrayList<InfoDetails> infoList = null;
     InfoListAdapter infoAdapter = null;
+    ProgressDialog progressDialog = null;
 
     public static final String ACTIVITY_TYPE = "activityType";
     public static final String ITEM_POS = "itemPos";
@@ -161,6 +163,8 @@ public class EventDetailActivity extends AppCompatActivity {
                                 map.put("likeStatus", infoItem.getInfoLikeStatus());
                                 map.put("likeTimeStamp", infoItem.getInfoTimeStamp());
                                 map.put("likeId", infoItem.getId());
+                                progressDialog = appGlobals.showDialog(EventDetailActivity.this,
+                                        getString(R.string.saving));
                                 serverCall(map);
                             }
 
@@ -198,13 +202,14 @@ public class EventDetailActivity extends AppCompatActivity {
                         } else {
                             appGlobals.toastMsg(context, getString(R.string.pls_try_later), appGlobals.LENGTH_LONG);
                         }
-
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override

@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,7 @@ public class AddGameTypeFragment extends Fragment {
 
     EditText gameType;
     Button save, clear;
+    ProgressDialog progressDialog = null;
 
     final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
 
@@ -86,6 +88,8 @@ public class AddGameTypeFragment extends Fragment {
 
                         String curTime = "" + System.currentTimeMillis();
 
+                        progressDialog = appGlobals.showDialog(context, getString(R.string.save_new_game));
+
                         Map<String,String> map = new HashMap<String,String>();
                         map.put("header", game);
                         map.put("timeStamp", curTime);
@@ -118,12 +122,14 @@ public class AddGameTypeFragment extends Fragment {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
                         CommonUtilities.getRocketsNewGame(context, response);
                         clearFields();
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override

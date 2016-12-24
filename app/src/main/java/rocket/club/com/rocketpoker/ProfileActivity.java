@@ -3,6 +3,7 @@ package rocket.club.com.rocketpoker;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -87,6 +88,8 @@ public class ProfileActivity extends ActionBarActivity {
     static final int DATE_DIALOG_ID = 1111;
     private static final String TAG = "Profile Activity";
 
+    ProgressDialog progressDialog = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +99,10 @@ public class ProfileActivity extends ActionBarActivity {
         setClickListener();
         checkPermission();
 
-        fetchProfile();
+        if(connectionDetector.isConnectingToInternet())
+            fetchProfile();
+        else
+            appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
     }
 
     private void initializeWidgets() {
@@ -325,6 +331,8 @@ public class ProfileActivity extends ActionBarActivity {
                                final String userGameType, final String userDob,
                                final String userImage) {
 
+        progressDialog = appGlobals.showDialog(this, getString(R.string.save_profile));
+
         Map<String,String> map = new HashMap<String,String>();
         map.put("fullName", userFullName);
         map.put("email", userEmail);
@@ -340,6 +348,8 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void fetchProfile() {
+
+        progressDialog = appGlobals.showDialog(this, getString(R.string.fetch_profile));
 
         Map<String,String> map = new HashMap<String,String>();
         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
@@ -382,12 +392,14 @@ public class ProfileActivity extends ActionBarActivity {
                             }
                             loadGameNameSpinner();
                         }
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         String msg = "";
+                        appGlobals.cancelDialog(progressDialog);
                         if(task.equals(appGlobals.UPDATE_PROFILE))
                             msg = getString(R.string.profile_update_failed);
                         else if(task.equals(appGlobals.FETCH_PROFILE))
@@ -420,7 +432,8 @@ public class ProfileActivity extends ActionBarActivity {
         gameTypeMultiSpinner = (MultiSelectionSpinner)
                 findViewById(R.id.gameType);
 
-        gameTypeMultiSpinner.setItems(GAME_LIST);
+        if(GAME_LIST.length > 0)
+            gameTypeMultiSpinner.setItems(GAME_LIST);
 
     }
 

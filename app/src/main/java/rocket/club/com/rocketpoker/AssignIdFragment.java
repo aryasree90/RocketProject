@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -56,6 +57,7 @@ public class AssignIdFragment extends Fragment {
     Button changeId, clearBtn;
     TextView errorMsg, memberName, memberNum, memberId;
     View.OnClickListener clickListener = null;
+    ProgressDialog progressDialog = null;
 
     final String URL = AppGlobals.SERVER_URL + "memberIdUpdate.php";
 
@@ -109,6 +111,8 @@ public class AssignIdFragment extends Fragment {
                             Map<String, String> search_map = new HashMap<String, String>();
                             search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             search_map.put("frnd_mobile", searchAFriend);
+                            progressDialog = appGlobals.showDialog(context, getString(R.string.search_member));
+
                             serverCall(search_map, FriendsFragment.FRIEND_SEARCH_URL);
                         }
 
@@ -124,6 +128,7 @@ public class AssignIdFragment extends Fragment {
                             member_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             member_map.put("user_mob", memberNum.getText().toString());
                             member_map.put("user_id", memId);
+                            progressDialog = appGlobals.showDialog(context, getString(R.string.assign_detail));
                             serverCall(member_map, URL);
                         }
                         break;
@@ -176,13 +181,14 @@ public class AssignIdFragment extends Fragment {
                         } else if(response.equals("success")){
                             clearFields();
                         }
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override

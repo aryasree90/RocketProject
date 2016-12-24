@@ -52,6 +52,7 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
     private final int LOGIN_PROCESS = 1;
     private final int OTP_PROCESS = 2;*/
     private final String TAG = "LoginAsync";
+    ProgressDialog progressDialog = null;
     private static String VALIDATION_URL = AppGlobals.SERVER_URL + "validate_user.php";
 
     public LoginAsync(Context ctx, Activity loginActivity) {
@@ -63,6 +64,7 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        progressDialog = appGlobals.showDialog(loginActivity, ctx.getString(R.string.validating_user));
     }
 
     @Override
@@ -78,6 +80,7 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
         super.onPostExecute(mobile);
         appGlobals.logClass.setLogMsg(TAG, "Reached onPostExecute", LogClass.DEBUG_MSG);
         sendValidationSms(mobile);
+        appGlobals.cancelDialog(progressDialog);
         loginActivity.finish();
         Intent loginIntent = new Intent(ctx, LoginActivity.class);
         loginIntent.putExtra(LoginActivity.pageType, LoginActivity.otpPage);

@@ -1,6 +1,7 @@
 package rocket.club.com.rocketpoker;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class AddEventFragment extends Fragment {
     EditText headerText, summaryText;
     ImageView eventImage;
     Button save, clear;
-
+    ProgressDialog progressDialog = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,6 +109,14 @@ public class AddEventFragment extends Fragment {
 
                             String timeStamp = String.valueOf(System.currentTimeMillis());
 
+                            String message = "";
+                            if (activityType.equals(AppGlobals.EVENT_INFO)) {
+                                message = getString(R.string.save_new_event);
+                            } else {
+                                message = getString(R.string.save_new_summary);
+                            }
+                            progressDialog = appGlobals.showDialog(context, message);
+
                             Map<String,String> map = new HashMap<String,String>();
                             map.put("header", header);
                             map.put("summary", summary);
@@ -143,12 +152,14 @@ public class AddEventFragment extends Fragment {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
                         CommonUtilities.getRocketsInfo(context, response);
                         clearFields();
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override

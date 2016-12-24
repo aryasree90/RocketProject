@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class AddLiveUpdateFragment extends Fragment {
     ArrayAdapter<String> updateTypeAdapter = null;
     EditText header, text1, text2, text3, comments;
     Button save, clear;
+    ProgressDialog progressDialog = null;
 
     final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
 
@@ -128,6 +130,8 @@ public class AddLiveUpdateFragment extends Fragment {
                         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                         map.put("task", AppGlobals.LIVE_UPDATE_INFO);
 
+                        progressDialog = appGlobals.showDialog(context, getString(R.string.save_live_update));
+
                         serverCall(map);
 
                         break;
@@ -159,12 +163,14 @@ public class AddLiveUpdateFragment extends Fragment {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
                         CommonUtilities.getRocketsLiveUpdate(context, response);
                         clearFields();
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override

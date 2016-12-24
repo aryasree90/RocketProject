@@ -1,6 +1,7 @@
 package rocket.club.com.rocketpoker;
 
 import android.*;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -55,6 +56,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
 
     private GoogleMap googleMap = null;
     private GoogleApiClient mLocationClient = null;
+    ProgressDialog progressDialog = null;
 
     private static final String TAG = "Location Fragment";
 
@@ -72,11 +74,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         return view;
     }
 
-
     private void initializeWidgets(View v) {
         context = getActivity();
         appGlobals = AppGlobals.getInstance(context);
 
+        progressDialog = appGlobals.showDialog(context, getString(R.string.load_map));
         serverCall();
 
         SupportMapFragment fm = (SupportMapFragment) this.getChildFragmentManager()
@@ -121,6 +123,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override
@@ -204,7 +207,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
             if (builder != null) {
                 mapActivity.moveCamera(builder);
             }
-
+            appGlobals.cancelDialog(progressDialog);
         }
     }
 

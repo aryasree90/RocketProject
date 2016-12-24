@@ -2,6 +2,7 @@ package rocket.club.com.rocketpoker;
 
 import android.*;
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -62,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin, btnClear, btnContinue, btnClear1;
     LinearLayout loginLayout = null, otpLayout = null;
     CountryCodePicker countryCodePicker = null;
+    ProgressDialog progressDialog = null;
     String canonicalMobile = "";
 
     public static final String pageType = "PageType";
@@ -320,11 +322,13 @@ public class LoginActivity extends AppCompatActivity {
     };
 
     private void validateUser(final String mobile) {
+        progressDialog = appGlobals.showDialog(LoginActivity.this, getString(R.string.logging_in));
         final String VALIDATION_URL = AppGlobals.SERVER_URL + "validate_user.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         if(response.trim().startsWith("success")){
                             if(response.contains(":")) {
                                 int userType = Integer.parseInt(response.split(":")[1]);
@@ -334,10 +338,15 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             appGlobals.sharedPref.setLogInStatus(true);
+
+                            // TODO read user history
+
+                            appGlobals.cancelDialog(progressDialog);
                             finish();
                             Intent loginIntent = new Intent(context, ProfileActivity.class);
                             startActivity(loginIntent);
                         }else{
+                            appGlobals.cancelDialog(progressDialog);
                             appGlobals.toastMsg(context, getString(R.string.validation_failed), appGlobals.LENGTH_LONG);
                         }
                     }
@@ -347,6 +356,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.toastMsg(context, getString(R.string.validation_failed), appGlobals.LENGTH_LONG);
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }){
             @Override

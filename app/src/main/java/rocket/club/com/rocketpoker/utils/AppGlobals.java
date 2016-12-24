@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
@@ -343,6 +344,19 @@ public class AppGlobals {
             }
         }
         return imgFileName;
+    }
+
+    public ProgressDialog showDialog(Context context, String message) {
+        ProgressDialog progress = new ProgressDialog(context);
+        progress.setMessage(message);
+        progress.show();
+
+        return progress;
+    }
+
+    public void cancelDialog(ProgressDialog progressDialog) {
+        if(progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
     }
 
     public static boolean checkLocationPermission(Context context, String permission) {

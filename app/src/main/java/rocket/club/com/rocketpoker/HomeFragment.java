@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -100,6 +101,8 @@ public class HomeFragment extends Fragment {
         context = getActivity();
         appGlobals = AppGlobals.getInstance(context);
 
+        ProgressDialog progressDialog = appGlobals.showDialog(context, getString(R.string.load_home_page));
+
         db = new DBHelper(context);
 
         eventList = (ViewPager) view.findViewById(R.id.eventList);
@@ -138,6 +141,8 @@ public class HomeFragment extends Fragment {
         emptyFriendlnr = (LinearLayout) view.findViewById(R.id.linr_emptyfriendname);
 
         refreshFriendReqList();
+
+        appGlobals.cancelDialog(progressDialog);
 
         appGlobals.toastMsg(context, "Type " + appGlobals.sharedPref.getUserType(),appGlobals.LENGTH_LONG);
     }

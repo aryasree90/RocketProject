@@ -3,6 +3,7 @@ package rocket.club.com.rocketpoker;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -88,6 +89,7 @@ public class FriendsFragment extends Fragment {
     public static final String FRIEND_SEARCH_URL = AppGlobals.SERVER_URL + "searchFriend.php";
     final String INVITE_TO_PLAY_URL = AppGlobals.SERVER_URL + "inviteToPlay.php";
     private int pageType = 1;
+    ProgressDialog progressDialog = null;
 
     MaterialBetterSpinner selectGameType = null;
     Button btnDateTime = null;
@@ -207,7 +209,6 @@ public class FriendsFragment extends Fragment {
                                 appGlobals.toastMsg(context, getString(R.string.select_time), appGlobals.LENGTH_LONG);
                                 setTimeSlotDialog();
                             } else {
-
                                 DBHelper db = new DBHelper(context);
                                 String timeStamp = "" +  System.currentTimeMillis();
                                 GameInvite gameInvite = new GameInvite(appGlobals.sharedPref.getLoginMobile(), listMob, game, schedule, timeStamp, count);
@@ -222,6 +223,7 @@ public class FriendsFragment extends Fragment {
                                 frnd_map.put("timeStamp", timeStamp);
                                 frnd_map.put("count", "" + count);
                                 frnd_map.put("task", AppGlobals.SEND_INVITE);
+                                progressDialog = appGlobals.showDialog(context, getString(R.string.send_invitation));
 
                                 serverCall(frnd_map, INVITE_TO_PLAY_URL);
                             }
@@ -249,7 +251,7 @@ public class FriendsFragment extends Fragment {
                             frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             frnd_map.put("frnd_mobile", friendMobile.getText().toString());
                             frnd_map.put("task", appGlobals.NEW_FRND_REQ);
-
+                            progressDialog = appGlobals.showDialog(context, getString(R.string.saving));
                             serverCall(frnd_map, FRIEND_REQ_URL);
                             resetDialog();
                         }
@@ -271,6 +273,7 @@ public class FriendsFragment extends Fragment {
                             Map<String, String> search_map = new HashMap<String, String>();
                             search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             search_map.put("frnd_mobile", searchAFriend);
+                            progressDialog = appGlobals.showDialog(context, getString(R.string.search_member));
                             serverCall(search_map, FRIEND_SEARCH_URL);
                         }
                         break;
@@ -342,6 +345,7 @@ public class FriendsFragment extends Fragment {
 
         if(!appGlobals.isNetworkConnected(context)) {
             appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+            appGlobals.cancelDialog(progressDialog);
             return;
         }
 
@@ -395,12 +399,14 @@ public class FriendsFragment extends Fragment {
                                 appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
                             }
                         }
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }) {
             @Override
