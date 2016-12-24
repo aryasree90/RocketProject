@@ -294,15 +294,11 @@ public class AppGlobals {
 
     public String convertImageToBase64(String imagePath) {
         Bitmap bm = BitmapFactory.decodeFile(imagePath);
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] byteArrayImage = baos.toByteArray();
-
-        if(bm != null)
-            bm = null;
-
-        return Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
     public boolean createThumbnail(String srcFileName, String destFileName) {

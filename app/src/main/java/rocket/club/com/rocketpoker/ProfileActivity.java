@@ -277,6 +277,7 @@ public class ProfileActivity extends ActionBarActivity {
 
         if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists())
             userImage = appGlobals.convertImageToBase64(imagePath);
+
         if(validateFields(userFullName, userEmail, userNickName, userGender, userGameType))
             updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob, userImage);
 
