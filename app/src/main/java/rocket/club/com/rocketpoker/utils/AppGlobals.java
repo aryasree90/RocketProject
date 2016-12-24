@@ -292,6 +292,20 @@ public class AppGlobals {
         }
     }
 
+    public boolean compressImage(String srcFileName, String destFileName) {
+        try {
+//            Bitmap compressedBitmap = ImageUtils.getInstant().getCompressedBitmap(srcFileName);
+            Bitmap compressedBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(new File(destFileName));
+            compressedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch(Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "Exception in createThumbnail " + e.toString(), LogClass.ERROR_MSG);
+            return false;
+        }
+        return true;
+    }
+
     public String convertImageToBase64(String imagePath) {
         Bitmap bm = BitmapFactory.decodeFile(imagePath);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -300,23 +314,7 @@ public class AppGlobals {
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-
-    public boolean createThumbnail(String srcFileName, String destFileName) {
-
-        try {
-            Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
-
-            FileOutputStream fos = null;
-            fos = new FileOutputStream(new File(destFileName));
-            thumbImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch(Exception e) {
-            appGlobals.logClass.setLogMsg(TAG, "Exception in createThumbnail " + e.toString(), LogClass.ERROR_MSG);
-            return false;
-        }
-        return true;
-
-    }
-
+    
     public String convertBase64ToImageFile(String encodedImage, String fileName, Context context) {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);

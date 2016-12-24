@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -235,31 +236,42 @@ public class ProfileActivity extends ActionBarActivity {
 
             if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists()) {
 
-                new AsyncTask<String, Void, Uri>() {
+                new AsyncTask<String, Void, Bitmap>() {
 
                     @Override
-                    protected Uri doInBackground(String... params) {
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        progressDialog = appGlobals.showDialog(ProfileActivity.this, "Load Image");
+                    }
 
-                        /*String encodedImage = appGlobals.convertImageToBase64(imagePath);
-
-                        String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
-                        String imgPath = appGlobals.convertBase64ToImageFile(encodedImage, imgFileName, context);*/
+                    @Override
+                    protected Bitmap doInBackground(String... params) {
 
                         String imgFileName = appGlobals.getRocketsPath(context) + "/" +
                                 appGlobals.sharedPref.getLoginMobile() + ".jpg";
 
-                        if(appGlobals.createThumbnail(imagePath, imgFileName)) {
+                        File curFile = new File(imgFileName);
+                        if(curFile.exists()) {
+                            curFile.delete();
+                        }
+
+                        if(appGlobals.compressImage(imagePath, imgFileName)) {
                             imagePath = imgFileName;
-                            return Uri.fromFile(new File(imagePath));
+                            Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                            return bm;
+//                            return Uri.fromFile(new File(imagePath));
                         }
                         return null;
                     }
 
                     @Override
-                    protected void onPostExecute(Uri uri) {
-                        super.onPostExecute(uri);
-                        if(uri != null)
-                            profileImage.setImageURI(uri);
+                    protected void onPostExecute(Bitmap bitmap) {
+                        super.onPostExecute(bitmap);
+                        if(bitmap != null)
+                            profileImage.setImageBitmap(bitmap);
+//                            profileImage.setImageURI(uri);
+
+                        appGlobals.cancelDialog(progressDialog);
                     }
                 }.execute(imagePath);
             }
