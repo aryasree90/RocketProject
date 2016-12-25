@@ -202,7 +202,7 @@ public final class CommonUtilities {
         InfoDetails[] infoDetails = gson.fromJson(message, InfoDetails[].class);
 
         DBHelper db = new DBHelper(context);
-        db.insertInfoDetails(infoDetails);
+        db.insertInfoDetails(infoDetails, context);
     }
 
     static void getRocketsLiveUpdate(Context context, String message) {

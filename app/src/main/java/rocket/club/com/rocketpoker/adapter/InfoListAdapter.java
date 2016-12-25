@@ -2,6 +2,8 @@ package rocket.club.com.rocketpoker.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,8 +98,13 @@ public class InfoListAdapter extends PagerAdapter {
         eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
 
         final InfoDetails infoItem = infoList.get(position);
-
-        eventImage.setImageResource(R.drawable.event1);
+        String imgPath = appGlobals.getRocketsPath(context) + "/" + infoItem.getInfoImage();
+        File imgFile = new File(imgPath);
+        if(imgFile.exists()) {
+            Bitmap bmp = BitmapFactory.decodeFile(imgPath);
+            eventImage.setImageBitmap(bmp);
+        }
+//        eventImage.setImageResource(R.drawable.event1);
 
         eventHeader.setText(infoItem.getInfoTitle());
         eventSubHeader.setText(infoItem.getInfoSubTitle());

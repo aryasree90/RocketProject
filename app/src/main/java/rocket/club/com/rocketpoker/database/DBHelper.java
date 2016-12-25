@@ -21,6 +21,7 @@ import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -416,12 +417,25 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
     }
 
-    public boolean insertInfoDetails(InfoDetails[] infoDetails){
+    public boolean insertInfoDetails(InfoDetails[] infoDetails, Context context){
         SQLiteDatabase db = this.getWritableDatabase();
 
+        AppGlobals appGlobals = AppGlobals.getInstance(context);
+
         for(InfoDetails infoDetail : infoDetails) {
+
+            String imageFileName = AppGlobals.CLUB_INFO + infoDetail.getInfoTimeStamp() + appGlobals.IMG_FILE_EXTENSION;
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
+            params.put("id", infoDetail.getId());
+            params.put("timeStamp", infoDetail.getInfoTimeStamp());
+            params.put("task", AppGlobals.CLUB_INFO);
+
+            appGlobals.serverCallToDownloadImage(context, params, imageFileName);
+
             ContentValues contentValues = new ContentValues();
-            contentValues.put(this.infoImage, infoDetail.getInfoImage());
+            contentValues.put(this.infoImage, imageFileName);
             contentValues.put(this.infoTitle, infoDetail.getInfoTitle());
             contentValues.put(this.infoSubTitle, infoDetail.getInfoSubTitle());
             contentValues.put(this.infoLikeStatus, infoDetail.getInfoLikeStatus());

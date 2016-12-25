@@ -1,10 +1,17 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +35,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +51,7 @@ public class AddEventFragment extends Fragment {
     AppGlobals appGlobals = null;
     View.OnClickListener onClickListener = null;
 
-    String activityType = "";
+    String activityType = "", imagePath = "";
     final String TAG = "AddEventFragment";
     ConnectionDetector connectionDetector = null;
     final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
@@ -117,7 +125,13 @@ public class AddEventFragment extends Fragment {
                             }
                             progressDialog = appGlobals.showDialog(context, message);
 
+                            String userImage = "";
+
+                            if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists())
+                                userImage = appGlobals.convertImageToBase64(imagePath);
+
                             Map<String,String> map = new HashMap<String,String>();
+                            map.put("image", userImage);
                             map.put("header", header);
                             map.put("summary", summary);
                             map.put("timeStamp", timeStamp);
@@ -131,11 +145,18 @@ public class AddEventFragment extends Fragment {
                     case R.id.clearBtn:
                         clearFields();
                         break;
+                    case R.id.eventImage:
+                        Intent galleryIntent = new Intent();
+                        galleryIntent.setType("image/*");
+                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(galleryIntent, "Select File"), 1);
+                        break;
                 }
             }
         };
         save.setOnClickListener(onClickListener);
         clear.setOnClickListener(onClickListener);
+        eventImage.setOnClickListener(onClickListener);
     }
 
     private void clearFields() {
@@ -171,4 +192,76 @@ public class AddEventFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        appGlobals.logClass.setLogMsg(TAG, "onActivityResult " + requestCode + " " + resultCode, LogClass.DEBUG_MSG);
+
+        if (resultCode == Activity.RESULT_OK) {
+            appGlobals.logClass.setLogMsg(TAG, "onActivityResult Reached in ", LogClass.DEBUG_MSG);
+
+            if(requestCode == 1) {
+                Uri selectedImage = data.getData();
+
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor = context.getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imagePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                appGlobals.logClass.setLogMsg(TAG, "onActivityResult Gallery " + imagePath, LogClass.DEBUG_MSG);
+            }
+
+            if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists()) {
+
+                new AsyncTask<String, Void, Bitmap>() {
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        progressDialog = appGlobals.showDialog(context, "Load Image");
+                    }
+
+                    @Override
+                    protected Bitmap doInBackground(String... params) {
+
+                        String imgFileName = appGlobals.getRocketsPath(context) + "/" +
+                                appGlobals.sharedPref.getLoginMobile() + ".jpg";
+
+                        File curFile = new File(imgFileName);
+                        if(curFile.exists()) {
+                            curFile.delete();
+                        }
+
+                        if(appGlobals.compressImage(imagePath, imgFileName)) {
+                            imagePath = imgFileName;
+                            Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                            return bm;
+//                            return Uri.fromFile(new File(imagePath));
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bitmap bitmap) {
+                        super.onPostExecute(bitmap);
+                        if(bitmap != null)
+                            eventImage.setImageBitmap(bitmap);
+//                            profileImage.setImageURI(uri);
+
+                        appGlobals.cancelDialog(progressDialog);
+                    }
+                }.execute(imagePath);
+            }
+        }
+    }
+
 }

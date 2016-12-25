@@ -2,6 +2,8 @@ package rocket.club.com.rocketpoker.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.EventDetailActivity;
@@ -23,6 +26,7 @@ public class EventListAdapter extends PagerAdapter {
     Context context;
     ImageView itemImage;
     RelativeLayout itemLayout;
+    AppGlobals appGlobals = null;
 
     LayoutInflater mLayoutInflater;
     ArrayList<InfoDetails> infoList = null;
@@ -34,6 +38,7 @@ public class EventListAdapter extends PagerAdapter {
         this.context = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.infoList = infoList;
+        appGlobals = AppGlobals.getInstance(context);
     }
 
     @Override
@@ -56,7 +61,13 @@ public class EventListAdapter extends PagerAdapter {
 
         InfoDetails infoItem = infoList.get(position);
 
-        itemImage.setImageResource(R.drawable.event1);
+        String imgPath = appGlobals.getRocketsPath(context) + "/" + infoItem.getInfoImage();
+        File imgFile = new File(imgPath);
+        if(imgFile.exists()) {
+            Bitmap bmp = BitmapFactory.decodeFile(imgPath);
+            itemImage.setImageBitmap(bmp);
+        }
+//        itemImage.setImageResource(R.drawable.event1);
         headerText.setText(infoItem.getInfoTitle());
         setItemClickListener(position, infoItem);
 

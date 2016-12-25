@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rocket.club.com.rocketpoker.CommonUtilities;
 import rocket.club.com.rocketpoker.ConnectionDetector;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.receiver.LocationTrigger;
@@ -79,6 +80,7 @@ public class AppGlobals {
 
     public static final String SERVER_URL = "http://45.79.130.11/rocketPoker/";
     public static final String EDITORS_URL = "addEvents.php";
+    public final String FETCH_IMAGE = SERVER_URL + "fetchImage.php";
     public boolean enableLog = true;
     public int chunkSize = 100;
     public final int LENGTH_LONG = 1;
@@ -163,6 +165,8 @@ public class AppGlobals {
 
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";
+
+    public final String IMG_FILE_EXTENSION = ".jpg";
 
     private final String ROCKETS = "Rockets";
 
@@ -314,7 +318,7 @@ public class AppGlobals {
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-    
+
     public String convertBase64ToImageFile(String encodedImage, String fileName, Context context) {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -338,6 +342,34 @@ public class AppGlobals {
             }
         }
         return imgFileName;
+    }
+
+    public void serverCallToDownloadImage(final Context context, final HashMap<String, String> params,
+                                          final String imageName) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, FETCH_IMAGE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
+
+                        convertBase64ToImageFile(response, imageName, context);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
     public ProgressDialog showDialog(Context context, String message) {
