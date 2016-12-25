@@ -168,10 +168,24 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public void updateContacts(int statusValue, String updtMob) {
+    public void updateContacts(int statusValue, String updtMob, Context context) {
         SQLiteDatabase db = this.getWritableDatabase();
         final String where = mobile + "=" + updtMob;
         if(statusValue == 1) {
+
+            AppGlobals appGlobals = AppGlobals.getInstance(context);
+
+            String imageFileName = appGlobals.ROCKETS + "_" + updtMob + appGlobals.IMG_FILE_EXTENSION;
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
+            params.put("id", updtMob);
+            params.put("task", AppGlobals.NOTIF_FRND_REQ_RESP);
+
+            Log.d("_________________", "______________ " + imageFileName);
+
+            appGlobals.serverCallToDownloadImage(context, params, imageFileName);
+
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
             db.update(friendsTable, cv, where, null);
@@ -230,7 +244,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor res = db.rawQuery(SELECT_FRIENDS_USING_MOB, new String[]{regMob});
 
-        ContactClass contact = new ContactClass();
+        ContactClass contact = null;
 
         if(res != null && res.moveToFirst()) {
 
@@ -239,6 +253,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String userMobile = res.getString(res.getColumnIndex(mobile));
             int userStatus = res.getInt(res.getColumnIndex(status));
 
+            contact = new ContactClass();
             contact.setContactName(name);
             contact.setPhoneNumber(userMobile);
             contact.setNickName(userNickName);

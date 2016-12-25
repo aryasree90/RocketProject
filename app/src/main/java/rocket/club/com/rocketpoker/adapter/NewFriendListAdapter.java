@@ -114,7 +114,7 @@ public class NewFriendListAdapter extends PagerAdapter {
                     public void onResponse(String response) {
                         if(response.equals("Success")) {
                             DBHelper db = new DBHelper(mContext);
-                            db.updateContacts(status, frnd_mob);
+                            db.updateContacts(status, frnd_mob, mContext);
 
                             Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ);
                             mContext.sendBroadcast(autoIntent);

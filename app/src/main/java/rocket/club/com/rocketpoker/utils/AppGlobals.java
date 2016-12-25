@@ -168,7 +168,7 @@ public class AppGlobals {
 
     public final String IMG_FILE_EXTENSION = ".jpg";
 
-    private final String ROCKETS = "Rockets";
+    public final String ROCKETS = "Rockets";
 
     // methods
 

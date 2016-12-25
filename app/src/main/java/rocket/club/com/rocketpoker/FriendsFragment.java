@@ -230,9 +230,8 @@ public class FriendsFragment extends Fragment {
                         }
                         break;
                     case R.id.acceptFriend:
-                            friendNotFoundTxt.setVisibility(View.GONE);
-
-                            String frndMob = friendMobile.getText().toString();
+                        friendNotFoundTxt.setVisibility(View.GONE);
+                        String frndMob = friendMobile.getText().toString();
 
                         DBHelper db = new DBHelper(context);
                         ContactClass contactFrnd = db.getContacts(frndMob);

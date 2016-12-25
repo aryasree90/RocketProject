@@ -1,6 +1,8 @@
 package rocket.club.com.rocketpoker.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +72,16 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
         FriendsListClass friendList = friendsList.get(position);
         holder.friendName.setText(friendList.getName());
         holder.friendNumber.setText(friendList.getMobile());
-        holder.friendImage.setImageResource(R.drawable.default_profile);
+
+        String imagePath = appGlobals.getRocketsPath(context) + "/" + appGlobals.ROCKETS + "_" +
+                friendList.getMobile() + appGlobals.IMG_FILE_EXTENSION;
+
+        File imgFile = new File(imagePath);
+        if(imgFile != null && imgFile.exists()) {
+            Bitmap bmp = BitmapFactory.decodeFile(imagePath);
+            holder.friendImage.setImageBitmap(bmp);
+        } else
+            holder.friendImage.setImageResource(R.drawable.default_profile);
 
         if(pageType == AppGlobals.FRIEND_LIST) {
             holder.selectedItem.setVisibility(View.GONE);

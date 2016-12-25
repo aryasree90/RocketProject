@@ -100,7 +100,7 @@ public final class CommonUtilities {
                 context.sendBroadcast(autoIntent);
 
             } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
-                db.updateContacts(userDetails.getStatus(), notif.getSender());
+                db.updateContacts(userDetails.getStatus(), notif.getSender(), context);
                 if(userDetails.getStatus() == 1) {
                     notifMsg = notif.getSender() + context.getString(R.string.frnd_req_accept);
                 }
