@@ -296,6 +296,12 @@ public class LandingActivity extends AppCompatActivity
             case R.id.id_assign:
                 fragmentClass = AssignIdFragment.class;
                 break;
+            case R.id.user_transactions:
+                fragmentClass = UserTransFragment.class;
+                break;
+            case R.id.club_transactions:
+
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }
