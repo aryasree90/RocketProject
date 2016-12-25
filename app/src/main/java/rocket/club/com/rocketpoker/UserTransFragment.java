@@ -156,12 +156,12 @@ public class UserTransFragment extends Fragment {
                         }
 
                         if(creditAmt > 5000) {
-                            appGlobals.toastMsg(context, getString(R.string.creditlimit), appGlobals.LENGTH_LONG);
+                            appGlobals.toastMsg(context, getString(R.string.credit_limit), appGlobals.LENGTH_LONG);
                             return;
                         }
 
                         if(bonusAmt < 0) {
-                            appGlobals.toastMsg(context, getString(R.string.bonuslimit), appGlobals.LENGTH_LONG);
+                            appGlobals.toastMsg(context, getString(R.string.bonus_limit), appGlobals.LENGTH_LONG);
                             return;
                         }
 

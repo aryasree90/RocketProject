@@ -302,6 +302,9 @@ public class LandingActivity extends AppCompatActivity
             case R.id.club_transactions:
 
                 break;
+            case  R.id.transactions:
+                fragmentClass = TransactionFragment.class;
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }
