@@ -153,6 +153,9 @@
     <string name="admin_assign_role">Assign Role</string>
     <string name="admin_assign_id">Assign Id</string>
 
+    <string name="user_trans">User Transaction</string>
+    <string name="club_trans">Club Transaction</string>
+
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
 

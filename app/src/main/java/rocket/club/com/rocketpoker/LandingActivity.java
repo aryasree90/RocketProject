@@ -83,6 +83,8 @@ public class LandingActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        setMenuVisibility();
+
         View headerView = getLayoutInflater().inflate(R.layout.nav_header_landing, navigationView, false);
         navigationView.addHeaderView(headerView);
 
@@ -190,24 +192,23 @@ public class LandingActivity extends AppCompatActivity
         return true;
     }  */
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    private void setMenuVisibility() {
 
         int msgType = appGlobals.sharedPref.getUserType();
 
+        navigationView.getMenu().setGroupVisible(R.id.editor, false);
+        navigationView.getMenu().setGroupVisible(R.id.cashier, false);
+        navigationView.getMenu().setGroupVisible(R.id.admin, false);
+
         if(msgType == AppGlobals.EDITOR) {
-            menu.setGroupVisible(R.id.editor, true);
-        } else {
-            menu.setGroupVisible(R.id.editor, false);
+            navigationView.getMenu().setGroupVisible(R.id.editor, true);
+        } else if(msgType == AppGlobals.CASHIER) {
+            navigationView.getMenu().setGroupVisible(R.id.cashier, true);
+        } else if(msgType == AppGlobals.ADMIN) {
+            navigationView.getMenu().setGroupVisible(R.id.editor, true);
+            navigationView.getMenu().setGroupVisible(R.id.cashier, true);
+            navigationView.getMenu().setGroupVisible(R.id.admin, true);
         }
-
-        if(msgType == AppGlobals.ADMIN) {
-            menu.setGroupVisible(R.id.admin, true);
-        } else {
-            menu.setGroupVisible(R.id.admin, false);
-        }
-
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

@@ -30,11 +30,11 @@
             android:title="@string/settings" />
     </group>
 
-    <item
-        android:title="@string/editor">
-        <menu>
-            <group android:checkableBehavior="single"
-                android:id="@+id/editor">
+    <group android:checkableBehavior="single"
+        android:id="@+id/editor">
+        <item
+            android:title="@string/editor">
+            <menu>
                 <item
                     android:id="@+id/edit_events"
                     android:icon="@mipmap/ic_about_us"
@@ -51,15 +51,32 @@
                     android:id="@+id/edit_game_type"
                     android:icon="@mipmap/ic_contact_us"
                     android:title="@string/edit_game_type" />
-            </group>
-        </menu>
-    </item>
+            </menu>
+        </item>
+    </group>
 
-    <item
-        android:title="@string/admin">
-        <menu>
-            <group android:checkableBehavior="single"
-                android:id="@+id/admin">
+    <group android:checkableBehavior="single"
+        android:id="@+id/cashier">
+        <item
+            android:title="@string/cashier">
+            <menu>
+                <item
+                    android:id="@+id/user_transactions"
+                    android:icon="@mipmap/ic_contact_us"
+                    android:title="@string/user_trans" />
+                <item
+                    android:id="@+id/club_transactions"
+                    android:icon="@mipmap/ic_contact_us"
+                    android:title="@string/club_trans" />
+            </menu>
+        </item>
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/admin">
+        <item
+            android:title="@string/admin">
+            <menu>
                 <item
                     android:id="@+id/role_assign"
                     android:icon="@mipmap/ic_contact_us"
@@ -68,31 +85,23 @@
                     android:id="@+id/id_assign"
                     android:icon="@mipmap/ic_contact_us"
                     android:title="@string/admin_assign_id" />
-            </group>
-        </menu>
-    </item>
+            </menu>
+        </item>
+    </group>
 
-    <item android:title="@string/app_name">
-        <menu>
-            <group android:checkableBehavior="single"
-                android:id="@+id/common_group">
+    <group android:checkableBehavior="single"
+        android:id="@+id/common_group">
+        <item android:title="@string/app_name">
+            <menu>
                 <item
                     android:id="@+id/about_us"
                     android:icon="@mipmap/ic_about_us"
                     android:title="@string/about_us" />
-             <!--   <item
-                    android:id="@+id/gallery"
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="@string/gallery" />
-                <item
-                    android:id="@+id/calendar"
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="@string/calendar" /> -->
                 <item
                     android:id="@+id/contact_us"
                     android:icon="@mipmap/ic_contact_us"
                     android:title="@string/contact_us" />
-            </group>
-        </menu>
-    </item>
+            </menu>
+        </item>
+    </group>
 </menu>
