@@ -5,9 +5,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -21,12 +25,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.classes.UserDetails;
+import rocket.club.com.rocketpoker.classes.UserTransaction;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
@@ -39,13 +47,20 @@ public class UserTransFragment extends Fragment {
     Context context = null;
     AppGlobals appGlobals = null;
 
-    EditText searchMem;
+    EditText searchMem, amount;
     TextView memNotFound, memId, memName, memNum;
+    TextView creditAvail, bonusAvail;
     ImageButton searchBtn;
-    LinearLayout memberDetails;
+    LinearLayout memberDetails, transDetails;
+    MaterialBetterSpinner transTypeSpinner = null;
+    ArrayAdapter<String> transTypeAdapter = null;
+    Button save, clear;
 
+    String[] TRANSACTION_TYPE_LIST = null;
     ProgressDialog progressDialog = null;
     View.OnClickListener clickListener = null;
+    public static final String FETCH_TRANS_URL = AppGlobals.SERVER_URL + "fetchTransaction.php";
+    public static final String MEMBER_TRANS_URL = AppGlobals.SERVER_URL + "memberTransaction.php";
     public static final String MEMBER_SEARCH_URL = AppGlobals.SERVER_URL + "searchMember.php";
     private final String TAG = "UserTransFragment";
 
@@ -69,10 +84,25 @@ public class UserTransFragment extends Fragment {
         memNotFound = (TextView) view.findViewById(R.id.txt_member_not_found);
         searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
         memberDetails = (LinearLayout) view.findViewById(R.id.show_member_details);
+        transDetails = (LinearLayout) view.findViewById(R.id.trans_details);
 
         memId = (TextView) view.findViewById(R.id.memberId);
         memName = (TextView) view.findViewById(R.id.memberName);
         memNum = (TextView) view.findViewById(R.id.memberNumber);
+
+        amount = (EditText) view.findViewById(R.id.amount);
+
+        TRANSACTION_TYPE_LIST = getResources().getStringArray(R.array.trans_type_list);
+        transTypeSpinner = (MaterialBetterSpinner) view.findViewById(R.id.transType);
+        transTypeAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_dropdown_item_1line, TRANSACTION_TYPE_LIST);
+        transTypeSpinner.setAdapter(transTypeAdapter);
+
+        save = (Button) view.findViewById(R.id.btn_save);
+        clear = (Button) view.findViewById(R.id.btn_clear);
+
+        creditAvail = (TextView) view.findViewById(R.id.credit);
+        bonusAvail = (TextView) view.findViewById(R.id.bonus);
     }
 
     private void setClickListener() {
@@ -97,10 +127,66 @@ public class UserTransFragment extends Fragment {
                             serverCall(search_map, MEMBER_SEARCH_URL);
                         }
                         break;
+                    case R.id.btn_save:
+
+                        String amt = amount.getText().toString();
+                        String userMob =  memNum.getText().toString();
+                        String transType = transTypeSpinner.getText().toString();
+
+                        int creditAmt = Integer.parseInt(creditAvail.getText().toString().split(getString(R.string.credit_))[1].trim());
+                        int bonusAmt = Integer.parseInt(bonusAvail.getText().toString().split(getString(R.string.bonus_))[1].trim());
+
+                        if(TextUtils.isEmpty(amt)) {
+                            appGlobals.toastMsg(context, getString(R.string.invalid_amt), appGlobals.LENGTH_LONG);
+                            return;
+                        }
+
+                        long timeStamp = System.currentTimeMillis();
+
+                        if(transType.equals(TRANSACTION_TYPE_LIST[2])) {
+                            creditAmt += Integer.parseInt(amt);
+                        } else if(transType.equals(TRANSACTION_TYPE_LIST[3])) {
+                            creditAmt -= Integer.parseInt(amt);
+                        }
+
+                        if(transType.equals(TRANSACTION_TYPE_LIST[4])) {
+                            bonusAmt += Integer.parseInt(amt);
+                        } else if(transType.equals(TRANSACTION_TYPE_LIST[5])) {
+                            bonusAmt -= Integer.parseInt(amt);
+                        }
+
+                        if(creditAmt > 5000) {
+                            appGlobals.toastMsg(context, getString(R.string.creditlimit), appGlobals.LENGTH_LONG);
+                            return;
+                        }
+
+                        if(bonusAmt < 0) {
+                            appGlobals.toastMsg(context, getString(R.string.bonuslimit), appGlobals.LENGTH_LONG);
+                            return;
+                        }
+
+                        Map<String, String> trans_map = new HashMap<String, String>();
+                        trans_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                        trans_map.put("user", userMob);
+                        trans_map.put("amount", amt);
+                        trans_map.put("transType", transType);
+                        trans_map.put("timeStamp", String.valueOf(timeStamp));
+                        trans_map.put("credit", "" + creditAmt);
+                        trans_map.put("bonus", "" + bonusAmt);
+
+                        progressDialog = appGlobals.showDialog(context, getString(R.string.saving_trans));
+                        serverCall(trans_map, MEMBER_TRANS_URL);
+
+                        break;
+                    case R.id.btn_clear:
+                        clearFields();
+                        break;
                 }
             }
         };
         searchBtn.setOnClickListener(clickListener);
+        save.setOnClickListener(clickListener);
+        clear.setOnClickListener(clickListener);
     }
 
     private void serverCall(final Map<String, String> map, final String URL) {
@@ -126,12 +212,41 @@ public class UserTransFragment extends Fragment {
                                 memNum.setText(userDetails.getMobile());
 
                                 memberDetails.setVisibility(View.VISIBLE);
+                                transDetails.setVisibility(View.VISIBLE);
+
+                                fetchUserTransDetails(userDetails.getMobile());
                             } catch(Exception e) {
                                 appGlobals.toastMsg(context, getString(R.string.friend_not_found), appGlobals.LENGTH_LONG);
-                                searchMem.setText("");
                                 memNotFound.setVisibility(View.VISIBLE);
-                 //               searchMem.setEnabled(true);
-                                searchMem.requestFocus();
+                                clearFields();
+                            }
+                        } else if(URL.equals(MEMBER_TRANS_URL)) {
+                            if(response.equals("success")) {
+                                appGlobals.toastMsg(context, getString(R.string.trans_save), appGlobals.LENGTH_LONG);
+                                clearFields();
+                            } else {
+                                appGlobals.toastMsg(context, getString(R.string.trans_fail), appGlobals.LENGTH_LONG);
+                            }
+                        } else if(URL.equals(FETCH_TRANS_URL)) {
+                            if(!TextUtils.isEmpty(response)) {
+                                Gson gson = new Gson();
+
+                                UserTransaction[] userTransactions = gson.fromJson(response, UserTransaction[].class);
+
+                                if(userTransactions.length > 0) {
+                                    UserTransaction trans = userTransactions[0];
+
+                                    String creditAmt = "0", bonusAmt = "0";
+
+                                    if(!TextUtils.isEmpty(trans.getAvail_credit()))
+                                        creditAmt = trans.getAvail_credit();
+
+                                    if(!TextUtils.isEmpty(trans.getBonus()))
+                                        bonusAmt = trans.getBonus();
+
+                                    creditAvail.setText(getString(R.string.credit_) + creditAmt);
+                                    bonusAvail.setText(getString(R.string.bonus_) + bonusAmt);
+                                }
                             }
                         }
                         appGlobals.cancelDialog(progressDialog);
@@ -154,5 +269,24 @@ public class UserTransFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
+    private void fetchUserTransDetails(String mob) {
+        Map<String, String> search_map = new HashMap<String, String>();
+        search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+        search_map.put("user", mob);
 
+        serverCall(search_map, FETCH_TRANS_URL);
+    }
+
+    private void clearFields() {
+        searchMem.setText("");
+        searchMem.requestFocus();
+
+        memId.setText("");
+        memName.setText("");
+        memNum.setText("");
+        amount.setText("");
+
+        memberDetails.setVisibility(View.INVISIBLE);
+        transDetails.setVisibility(View.INVISIBLE);
+    }
 }

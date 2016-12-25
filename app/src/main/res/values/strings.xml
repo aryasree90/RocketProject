@@ -63,6 +63,15 @@
         <item><string name="female">Female</string></item>
     </string-array>
 
+    <string-array name="trans_type_list">
+        <item><string name="cash_in">Cash In</string></item>
+        <item><string name="cash_out">Cash Out</string></item>
+        <item><string name="credit_taken">Credit Taken</string></item>
+        <item><string name="credit_return">Credit Returned</string></item>
+        <item><string name="bonus">Add Bonus</string></item>
+        <item><string name="bonus_redeem">Redeem Bonus</string></item>
+    </string-array>
+
     <string-array name="game_list">
         <item><string name="game1">Texas Hold Em</string></item>
         <item><string name="game2">Omaha</string></item>
@@ -173,6 +182,17 @@
 
     <string name="send_to">Send</string>
     <string name="signoutNotify">Do you want to exit?</string>
+
+    <string name="amount">Amount</string>
+    <string name="trans_type">Transaction Type</string>
+    <string name="trans_save">Transaction Saved</string>
+    <string name="saving_trans">Saving Transaction</string>
+    <string name="trans_fail">Unable to save transaction</string>
+    <string name="invalid_amt">Invalid Amount</string>
+    <string name="credit_">Credit :</string>
+    <string name="bonus_">Bonus :</string>
+    <string name="creditlimit">Credit limit reached</string>
+    <string name="bonuslimit">No bonus available</string>
 
 
     <!-- Contents about the club -->
