@@ -4,11 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,6 +27,8 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 
+import rocket.club.com.rocketpoker.adapter.FriendListAdapter;
+import rocket.club.com.rocketpoker.adapter.TransactionAdapter;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.classes.UserTransaction;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -35,7 +42,10 @@ public class TransactionFragment extends Fragment {
     Context context = null;
     AppGlobals appGlobals = null;
 
+    RecyclerView transactionView = null;
     ProgressDialog progressDialog = null;
+
+    TextView creditText, bonusText;
 
     private final String TAG = "TransactionFragment";
     public static final String FETCH_TRANS_URL = AppGlobals.SERVER_URL + "fetchTransaction.php";
@@ -54,6 +64,10 @@ public class TransactionFragment extends Fragment {
     private void initializeWidgets(View view) {
         context = getActivity();
         appGlobals = AppGlobals.getInstance(context);
+
+        transactionView = (RecyclerView) view.findViewById(R.id.transList);
+        creditText = (TextView) view.findViewById(R.id.credit);
+        bonusText = (TextView) view.findViewById(R.id.bonus);
     }
 
     private void initializeData() {
@@ -84,7 +98,7 @@ public class TransactionFragment extends Fragment {
                                 UserTransaction[] userTransactions = gson.fromJson(response, UserTransaction[].class);
 
                                 if(userTransactions.length > 0) {
-                                    Log.d("____________", "_____________ " + response);
+                                    loadTransactionDetails(userTransactions);
                                 }
                             }
                         }
@@ -108,5 +122,16 @@ public class TransactionFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
+    private void loadTransactionDetails(UserTransaction[] userTransactions) {
 
+        UserTransaction latestTrans = userTransactions[0];
+        creditText.setText(getString(R.string.credit_) + latestTrans.getAvail_credit());
+        bonusText.setText(getString(R.string.bonus_) + latestTrans.getBonus());
+
+        TransactionAdapter adapter = new TransactionAdapter(userTransactions, context);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        transactionView.setLayoutManager(mLayoutManager);
+        transactionView.setItemAnimator(new DefaultItemAnimator());
+        transactionView.setAdapter(adapter);
+    }
 }

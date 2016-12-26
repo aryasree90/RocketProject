@@ -189,11 +189,12 @@
     <string name="saving_trans">Saving Transaction</string>
     <string name="trans_fail">Unable to save transaction</string>
     <string name="invalid_amt">Invalid Amount</string>
-    <string name="credit_">Credit :</string>
-    <string name="bonus_">Bonus :</string>
+    <string name="credit_">Credit :&#160;</string>
+    <string name="bonus_">Bonus :&#160;</string>
     <string name="credit_limit">Credit limit reached</string>
     <string name="bonus_limit">No bonus available</string>
     <string name="fetch_trans">Fetching Transactions</string>
+    <string name="date">Date</string>
 
 
     <!-- Contents about the club -->

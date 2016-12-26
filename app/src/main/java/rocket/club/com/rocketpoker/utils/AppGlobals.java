@@ -221,6 +221,11 @@ public class AppGlobals {
         return time;
     }
 
+    public static String convertDate(long timeStamp) {
+        String time = (String) DateFormat.format("yyyy-MM-dd", timeStamp);
+        return time;
+    }
+
     public int getScreenHeight(Context context) {
         Point point = getPoint(context);
         return point.y;
