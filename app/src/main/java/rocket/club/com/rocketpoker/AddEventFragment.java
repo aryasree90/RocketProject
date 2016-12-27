@@ -233,8 +233,15 @@ public class AddEventFragment extends Fragment {
                     @Override
                     protected Bitmap doInBackground(String... params) {
 
+                        String type = "";
+                        if (activityType.equals(AppGlobals.EVENT_INFO)) {
+                            type = appGlobals.EVENTS;
+                        } else {
+                            type = appGlobals.SERVICES;
+                        }
+
                         String imgFileName = appGlobals.getRocketsPath(context) + "/" +
-                                appGlobals.sharedPref.getLoginMobile() + ".jpg";
+                                AppGlobals.CLUB_INFO + "_" + type + appGlobals.IMG_FILE_EXTENSION;
 
                         File curFile = new File(imgFileName);
                         if(curFile.exists()) {

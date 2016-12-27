@@ -17,6 +17,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.media.Image;
 import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
@@ -166,6 +167,8 @@ public class AppGlobals {
     public static final String AUTO_SMS_READER =
             "rocket.club.com.rocketpoker.AUTO_SMS_READER";
 
+    public final String EVENTS = "EVENTS";
+    public final String SERVICES = "SERVICES";
     public final String IMG_FILE_EXTENSION = ".jpg";
 
     public final String ROCKETS = "Rockets";
@@ -305,6 +308,7 @@ public class AppGlobals {
         try {
 //            Bitmap compressedBitmap = ImageUtils.getInstant().getCompressedBitmap(srcFileName);
             Bitmap compressedBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
+
             FileOutputStream fos = null;
             fos = new FileOutputStream(new File(destFileName));
             compressedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -325,6 +329,7 @@ public class AppGlobals {
     }
 
     public String convertBase64ToImageFile(String encodedImage, String fileName, Context context) {
+
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         String imgFileName = "";
@@ -355,10 +360,16 @@ public class AppGlobals {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, FETCH_IMAGE,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(final String response) {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
 
-                        convertBase64ToImageFile(response, imageName, context);
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                convertBase64ToImageFile(response, imageName, context);
+                                return null;
+                            }
+                        }.execute();
                     }
                 },
                 new Response.ErrorListener() {
