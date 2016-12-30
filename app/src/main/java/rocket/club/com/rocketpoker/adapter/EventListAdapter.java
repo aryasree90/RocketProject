@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 
 import rocket.club.com.rocketpoker.EventDetailActivity;
@@ -61,12 +62,24 @@ public class EventListAdapter extends PagerAdapter {
 
         InfoDetails infoItem = infoList.get(position);
 
-        String imgPath = appGlobals.getRocketsPath(context) + "/" + infoItem.getInfoImage();
+        /*String imgPath = appGlobals.getRocketsPath(context) + "/" + infoItem.getInfoImage();
         File imgFile = new File(imgPath);
         if(imgFile.exists()) {
             Bitmap bmp = BitmapFactory.decodeFile(imgPath);
             itemImage.setImageBitmap(bmp);
+        }*/
+
+        try {
+            String imgPath = AppGlobals.SERVER_URL + infoItem.getInfoImage();
+            Log.d("_______", "__________ " + imgPath);
+
+            URL url = new URL(imgPath);
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            itemImage.setImageBitmap(bmp);
+        }catch(Exception e) {
+            e.printStackTrace();
         }
+
 //        itemImage.setImageResource(R.drawable.event1);
         headerText.setText(infoItem.getInfoTitle());
         setItemClickListener(position, infoItem);

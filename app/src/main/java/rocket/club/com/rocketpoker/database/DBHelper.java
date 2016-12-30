@@ -439,7 +439,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         for(InfoDetails infoDetail : infoDetails) {
 
-            String imageFileName = AppGlobals.CLUB_INFO + infoDetail.getInfoTimeStamp() + appGlobals.IMG_FILE_EXTENSION;
+            /*String imageFileName = AppGlobals.CLUB_INFO + infoDetail.getInfoTimeStamp() + appGlobals.IMG_FILE_EXTENSION;
 
             HashMap<String, String> params = new HashMap<>();
             params.put("mobile", appGlobals.sharedPref.getLoginMobile());
@@ -447,10 +447,10 @@ public class DBHelper extends SQLiteOpenHelper {
             params.put("timeStamp", infoDetail.getInfoTimeStamp());
             params.put("task", AppGlobals.CLUB_INFO);
 
-            appGlobals.serverCallToDownloadImage(context, params, imageFileName);
+            appGlobals.serverCallToDownloadImage(context, params, imageFileName);*/
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put(this.infoImage, imageFileName);
+            contentValues.put(this.infoImage, infoDetail.getInfoImage());
             contentValues.put(this.infoTitle, infoDetail.getInfoTitle());
             contentValues.put(this.infoSubTitle, infoDetail.getInfoSubTitle());
             contentValues.put(this.infoLikeStatus, infoDetail.getInfoLikeStatus());
