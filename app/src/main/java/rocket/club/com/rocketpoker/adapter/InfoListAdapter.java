@@ -96,15 +96,16 @@ public class InfoListAdapter extends PagerAdapter {
         eventHeader = (TextView) itemView.findViewById(R.id.eventHeaderText);
         eventSubHeader = (TextView) itemView.findViewById(R.id.eventSummaryText);
         eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
+        TextView imageText = (TextView) itemView.findViewById(R.id.imageText);
 
         final InfoDetails infoItem = infoList.get(position);
-        String imgPath = appGlobals.getRocketsPath(context) + "/" + infoItem.getInfoImage();
-        File imgFile = new File(imgPath);
-        if(imgFile.exists()) {
-            Bitmap bmp = BitmapFactory.decodeFile(imgPath);
-            eventImage.setImageBitmap(bmp);
+        try {
+
+            String imgPath = AppGlobals.SERVER_URL + infoItem.getInfoImage();
+            appGlobals.loadImageFromServer(imgPath, eventImage, imageText, context);
+        }catch(Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
-//        eventImage.setImageResource(R.drawable.event1);
 
         eventHeader.setText(infoItem.getInfoTitle());
         eventSubHeader.setText(infoItem.getInfoSubTitle());

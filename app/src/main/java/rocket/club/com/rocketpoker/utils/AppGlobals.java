@@ -28,7 +28,10 @@ import android.text.format.DateFormat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -43,8 +46,10 @@ import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -352,6 +357,46 @@ public class AppGlobals {
             }
         }
         return imgFileName;
+    }
+
+    public void loadImageFromServer(final String imageUrl, final ImageView itemImage,
+                                    final TextView imageText, final Context context) {
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            String errMsg = "";
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                try {
+                    URL url = new URL(imageUrl);
+                    return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch(FileNotFoundException fnfe) {
+                    errMsg = "No Preview Available";
+                } catch(Exception e) {
+                    errMsg = "Unable to load Image";
+                    appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bmp) {
+                super.onPostExecute(bmp);
+                if(bmp != null) {
+                    imageText.setVisibility(View.GONE);
+                    itemImage.setVisibility(View.VISIBLE);
+                    itemImage.setImageBitmap(bmp);
+                } else {
+                    imageText.setVisibility(View.VISIBLE);
+                    itemImage.setVisibility(View.GONE);
+                    imageText.setText(errMsg);
+                }
+            }
+        }.execute();
     }
 
     public void serverCallToDownloadImage(final Context context, final HashMap<String, String> params,

@@ -11,8 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:contentDescription="@string/content_description"
-        android:src="@drawable/event1" />
+        android:contentDescription="@string/content_description" />
+
+    <TextView
+        android:id="@+id/imageText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center" />
 
     <LinearLayout
         android:id="@+id/eventContentLayout"
