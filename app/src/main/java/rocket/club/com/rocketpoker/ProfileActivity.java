@@ -346,6 +346,8 @@ public class ProfileActivity extends ActionBarActivity {
 
         progressDialog = appGlobals.showDialog(this, getString(R.string.save_profile));
 
+        String imageName = appGlobals.sharedPref.getLoginMobile() + appGlobals.IMG_FILE_EXTENSION;
+
         Map<String,String> map = new HashMap<String,String>();
         map.put("fullName", userFullName);
         map.put("email", userEmail);
@@ -356,6 +358,7 @@ public class ProfileActivity extends ActionBarActivity {
         map.put("image", userImage);
         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
         map.put("task", appGlobals.UPDATE_PROFILE);
+        map.put("imageName", imageName);
 
         serverCall(map, appGlobals.UPDATE_PROFILE, VALIDATION_URL);
     }
