@@ -311,8 +311,8 @@ public class AppGlobals {
 
     public boolean compressImage(String srcFileName, String destFileName) {
         try {
-//            Bitmap compressedBitmap = ImageUtils.getInstant().getCompressedBitmap(srcFileName);
-            Bitmap compressedBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
+            Bitmap compressedBitmap = ImageUtils.getInstant().getCompressedBitmap(srcFileName);
+//            Bitmap compressedBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
 
             FileOutputStream fos = null;
             fos = new FileOutputStream(new File(destFileName));

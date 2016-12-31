@@ -74,5 +74,13 @@
             android:scaleType="fitXY"
             android:src="@drawable/event1"/>
 
+        <TextView
+            android:id="@+id/imageText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            android:gravity="center" />
+
     </LinearLayout>
 </LinearLayout>

@@ -100,7 +100,6 @@ public class InfoListAdapter extends PagerAdapter {
 
         final InfoDetails infoItem = infoList.get(position);
         try {
-
             String imgPath = AppGlobals.SERVER_URL + infoItem.getInfoImage();
             appGlobals.loadImageFromServer(imgPath, eventImage, imageText, context);
         }catch(Exception e) {
