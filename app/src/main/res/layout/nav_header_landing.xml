@@ -3,31 +3,32 @@
     android:id="@+id/header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     android:gravity="bottom"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="20dp"
-    android:paddingTop="20dp"
+    android:paddingTop="25dp"
+    android:paddingLeft="5dp"
+    android:paddingStart="5dp"
+    android:paddingBottom="5dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="right"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@drawable/default_profile" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:paddingTop="6dp"
