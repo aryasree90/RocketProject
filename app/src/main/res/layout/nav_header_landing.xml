@@ -3,9 +3,9 @@
     android:id="@+id/header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/common_plus_signin_btn_text_light_default"
+    android:background="@color/colorPrimaryDark"
     android:gravity="bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingBottom="20dp"
@@ -14,27 +14,34 @@
 
    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
         android:src="@drawable/default_profile" />
 
-    <TextView
-        android:id="@+id/textName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:paddingTop="6dp"
-        android:text="User Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="6dp"
-        android:text="919876543210"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:paddingTop="6dp"
+            android:text="User Name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/textNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:text="919876543210"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+    </LinearLayout>
 
 </LinearLayout>

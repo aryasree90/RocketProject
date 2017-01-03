@@ -4,6 +4,7 @@ import android.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +29,9 @@ import android.widget.Toast;
 import com.google.android.gcm.GCMRegistrar;
 
 import org.w3c.dom.Text;
+
+import java.io.File;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -94,6 +99,20 @@ public class LandingActivity extends AppCompatActivity
 
         textName.setText(appGlobals.sharedPref.getUserName());
         textNum.setText(appGlobals.sharedPref.getLoginMobile());
+
+        String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
+        String imgPath = appGlobals.getRocketsPath(context) + "/" + imgFileName;
+        File imageFile = new File(imgPath);
+
+        if(!imageFile.exists()) {
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
+            params.put("frndMob", appGlobals.sharedPref.getLoginMobile());
+
+            appGlobals.searchUpdatedImage(context, params, imgPath, circularImageView);
+        }
+        if(imageFile.exists())
+            circularImageView.setImageURI(Uri.fromFile(imageFile));
 
         if(appGlobals.currentFragmentClass == null)
             appGlobals.currentFragmentClass = HomeFragment.class;

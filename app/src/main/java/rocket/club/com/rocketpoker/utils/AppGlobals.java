@@ -331,7 +331,7 @@ public class AppGlobals {
     }
 
     public String thumbnailImage(String srcFileName) {
-        Bitmap thumbBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
+        Bitmap thumbBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 100, 100);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
