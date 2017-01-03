@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -17,11 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -42,7 +48,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView friendName, friendNumber;
-        ImageView friendImage;
+        CircleImageView friendImage;
         CheckBox selectedItem;
 
         public MyViewHolder(View view) {
@@ -50,7 +56,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             selectedItem = (CheckBox) view.findViewById(R.id.selectedName);
             friendName = (TextView) view.findViewById(R.id.friendName);
             friendNumber = (TextView) view.findViewById(R.id.friendNumber);
-            friendImage = (ImageView) view.findViewById(R.id.friendImage);
+            friendImage = (CircleImageView) view.findViewById(R.id.friendImage);
         }
     }
 
@@ -72,7 +78,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        FriendsListClass friendList = friendsList.get(position);
+        final FriendsListClass friendList = friendsList.get(position);
         holder.friendName.setText(friendList.getName());
         holder.friendNumber.setText(friendList.getMobile());
 
@@ -80,6 +86,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
         String imageUrl = AppGlobals.SERVER_URL + thumbName;
         appGlobals.loadImageFromServerWithDefault(imageUrl, holder.friendImage, "", false, context);
+
+        holder.friendImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mainImageUrl = AppGlobals.SERVER_URL + friendList.getImage();
+//                Toast.makeText(context, mainImageUrl, Toast.LENGTH_LONG).show();
+                showImageDialog(mainImageUrl);
+            }
+        });
 
         /*if(friendList.getImage() == null || TextUtils.isEmpty(friendList.getImage())) {
             String imagePath = appGlobals.getRocketsPath(context) + "";
@@ -117,6 +132,24 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             setClickListener(friendList.getMobile(), position);
         }
     }
+
+    private void showImageDialog(String imageUrl) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.setContentView(R.layout.activity_image_view);
+
+//        dialog.setTitle(getString(R.string.set_game_time));
+
+        ImageView fullImage = (ImageView) dialog.findViewById(R.id.fullImage);
+        appGlobals.loadImageFromServerWithDefault(imageUrl, fullImage, "", false, context);
+
+
+        dialog.show();
+
+        appGlobals.setDialogLayoutParams(dialog, context, false, true);
+
+    }
+
 
     private void setClickListener(final String mob, final int pos) {
         checkBox.setOnClickListener(new View.OnClickListener() {

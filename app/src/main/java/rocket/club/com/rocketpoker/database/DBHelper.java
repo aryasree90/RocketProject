@@ -224,7 +224,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 String userMobile = res.getString(res.getColumnIndex(mobile));
                 int userStatus = res.getInt(res.getColumnIndex(status));
                 String image = res.getString(res.getColumnIndex(userImage));
-
+                
                 ContactClass contactClass = new ContactClass();
                 contactClass.setContactName(name);
                 contactClass.setPhoneNumber(userMobile);

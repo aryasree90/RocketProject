@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.classes.ProfileDetailsClass;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -70,7 +71,7 @@ public class ProfileActivity extends ActionBarActivity {
     Context context = null;
     AppGlobals appGlobals = null;
     Button gotoHome, clear;
-    ImageView profileImage;
+    CircleImageView profileImage;
     EditText fullName, email, nickName, dob;
     TextView skipProfile, rocketId;
     ConnectionDetector connectionDetector = null;
@@ -117,7 +118,7 @@ public class ProfileActivity extends ActionBarActivity {
         email = (EditText) findViewById(R.id.email);
         nickName = (EditText) findViewById(R.id.nickName);
         dob = (EditText) findViewById(R.id.DOB);
-        profileImage = (ImageView) findViewById(R.id.userProfilePic);
+        profileImage = (CircleImageView) findViewById(R.id.userProfilePic);
         skipProfile = (TextView) findViewById(R.id.skipProfile);
         rocketId = (TextView) findViewById(R.id.rocketId);
 
@@ -279,12 +280,15 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void saveProfileDetails() {
-        final String userFullName = fullName.getText().toString();
+        String tempFullName = fullName.getText().toString();
         final String userEmail = email.getText().toString();
         final String userNickName = nickName.getText().toString();
         final String userGameType = gameTypeMultiSpinner.getSelectedItemsAsString();
         final String userGender = genderSpinner.getText().toString();
         final String userDob = dob.getText().toString();
+        final String userFullName = tempFullName.substring(0, 1).toUpperCase() +
+                tempFullName.substring(1);
+
         String userImage = "", thumbImage = "";
 
         if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists()) {

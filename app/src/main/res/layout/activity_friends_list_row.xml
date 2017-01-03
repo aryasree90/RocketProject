@@ -11,35 +11,40 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/selectedName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/friendImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/friendName"
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/selectedName"
-        android:layout_toRightOf="@+id/selectedName"
+        android:layout_toEndOf="@+id/friendImage"
+        android:layout_toRightOf="@+id/friendImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp" />
 
     <TextView
         android:id="@+id/friendNumber"
         android:layout_below="@id/friendName"
-        android:layout_toEndOf="@+id/selectedName"
-        android:layout_toRightOf="@+id/selectedName"
+        android:layout_toEndOf="@+id/friendImage"
+        android:layout_toRightOf="@+id/friendImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp" />
 
-    <ImageView
-        android:id="@+id/friendImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:visibility="gone"
-        android:layout_alignParentRight="true" />
+    <CheckBox
+        android:id="@+id/selectedName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>
