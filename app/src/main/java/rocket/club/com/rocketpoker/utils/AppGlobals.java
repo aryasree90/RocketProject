@@ -57,6 +57,7 @@ import java.util.Map;
 
 import rocket.club.com.rocketpoker.CommonUtilities;
 import rocket.club.com.rocketpoker.ConnectionDetector;
+import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.receiver.LocationTrigger;
 import rocket.club.com.rocketpoker.service.GooglePlayServiceLocation;
@@ -175,6 +176,7 @@ public class AppGlobals {
     public final String EVENTS = "EVENTS";
     public final String SERVICES = "SERVICES";
     public final String IMG_FILE_EXTENSION = ".jpg";
+    public final String IMAGE_FOLDER = "profile";
 
     public final String ROCKETS = "Rockets";
 
@@ -298,6 +300,18 @@ public class AppGlobals {
         return dir;
     }
 
+    private void createFolder(String folderName, Context context) {
+
+        String folder = getRocketsPath(context) + "/" + folderName;
+        File myFile = new File(folder);
+        try {
+            if (!myFile.exists())
+                myFile.mkdir();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void createNoMediaFile(String filePath) {
 
         File myFile = new File(filePath, ".nomedia");
@@ -307,6 +321,23 @@ public class AppGlobals {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String thumbImageName(String imageName) {
+        String mainName = imageName.split(appGlobals.IMG_FILE_EXTENSION)[0];
+        String thumbName = mainName + "_th" + appGlobals.IMG_FILE_EXTENSION;
+
+        return thumbName;
+    }
+
+    public String thumbnailImage(String srcFileName) {
+        Bitmap thumbBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(srcFileName), 50, 50);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String thumbImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return thumbImage;
     }
 
     public boolean compressImage(String srcFileName, String destFileName) {
@@ -387,10 +418,11 @@ public class AppGlobals {
             protected void onPostExecute(Bitmap bmp) {
                 super.onPostExecute(bmp);
                 if(bmp != null) {
-                    imageText.setVisibility(View.GONE);
+                    if(imageText != null)
+                        imageText.setVisibility(View.GONE);
                     itemImage.setVisibility(View.VISIBLE);
                     itemImage.setImageBitmap(bmp);
-                } else {
+                } else if(imageText != null){
                     imageText.setVisibility(View.VISIBLE);
                     itemImage.setVisibility(View.GONE);
                     imageText.setText(errMsg);
@@ -399,22 +431,72 @@ public class AppGlobals {
         }.execute();
     }
 
-    public void serverCallToDownloadImage(final Context context, final HashMap<String, String> params,
-                                          final String imageName) {
+    public void loadImageFromServerWithDefault(final String imageUrl, final ImageView itemImage,
+                                               final String imagePath, final boolean saveImage,
+                                               final Context context) {
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                try {
+                    URL url = new URL(imageUrl);
+                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                    if(saveImage) {
+                        try {
+                            createFolder(IMAGE_FOLDER, context);
+                            FileOutputStream fos = new FileOutputStream(imagePath);
+                            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                            fos.close();
+                        } catch (FileNotFoundException e) {
+                            appGlobals.logClass.setLogMsg(TAG, "File not found " + e.toString(),
+                                    LogClass.ERROR_MSG);
+                        } catch (IOException e) {
+                            appGlobals.logClass.setLogMsg(TAG, "Error accessing file " + e.toString(),
+                                    LogClass.ERROR_MSG);
+                        }
+                    }
+
+                    return bmp;
+                } catch(Exception e) {
+                    appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bmp) {
+                super.onPostExecute(bmp);
+                itemImage.setVisibility(View.VISIBLE);
+                if(bmp != null) {
+                    itemImage.setImageBitmap(bmp);
+                } else {
+                    itemImage.setImageResource(R.drawable.default_profile);
+                }
+            }
+        }.execute();
+    }
+
+    public void searchUpdatedImage(final Context context, final HashMap<String, String> params,
+                                   final String imagePath, final ImageView imageView) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, FETCH_IMAGE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
-
-                        new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                convertBase64ToImageFile(response, imageName, context);
-                                return null;
-                            }
-                        }.execute();
+                        if(!imagePath.contains(response)) {
+                            String imageUrl = AppGlobals.SERVER_URL + response;
+                            appGlobals.loadImageFromServerWithDefault(imageUrl, imageView, imagePath,
+                                    true, context);
+                        } else {
+                            appGlobals.logClass.setLogMsg(TAG, "Contains same image", LogClass.INFO_MSG);
+                        }
                     }
                 },
                 new Response.ErrorListener() {

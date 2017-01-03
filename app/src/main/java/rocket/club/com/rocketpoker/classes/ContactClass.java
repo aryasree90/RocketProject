@@ -5,6 +5,7 @@ public class ContactClass {
     private String contactName;
     private String phoneNumber;
     private String nickName;
+    private String userImage;
     private int status;
 
     //    getter functions
@@ -25,6 +26,10 @@ public class ContactClass {
         return status;
     }
 
+    public String getUserImage() {
+        return userImage;
+    }
+
     //    setter functions
 
     public void setContactName(String contactName) {
@@ -43,4 +48,7 @@ public class ContactClass {
         this.status = status;
     }
 
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
 }

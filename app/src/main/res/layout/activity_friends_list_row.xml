@@ -39,6 +39,7 @@
         android:id="@+id/friendImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:visibility="gone"
         android:layout_alignParentRight="true" />
 
 </RelativeLayout>

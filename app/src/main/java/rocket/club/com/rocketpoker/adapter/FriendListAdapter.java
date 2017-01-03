@@ -3,7 +3,9 @@ package rocket.club.com.rocketpoker.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import rocket.club.com.rocketpoker.R;
@@ -73,15 +76,38 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
         holder.friendName.setText(friendList.getName());
         holder.friendNumber.setText(friendList.getMobile());
 
-        String imagePath = appGlobals.getRocketsPath(context) + "/" + appGlobals.ROCKETS + "_" +
-                friendList.getMobile() + appGlobals.IMG_FILE_EXTENSION;
+        String thumbName = appGlobals.thumbImageName(friendList.getImage());
 
-        File imgFile = new File(imagePath);
-        if(imgFile != null && imgFile.exists()) {
-            Bitmap bmp = BitmapFactory.decodeFile(imagePath);
-            holder.friendImage.setImageBitmap(bmp);
-        } else
-            holder.friendImage.setImageResource(R.drawable.default_profile);
+        String imageUrl = AppGlobals.SERVER_URL + thumbName;
+        appGlobals.loadImageFromServerWithDefault(imageUrl, holder.friendImage, "", false, context);
+
+        /*if(friendList.getImage() == null || TextUtils.isEmpty(friendList.getImage())) {
+            String imagePath = appGlobals.getRocketsPath(context) + "";
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
+            params.put("frndMob", friendList.getMobile());
+
+            appGlobals.searchUpdatedImage(context, params, imagePath, holder.friendImage);
+        } else {
+            String imagePath = appGlobals.getRocketsPath(context) + "/" + friendList.getImage();
+            File filePath = new File(imagePath);
+
+            if (filePath.exists()) {
+                holder.friendImage.setVisibility(View.VISIBLE);
+                holder.friendImage.setImageURI(Uri.fromFile(filePath));
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                params.put("frndMob", friendList.getMobile());
+
+                appGlobals.searchUpdatedImage(context, params, imagePath, holder.friendImage);
+            } else {
+                String imageUrl = AppGlobals.SERVER_URL + friendList.getImage();
+                appGlobals.loadImageFromServerWithDefault(imageUrl, holder.friendImage, imagePath,
+                        true, context);
+            }
+        }*/
 
         if(pageType == AppGlobals.FRIEND_LIST) {
             holder.selectedItem.setVisibility(View.GONE);

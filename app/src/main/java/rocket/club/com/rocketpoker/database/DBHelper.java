@@ -42,6 +42,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String userName = "frndName";
     public static final String nickName = "frndNickName";
     public static final String status = "status";
+    public static final String userImage = "userImage";
 
     public static final String msgId = "msgId";
     public static final String senderMob = "senderMob";
@@ -82,7 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_TABLE = "CREATE TABLE " + friendsTable + "(" + _id +
             " integer primary key autoincrement not null, " + mobile + " text, " + userName +
-            " text, " + nickName + " text, " + status + " integer)";
+            " text, " + nickName + " text, " + userImage + " text, " + status + " integer)";
 
     public static final String CREATE_MSG_TABLE = "CREATE TABLE " + messageTable + "(" + _id +
             " integer primary key autoincrement not null, " + msgId + " integer, " + senderMob +
@@ -161,6 +162,8 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(this.userName, details.getUserName());
             contentValues.put(this.nickName, details.getNickName());
             contentValues.put(this.status, details.getStatus());
+            contentValues.put(this.userImage, details.getUserImage());
+
             db.insert(friendsTable, null, contentValues);
         }
         if(db != null)
@@ -173,7 +176,7 @@ public class DBHelper extends SQLiteOpenHelper {
         final String where = mobile + "=" + updtMob;
         if(statusValue == 1) {
 
-            AppGlobals appGlobals = AppGlobals.getInstance(context);
+/*            AppGlobals appGlobals = AppGlobals.getInstance(context);
 
             String imageFileName = appGlobals.ROCKETS + "_" + updtMob + appGlobals.IMG_FILE_EXTENSION;
 
@@ -182,9 +185,7 @@ public class DBHelper extends SQLiteOpenHelper {
             params.put("id", updtMob);
             params.put("task", AppGlobals.NOTIF_FRND_REQ_RESP);
 
-            Log.d("_________________", "______________ " + imageFileName);
-
-            appGlobals.serverCallToDownloadImage(context, params, imageFileName);
+            appGlobals.serverCallToDownloadImage(context, params, imageFileName);*/
 
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
@@ -222,12 +223,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 String userNickName = res.getString(res.getColumnIndex(nickName));
                 String userMobile = res.getString(res.getColumnIndex(mobile));
                 int userStatus = res.getInt(res.getColumnIndex(status));
+                String image = res.getString(res.getColumnIndex(userImage));
 
                 ContactClass contactClass = new ContactClass();
                 contactClass.setContactName(name);
                 contactClass.setPhoneNumber(userMobile);
                 contactClass.setNickName(userNickName);
                 contactClass.setStatus(userStatus);
+                contactClass.setUserImage(image);
 
                 contactList.add(contactClass);
 
@@ -438,16 +441,6 @@ public class DBHelper extends SQLiteOpenHelper {
         AppGlobals appGlobals = AppGlobals.getInstance(context);
 
         for(InfoDetails infoDetail : infoDetails) {
-
-            /*String imageFileName = AppGlobals.CLUB_INFO + infoDetail.getInfoTimeStamp() + appGlobals.IMG_FILE_EXTENSION;
-
-            HashMap<String, String> params = new HashMap<>();
-            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
-            params.put("id", infoDetail.getId());
-            params.put("timeStamp", infoDetail.getInfoTimeStamp());
-            params.put("task", AppGlobals.CLUB_INFO);
-
-            appGlobals.serverCallToDownloadImage(context, params, imageFileName);*/
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(this.infoImage, infoDetail.getInfoImage());

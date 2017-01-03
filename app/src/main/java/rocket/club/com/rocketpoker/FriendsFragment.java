@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -78,6 +79,7 @@ public class FriendsFragment extends Fragment {
     ImageButton searchBtn = null;
 
     LinearLayout showFriendDetails = null;
+    ImageView friendImage = null;
     TextView friendName, friendMobile,friendNotFoundTxt;
     ArrayList<UserDetails> list = null;
     String searchAFriend = "";
@@ -164,7 +166,8 @@ public class FriendsFragment extends Fragment {
             ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.ALL_FRIENDS);
             for(ContactClass contactClass : contactList) {
                 String name = contactClass.getContactName();
-                friendsList.add(new FriendsListClass(name, contactClass.getPhoneNumber(), "image"));
+                String image = contactClass.getUserImage();
+                friendsList.add(new FriendsListClass(name, contactClass.getPhoneNumber(), image));
             }
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
@@ -372,6 +375,12 @@ public class FriendsFragment extends Fragment {
                                 friendName.setText(userDetails.getUserName());
                                 friendMobile.setText(userDetails.getMobile());
 
+                                String thumbName = appGlobals.thumbImageName(userDetails.getUserImage());
+                                String imageUrl = AppGlobals.SERVER_URL + thumbName;
+
+                                appGlobals.loadImageFromServerWithDefault(imageUrl, friendImage,
+                                        userDetails.getUserImage(), false, context);
+
                                 list = new ArrayList<UserDetails>();
                                 list.add(userDetails);
 
@@ -460,6 +469,7 @@ public class FriendsFragment extends Fragment {
         showFriendDetails = (LinearLayout) dialog.findViewById(R.id.show_friend_details);
         friendNotFoundTxt = (TextView) dialog.findViewById(R.id.txt_friend_not_found);
 
+        friendImage = (ImageView) dialog.findViewById(R.id.friendImage);
         friendName = (TextView) dialog.findViewById(R.id.friendName);
         friendMobile = (TextView) dialog.findViewById(R.id.friendNumber);
         searchFriend.requestFocus();

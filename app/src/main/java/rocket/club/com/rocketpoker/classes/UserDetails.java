@@ -7,6 +7,7 @@ public class UserDetails {
     private String mobile;
     private String userName;
     private int status = -1;
+    private String userImage;
 
     public int getStatus() {
         return status;
@@ -42,5 +43,13 @@ public class UserDetails {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
     }
 }

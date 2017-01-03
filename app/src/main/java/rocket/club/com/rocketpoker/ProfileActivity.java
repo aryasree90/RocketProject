@@ -285,13 +285,17 @@ public class ProfileActivity extends ActionBarActivity {
         final String userGameType = gameTypeMultiSpinner.getSelectedItemsAsString();
         final String userGender = genderSpinner.getText().toString();
         final String userDob = dob.getText().toString();
-        String userImage = "";
+        String userImage = "", thumbImage = "";
 
-        if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists())
+        if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists()) {
             userImage = appGlobals.convertImageToBase64(imagePath);
+            thumbImage = appGlobals.thumbnailImage(imagePath);
+        }
+
 
         if(validateFields(userFullName, userEmail, userNickName, userGender, userGameType))
-            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob, userImage);
+            updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob,
+                    userImage, thumbImage);
 
     }
 
@@ -342,11 +346,12 @@ public class ProfileActivity extends ActionBarActivity {
     private void updateProfile(final String userFullName, final String userEmail,
                                final String userNickName, final String userGender,
                                final String userGameType, final String userDob,
-                               final String userImage) {
+                               final String userImage, String thumbImage) {
 
         progressDialog = appGlobals.showDialog(this, getString(R.string.save_profile));
 
         String imageName = appGlobals.sharedPref.getLoginMobile() + appGlobals.IMG_FILE_EXTENSION;
+        String thumbName = appGlobals.thumbImageName(imageName);
 
         Map<String,String> map = new HashMap<String,String>();
         map.put("fullName", userFullName);
@@ -356,9 +361,11 @@ public class ProfileActivity extends ActionBarActivity {
         map.put("gameType", userGameType);
         map.put("dob", userDob);
         map.put("image", userImage);
+        map.put("thumbImage", thumbImage);
         map.put("mobile", appGlobals.sharedPref.getLoginMobile());
         map.put("task", appGlobals.UPDATE_PROFILE);
         map.put("imageName", imageName);
+        map.put("thumbName", thumbName);
 
         serverCall(map, appGlobals.UPDATE_PROFILE, VALIDATION_URL);
     }
@@ -472,12 +479,16 @@ public class ProfileActivity extends ActionBarActivity {
         genderSpinner.setText(profileDetails.getGender());
 
         String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
-        File imageFile = new File(appGlobals.getRocketsPath(context) + "/" + imgFileName);
+        String imgPath = appGlobals.getRocketsPath(context) + "/" + imgFileName;
+        File imageFile = new File(imgPath);
 
         if(!imageFile.exists() && !TextUtils.isEmpty(profileDetails.getUser_pic())) {
-            appGlobals.convertBase64ToImageFile(profileDetails.getUser_pic(), imgFileName, context);
-        }
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
+            params.put("frndMob", appGlobals.sharedPref.getLoginMobile());
 
+            appGlobals.searchUpdatedImage(context, params, imgPath, profileImage);
+        }
         if(imageFile.exists())
             profileImage.setImageURI(Uri.fromFile(imageFile));
     }
