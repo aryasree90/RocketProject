@@ -73,7 +73,7 @@ public class ProfileActivity extends ActionBarActivity {
     Button gotoHome, clear;
     CircleImageView profileImage;
     EditText fullName, email, nickName, dob;
-    TextView skipProfile, rocketId;
+    TextView skipProfile, rocketId, emptyImage;
     ConnectionDetector connectionDetector = null;
     MaterialBetterSpinner gameTypeSpinner = null, genderSpinner = null;
     ArrayAdapter<String> gameTypeAdapter = null, genderAdapter = null;
@@ -119,6 +119,7 @@ public class ProfileActivity extends ActionBarActivity {
         nickName = (EditText) findViewById(R.id.nickName);
         dob = (EditText) findViewById(R.id.DOB);
         profileImage = (CircleImageView) findViewById(R.id.userProfilePic);
+        emptyImage = (TextView) findViewById(R.id.emptyImage);
         skipProfile = (TextView) findViewById(R.id.skipProfile);
         rocketId = (TextView) findViewById(R.id.rocketId);
 
@@ -157,6 +158,10 @@ public class ProfileActivity extends ActionBarActivity {
                         break;
                     case R.id.userProfilePic:
                         createMediaDialog();
+                        break;
+                    case R.id.emptyImage:
+                        profileImage.setImageResource(R.drawable.default_profile);
+                        imagePath = "";
                         break;
                     case R.id.DOB:
                         showDialog(DATE_DIALOG_ID);
@@ -201,6 +206,7 @@ public class ProfileActivity extends ActionBarActivity {
         profileImage.setOnClickListener(clickListener);
         dob.setOnClickListener(clickListener);
         skipProfile.setOnClickListener(clickListener);
+        emptyImage.setOnClickListener(clickListener);
     }
 
     @Override
