@@ -376,10 +376,15 @@ public class FriendsFragment extends Fragment {
                                 friendMobile.setText(userDetails.getMobile());
 
                                 String thumbName = appGlobals.thumbImageName(userDetails.getUserImage());
-                                String imageUrl = AppGlobals.SERVER_URL + thumbName;
 
-                                appGlobals.loadImageFromServerWithDefault(imageUrl, friendImage,
-                                        userDetails.getUserImage(), false, context);
+                                if(!TextUtils.isEmpty(thumbName)) {
+                                    String imageUrl = AppGlobals.SERVER_URL + thumbName;
+
+                                    appGlobals.loadImageFromServerWithDefault(imageUrl, friendImage,
+                                            userDetails.getUserImage(), false, context);
+                                } else {
+                                    friendImage.setImageResource(R.drawable.default_profile);
+                                }
 
                                 list = new ArrayList<UserDetails>();
                                 list.add(userDetails);

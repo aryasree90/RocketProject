@@ -84,8 +84,12 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
         String thumbName = appGlobals.thumbImageName(friendList.getImage());
 
-        String imageUrl = AppGlobals.SERVER_URL + thumbName;
-        appGlobals.loadImageFromServerWithDefault(imageUrl, holder.friendImage, "", false, context);
+        if(!TextUtils.isEmpty(thumbName)) {
+            String imageUrl = AppGlobals.SERVER_URL + thumbName;
+            appGlobals.loadImageFromServerWithDefault(imageUrl, holder.friendImage, "", false, context);
+        } else {
+            holder.friendImage.setImageResource(R.drawable.default_profile);
+        }
 
         holder.friendImage.setOnClickListener(new View.OnClickListener() {
             @Override

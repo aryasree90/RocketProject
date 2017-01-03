@@ -324,9 +324,11 @@ public class AppGlobals {
     }
 
     public String thumbImageName(String imageName) {
-        String mainName = imageName.split(appGlobals.IMG_FILE_EXTENSION)[0];
-        String thumbName = mainName + "_th" + appGlobals.IMG_FILE_EXTENSION;
-
+        String thumbName = "";
+        if(!TextUtils.isEmpty(imageName)) {
+            String mainName = imageName.split(appGlobals.IMG_FILE_EXTENSION)[0];
+            thumbName = mainName + "_th" + appGlobals.IMG_FILE_EXTENSION;
+        }
         return thumbName;
     }
 

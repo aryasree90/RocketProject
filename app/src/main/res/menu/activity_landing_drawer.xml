@@ -1,34 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/user_group">
-
-        <item
-            android:id="@+id/my_home"
-            android:icon="@mipmap/ic_home_black"
-            android:title="@string/home" />
-        <item
-            android:id="@+id/my_friends"
-            android:icon="@mipmap/ic_people_black"
-            android:title="@string/my_friends" />
-        <item
-            android:id="@+id/location"
-            android:icon="@mipmap/ic_locate_us"
-            android:title="@string/locate_us" />
-        <item
-            android:id="@+id/transactions"
-            android:icon="@mipmap/ic_transactions"
-            android:title="@string/transactions" />
-        <item
-            android:id="@+id/services"
-            android:icon="@mipmap/ic_locate_us"
-            android:title="@string/services" />
-        <item
-            android:id="@+id/settings"
-            android:icon="@mipmap/ic_settings"
-            android:title="@string/settings" />
-    </group>
+    <group android:checkableBehavior="single">
 
     <group android:checkableBehavior="single"
         android:id="@+id/admin">
@@ -43,6 +16,23 @@
                     android:id="@+id/id_assign"
                     android:icon="@mipmap/ic_id"
                     android:title="@string/admin_assign_id" />
+            </menu>
+        </item>
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/cashier">
+        <item
+            android:title="@string/cashier">
+            <menu>
+                <item
+                    android:id="@+id/user_transactions"
+                    android:icon="@mipmap/ic_currency"
+                    android:title="@string/user_trans" />
+                <item
+                    android:id="@+id/club_transactions"
+                    android:icon="@mipmap/ic_currency"
+                    android:title="@string/club_trans" />
             </menu>
         </item>
     </group>
@@ -73,20 +63,32 @@
     </group>
 
     <group android:checkableBehavior="single"
-        android:id="@+id/cashier">
+        android:id="@+id/user_group">
+
         <item
-            android:title="@string/cashier">
-            <menu>
-                <item
-                    android:id="@+id/user_transactions"
-                    android:icon="@mipmap/ic_currency"
-                    android:title="@string/user_trans" />
-                <item
-                    android:id="@+id/club_transactions"
-                    android:icon="@mipmap/ic_currency"
-                    android:title="@string/club_trans" />
-            </menu>
-        </item>
+            android:id="@+id/my_home"
+            android:icon="@mipmap/ic_home_black"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/my_friends"
+            android:icon="@mipmap/ic_people_black"
+            android:title="@string/my_friends" />
+        <item
+            android:id="@+id/location"
+            android:icon="@mipmap/ic_locate_us"
+            android:title="@string/locate_us" />
+        <item
+            android:id="@+id/transactions"
+            android:icon="@mipmap/ic_transactions"
+            android:title="@string/transactions" />
+        <item
+            android:id="@+id/services"
+            android:icon="@mipmap/ic_locate_us"
+            android:title="@string/services" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@mipmap/ic_settings"
+            android:title="@string/settings" />
     </group>
 
     <group android:checkableBehavior="single"
@@ -103,5 +105,6 @@
                     android:title="@string/contact_us" />
             </menu>
         </item>
+    </group>
     </group>
 </menu>
