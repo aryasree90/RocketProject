@@ -141,6 +141,11 @@ public class UserTransFragment extends Fragment {
                             return;
                         }
 
+                        if(TextUtils.isEmpty(transType)) {
+                            appGlobals.toastMsg(context, getString(R.string.invalid_trans_type), appGlobals.LENGTH_LONG);
+                            return;
+                        }
+
                         long timeStamp = System.currentTimeMillis();
 
                         if(transType.equals(TRANSACTION_TYPE_LIST[2])) {
@@ -211,6 +216,9 @@ public class UserTransFragment extends Fragment {
                                 memName.setText(userDetails.getUserName());
                                 memNum.setText(userDetails.getMobile());
 
+                                searchMem.setEnabled(false);
+                                amount.requestFocus();
+
                                 memberDetails.setVisibility(View.VISIBLE);
                                 transDetails.setVisibility(View.VISIBLE);
 
@@ -221,6 +229,7 @@ public class UserTransFragment extends Fragment {
                                 clearFields();
                             }
                         } else if(URL.equals(MEMBER_TRANS_URL)) {
+                            searchMem.setEnabled(true);
                             if(response.equals("success")) {
                                 appGlobals.toastMsg(context, getString(R.string.trans_save), appGlobals.LENGTH_LONG);
                                 clearFields();
@@ -233,20 +242,18 @@ public class UserTransFragment extends Fragment {
 
                                 UserTransaction[] userTransactions = gson.fromJson(response, UserTransaction[].class);
 
+                                String creditAmt = "0", bonusAmt = "0";
                                 if(userTransactions.length > 0) {
                                     UserTransaction trans = userTransactions[0];
-
-                                    String creditAmt = "0", bonusAmt = "0";
 
                                     if(!TextUtils.isEmpty(trans.getAvail_credit()))
                                         creditAmt = trans.getAvail_credit();
 
                                     if(!TextUtils.isEmpty(trans.getBonus()))
                                         bonusAmt = trans.getBonus();
-
-                                    creditAvail.setText(getString(R.string.credit_) + creditAmt);
-                                    bonusAvail.setText(getString(R.string.bonus_) + bonusAmt);
                                 }
+                                creditAvail.setText(getString(R.string.credit_) + creditAmt);
+                                bonusAvail.setText(getString(R.string.bonus_) + bonusAmt);
                             }
                         }
                         appGlobals.cancelDialog(progressDialog);
@@ -279,6 +286,7 @@ public class UserTransFragment extends Fragment {
 
     private void clearFields() {
         searchMem.setText("");
+        searchMem.setEnabled(true);
         searchMem.requestFocus();
 
         memId.setText("");

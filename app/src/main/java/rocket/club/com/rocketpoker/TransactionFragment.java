@@ -97,9 +97,16 @@ public class TransactionFragment extends Fragment {
                                 Gson gson = new Gson();
                                 UserTransaction[] userTransactions = gson.fromJson(response, UserTransaction[].class);
 
+                                String creditAmt = "0", bonusAmt = "0";
                                 if(userTransactions.length > 0) {
+                                    UserTransaction latestTrans = userTransactions[0];
+                                    creditAmt = latestTrans.getAvail_credit();
+                                    bonusAmt = latestTrans.getBonus();
                                     loadTransactionDetails(userTransactions);
                                 }
+
+                                creditText.setText(getString(R.string.credit_) + creditAmt);
+                                bonusText.setText(getString(R.string.bonus_) + bonusAmt);
                             }
                         }
                         appGlobals.cancelDialog(progressDialog);
@@ -124,9 +131,9 @@ public class TransactionFragment extends Fragment {
 
     private void loadTransactionDetails(UserTransaction[] userTransactions) {
 
-        UserTransaction latestTrans = userTransactions[0];
+        /*UserTransaction latestTrans = userTransactions[0];
         creditText.setText(getString(R.string.credit_) + latestTrans.getAvail_credit());
-        bonusText.setText(getString(R.string.bonus_) + latestTrans.getBonus());
+        bonusText.setText(getString(R.string.bonus_) + latestTrans.getBonus());*/
 
         TransactionAdapter adapter = new TransactionAdapter(userTransactions, context);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);

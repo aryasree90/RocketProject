@@ -189,6 +189,7 @@
     <string name="saving_trans">Saving Transaction</string>
     <string name="trans_fail">Unable to save transaction</string>
     <string name="invalid_amt">Invalid Amount</string>
+    <string name="invalid_trans_type">Invalid Transaction Type</string>
     <string name="credit_">Credit :&#160;</string>
     <string name="bonus_">Bonus :&#160;</string>
     <string name="credit_limit">Credit limit reached</string>
