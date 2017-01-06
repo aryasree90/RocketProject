@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,10 +54,11 @@ public class UserTransFragment extends Fragment {
     TextView memNotFound, memId, memName, memNum;
     TextView creditAvail, bonusAvail;
     ImageButton searchBtn;
-    LinearLayout memberDetails, transDetails;
+    LinearLayout transDetails;
+    RelativeLayout memberDetails;
     MaterialBetterSpinner transTypeSpinner = null, payTypeSpinner = null;
     ArrayAdapter<String> transTypeAdapter = null, payTypeAdapter = null;
-    Button save, clear;
+    Button save, clear, userTrans;
 
     String[] TRANSACTION_TYPE_LIST = null, PAY_TYPE_LIST = null;
     ProgressDialog progressDialog = null;
@@ -85,7 +87,7 @@ public class UserTransFragment extends Fragment {
         searchMem = (EditText) view.findViewById(R.id.searchText);
         memNotFound = (TextView) view.findViewById(R.id.txt_member_not_found);
         searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
-        memberDetails = (LinearLayout) view.findViewById(R.id.show_member_details);
+        memberDetails = (RelativeLayout) view.findViewById(R.id.show_member_details);
         transDetails = (LinearLayout) view.findViewById(R.id.trans_details);
 
         memId = (TextView) view.findViewById(R.id.memberId);
@@ -113,16 +115,16 @@ public class UserTransFragment extends Fragment {
                 description.setVisibility(View.GONE);
                 payTypeSpinner.setVisibility(View.INVISIBLE);
 
-                if(position == 0) {
+                if (position == 0) {
                     PAY_TYPE_LIST = getResources().getStringArray(R.array.pay_type_cash_in);
-                } else if(position == 1) {
+                } else if (position == 1) {
                     PAY_TYPE_LIST = getResources().getStringArray(R.array.pay_type_cash_out);
-                } else if(position == 5) {
+                } else if (position == 5) {
                     payTypeSpinner.setVisibility(View.GONE);
                     description.setVisibility(View.VISIBLE);
                 }
 
-                if(position == 0 || position == 1) {
+                if (position == 0 || position == 1) {
                     payTypeSpinner.setVisibility(View.VISIBLE);
                     payTypeAdapter = new ArrayAdapter<String>(context,
                             android.R.layout.simple_dropdown_item_1line, PAY_TYPE_LIST);
@@ -131,6 +133,7 @@ public class UserTransFragment extends Fragment {
             }
         });
 
+        userTrans = (Button) view.findViewById(R.id.userTrans);
         save = (Button) view.findViewById(R.id.btn_save);
         clear = (Button) view.findViewById(R.id.btn_clear);
 
@@ -232,12 +235,33 @@ public class UserTransFragment extends Fragment {
                     case R.id.btn_clear:
                         clearFields();
                         break;
+                    case R.id.userTrans:
+                        String searchMob =  memNum.getText().toString();
+
+                        Class fragmentClass = TransactionFragment.class;
+                        Bundle args = new Bundle();
+                        args.putString(TransactionFragment.MOB_TRANS, searchMob);
+                        Fragment fragment = null;
+                        try {
+                            fragment = (Fragment) fragmentClass.newInstance();
+                            fragment.setArguments(args);
+                            appGlobals.currentFragmentClass = fragmentClass;
+                        } catch (Exception e) {
+                            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
+                        }
+
+                        // Insert the fragment by replacing any existing fragment
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+                        break;
                 }
             }
         };
         searchBtn.setOnClickListener(clickListener);
         save.setOnClickListener(clickListener);
         clear.setOnClickListener(clickListener);
+        userTrans.setOnClickListener(clickListener);
     }
 
     private void serverCall(final Map<String, String> map, final String URL) {

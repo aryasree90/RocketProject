@@ -13,7 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -47,6 +51,9 @@ public class TransactionFragment extends Fragment {
 
     TextView creditText, bonusText;
 
+    public static final String MOB_TRANS = "Mobile Transaction";
+
+    String mobNum = "";
     private final String TAG = "TransactionFragment";
     public static final String FETCH_TRANS_URL = AppGlobals.SERVER_URL + "fetchTransaction.php";
 
@@ -57,7 +64,6 @@ public class TransactionFragment extends Fragment {
 
         initializeWidgets(view);
 
-        initializeData();
         return view;
     }
 
@@ -65,15 +71,38 @@ public class TransactionFragment extends Fragment {
         context = getActivity();
         appGlobals = AppGlobals.getInstance(context);
 
+        Bundle bundle = getArguments();
+        mobNum = bundle.getString(MOB_TRANS);
+
         transactionView = (RecyclerView) view.findViewById(R.id.transList);
         creditText = (TextView) view.findViewById(R.id.credit);
         bonusText = (TextView) view.findViewById(R.id.bonus);
+
+        initializeData(mobNum);
+
+/*        if(pageType == PAGE_CASHIER) {
+            searchBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String mob = searchText.getText().toString();
+
+                    if(TextUtils.isEmpty(mob)) {
+                        appGlobals.toastMsg(context, getString(R.string.login_mobile), Toast.LENGTH_LONG);
+                        return;
+                    }
+
+                    initializeData(mob);
+                }
+            });
+        } else {
+            initializeData(appGlobals.sharedPref.getLoginMobile());
+        }*/
     }
 
-    private void initializeData() {
+    private void initializeData(String user) {
         Map<String, String> search_map = new HashMap<String, String>();
         search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-        search_map.put("user", appGlobals.sharedPref.getLoginMobile());
+        search_map.put("user", user);
 
         progressDialog = appGlobals.showDialog(context, getString(R.string.fetch_trans));
 

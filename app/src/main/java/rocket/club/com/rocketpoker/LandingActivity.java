@@ -323,6 +323,8 @@ public class LandingActivity extends AppCompatActivity
                 break;
             case  R.id.transactions:
                 fragmentClass = TransactionFragment.class;
+                args = new Bundle();
+                args.putString(TransactionFragment.MOB_TRANS, appGlobals.sharedPref.getLoginMobile());
                 break;
             default:
                 fragmentClass = HomeFragment.class;

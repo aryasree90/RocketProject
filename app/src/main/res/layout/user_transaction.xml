@@ -42,7 +42,7 @@
             android:textSize="15sp"
             android:textColor="@color/colorPrimary"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/show_member_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,6 +60,7 @@
                 android:id="@+id/memberName"
                 android:textStyle="bold"
                 android:textSize="14sp"
+                android:layout_below="@+id/memberId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -67,10 +68,19 @@
                 android:id="@+id/memberNumber"
                 android:textStyle="bold"
                 android:textSize="14sp"
-                android:layout_width="match_parent"
+                android:layout_below="@+id/memberName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/userTrans"
+                android:text="@string/user_trans"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/trans_details"
