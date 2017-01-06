@@ -10,12 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -47,16 +49,16 @@ public class UserTransFragment extends Fragment {
     Context context = null;
     AppGlobals appGlobals = null;
 
-    EditText searchMem, amount;
+    EditText searchMem, amount, description;
     TextView memNotFound, memId, memName, memNum;
     TextView creditAvail, bonusAvail;
     ImageButton searchBtn;
     LinearLayout memberDetails, transDetails;
-    MaterialBetterSpinner transTypeSpinner = null;
-    ArrayAdapter<String> transTypeAdapter = null;
+    MaterialBetterSpinner transTypeSpinner = null, payTypeSpinner = null;
+    ArrayAdapter<String> transTypeAdapter = null, payTypeAdapter = null;
     Button save, clear;
 
-    String[] TRANSACTION_TYPE_LIST = null;
+    String[] TRANSACTION_TYPE_LIST = null, PAY_TYPE_LIST = null;
     ProgressDialog progressDialog = null;
     View.OnClickListener clickListener = null;
     public static final String FETCH_TRANS_URL = AppGlobals.SERVER_URL + "fetchTransaction.php";
@@ -98,6 +100,37 @@ public class UserTransFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, TRANSACTION_TYPE_LIST);
         transTypeSpinner.setAdapter(transTypeAdapter);
 
+        payTypeSpinner = (MaterialBetterSpinner) view.findViewById(R.id.payType);
+        payTypeSpinner.setVisibility(View.INVISIBLE);
+
+        description = (EditText) view.findViewById(R.id.descriptionText);
+        description.setVisibility(View.GONE);
+
+        transTypeSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                description.setVisibility(View.GONE);
+                payTypeSpinner.setVisibility(View.INVISIBLE);
+
+                if(position == 0) {
+                    PAY_TYPE_LIST = getResources().getStringArray(R.array.pay_type_cash_in);
+                } else if(position == 1) {
+                    PAY_TYPE_LIST = getResources().getStringArray(R.array.pay_type_cash_out);
+                } else if(position == 5) {
+                    payTypeSpinner.setVisibility(View.GONE);
+                    description.setVisibility(View.VISIBLE);
+                }
+
+                if(position == 0 || position == 1) {
+                    payTypeSpinner.setVisibility(View.VISIBLE);
+                    payTypeAdapter = new ArrayAdapter<String>(context,
+                            android.R.layout.simple_dropdown_item_1line, PAY_TYPE_LIST);
+                    payTypeSpinner.setAdapter(payTypeAdapter);
+                }
+            }
+        });
+
         save = (Button) view.findViewById(R.id.btn_save);
         clear = (Button) view.findViewById(R.id.btn_clear);
 
@@ -129,6 +162,7 @@ public class UserTransFragment extends Fragment {
                         break;
                     case R.id.btn_save:
 
+                        String extra = "";
                         String amt = amount.getText().toString();
                         String userMob =  memNum.getText().toString();
                         String transType = transTypeSpinner.getText().toString();
@@ -160,6 +194,14 @@ public class UserTransFragment extends Fragment {
                             bonusAmt -= Integer.parseInt(amt);
                         }
 
+                        if((transType.equals(TRANSACTION_TYPE_LIST[0])) ||
+                                (transType.equals(TRANSACTION_TYPE_LIST[1]))) {
+                            extra = payTypeSpinner.getText().toString();
+                        } else if(transType.equals(TRANSACTION_TYPE_LIST[5])) {
+                            extra = description.getText().toString();
+                        }
+
+
                         if(creditAmt > 5000) {
                             appGlobals.toastMsg(context, getString(R.string.credit_limit), appGlobals.LENGTH_LONG);
                             return;
@@ -178,6 +220,7 @@ public class UserTransFragment extends Fragment {
                         trans_map.put("timeStamp", String.valueOf(timeStamp));
                         trans_map.put("credit", "" + creditAmt);
                         trans_map.put("bonus", "" + bonusAmt);
+                        trans_map.put("extra", extra);
 
                         progressDialog = appGlobals.showDialog(context, getString(R.string.saving_trans));
                         serverCall(trans_map, MEMBER_TRANS_URL);

@@ -16,6 +16,14 @@
                     android:id="@+id/id_assign"
                     android:icon="@mipmap/ic_id"
                     android:title="@string/admin_assign_id" />
+                <item
+                    android:id="@+id/add_exp_type"
+                    android:icon="@mipmap/ic_id"
+                    android:title="@string/add_exp_type" />
+                <item
+                    android:id="@+id/add_emp_sal"
+                    android:icon="@mipmap/ic_id"
+                    android:title="@string/add_emp_sal" />
             </menu>
         </item>
     </group>
@@ -30,9 +38,13 @@
                     android:icon="@mipmap/ic_currency"
                     android:title="@string/user_trans" />
                 <item
-                    android:id="@+id/club_transactions"
+                    android:id="@+id/salary_transactions"
                     android:icon="@mipmap/ic_currency"
-                    android:title="@string/club_trans" />
+                    android:title="@string/sal_trans" />
+                <item
+                    android:id="@+id/exp_transactions"
+                    android:icon="@mipmap/ic_currency"
+                    android:title="@string/exp_trans" />
             </menu>
         </item>
     </group>

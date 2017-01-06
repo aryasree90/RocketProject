@@ -318,7 +318,7 @@ public class LandingActivity extends AppCompatActivity
             case R.id.user_transactions:
                 fragmentClass = UserTransFragment.class;
                 break;
-            case R.id.club_transactions:
+            case R.id.salary_transactions:
 
                 break;
             case  R.id.transactions:

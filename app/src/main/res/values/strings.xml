@@ -72,6 +72,16 @@
         <item><string name="bonus_redeem">Redeem Bonus</string></item>
     </string-array>
 
+    <string-array name="pay_type_cash_in">
+        <item><string name="type_in_cash">Cash</string></item>
+        <item><string name="type_in_card">Card</string></item>
+    </string-array>
+
+    <string-array name="pay_type_cash_out">
+        <item><string name="type_out_cash">Cash</string></item>
+        <item><string name="type_out_online">Online</string></item>
+    </string-array>0
+
     <string-array name="game_list">
         <item><string name="game1">Texas Hold Em</string></item>
         <item><string name="game2">Omaha</string></item>
@@ -112,6 +122,7 @@
     <string name="set_game_time">Set Game Time</string>
     <string name="search_with_mob">Search with Mobile Number</string>
     <string name="search_member_num_id">Search with Mobile or Rocket Id</string>
+    <string name="description">Description</string>
     <string name="go_search">Go</string>
     <string name="friend_not_found">Unable to find the number</string>
     <string name="member_not_found">Unable to find the member</string>
@@ -163,9 +174,12 @@
 
     <string name="admin_assign_role">Assign Role</string>
     <string name="admin_assign_id">Assign Id</string>
+    <string name="add_exp_type">Add Expense Type</string>
+    <string name="add_emp_sal">Add Employee Salary</string>
 
     <string name="user_trans">User Transaction</string>
-    <string name="club_trans">Club Transaction</string>
+    <string name="sal_trans">Salary Transaction</string>
+    <string name="exp_trans">Expense Transaction</string>
 
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
@@ -184,6 +198,7 @@
     <string name="signoutNotify">Do you want to exit?</string>
 
     <string name="amount">Amount</string>
+    <string name="paymnt_type">Payment Type</string>
     <string name="trans_type">Transaction Type</string>
     <string name="trans_save">Transaction Saved</string>
     <string name="saving_trans">Saving Transaction</string>
