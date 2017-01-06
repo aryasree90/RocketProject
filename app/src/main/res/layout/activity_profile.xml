@@ -19,7 +19,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:layout_width="100dp"
+            android:layout_width="105dp"
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
