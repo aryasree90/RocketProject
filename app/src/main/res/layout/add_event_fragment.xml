@@ -29,7 +29,7 @@
 
     <EditText
         android:id="@+id/headerText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:hint="@string/eventHeader" />
@@ -37,7 +37,7 @@
     <EditText
         android:id="@+id/summaryText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_marginTop="10dp"
         android:hint="@string/eventSummary"
         android:singleLine="false" />
