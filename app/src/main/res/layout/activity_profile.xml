@@ -127,7 +127,8 @@
         <rocket.club.com.rocketpoker.utils.MultiSelectionSpinner
             android:id="@+id/gameType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
             android:hint="@string/game_type"
             android:textColorHint="#05ab9a"
             app:met_floatingLabel="normal" />

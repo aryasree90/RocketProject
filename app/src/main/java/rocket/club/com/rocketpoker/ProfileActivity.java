@@ -156,9 +156,9 @@ public class ProfileActivity extends ActionBarActivity {
                     case R.id.btn_clear:
                         clearFields();
                         break;
-                    case R.id.userProfilePic:
+                    /*case R.id.userProfilePic:
                         createMediaDialog();
-                        break;
+                        break;*/
                     case R.id.emptyImage:
                         profileImage.setImageResource(R.drawable.default_profile);
                         imagePath = "";
@@ -189,7 +189,7 @@ public class ProfileActivity extends ActionBarActivity {
                         resetMediaDialog();
                         break;
                     case R.id.btnGallery:
-
+                    case R.id.userProfilePic:
                         Intent galleryIntent = new Intent();
                         galleryIntent.setType("image/*");
                         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -565,7 +565,8 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void resetMediaDialog() {
-        dialog.cancel();
+        if(dialog != null && dialog.isShowing())
+            dialog.cancel();
     }
 
 
