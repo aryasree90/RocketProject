@@ -180,7 +180,7 @@ public class UserTransFragment extends Fragment {
                             return;
                         }
 
-                        long timeStamp = System.currentTimeMillis();
+                        String timeStamp = String.valueOf(System.currentTimeMillis());
 
                         if(transType.equals(TRANSACTION_TYPE_LIST[2])) {
                             creditAmt += Integer.parseInt(amt);
@@ -194,11 +194,13 @@ public class UserTransFragment extends Fragment {
                             bonusAmt -= Integer.parseInt(amt);
                         }
 
+                        String saveExp = "0";
                         if((transType.equals(TRANSACTION_TYPE_LIST[0])) ||
                                 (transType.equals(TRANSACTION_TYPE_LIST[1]))) {
                             extra = payTypeSpinner.getText().toString();
                         } else if(transType.equals(TRANSACTION_TYPE_LIST[5])) {
                             extra = description.getText().toString();
+                            saveExp = "1";
                         }
 
 
@@ -217,10 +219,11 @@ public class UserTransFragment extends Fragment {
                         trans_map.put("user", userMob);
                         trans_map.put("amount", amt);
                         trans_map.put("transType", transType);
-                        trans_map.put("timeStamp", String.valueOf(timeStamp));
+                        trans_map.put("timeStamp", timeStamp);
                         trans_map.put("credit", "" + creditAmt);
                         trans_map.put("bonus", "" + bonusAmt);
                         trans_map.put("extra", extra);
+                        trans_map.put("saveExp", saveExp);
 
                         progressDialog = appGlobals.showDialog(context, getString(R.string.saving_trans));
                         serverCall(trans_map, MEMBER_TRANS_URL);
