@@ -176,6 +176,10 @@
     <string name="admin_assign_id">Assign Id</string>
     <string name="add_exp_type">Add Expense Type</string>
     <string name="add_emp_sal">Add Employee Salary</string>
+    <string name="larger_amount">Amount exceeded max limit </string>
+    <string name="adv">Adv :</string>
+    <string name="bal">Bal :</string>
+    <string name="month">Month :</string>
 
     <string name="user_trans">User Transaction</string>
     <string name="sal_trans">Salary Transaction</string>
@@ -197,8 +201,11 @@
     <string name="send_to">Send</string>
     <string name="signoutNotify">Do you want to exit?</string>
 
+
+
     <string name="amount">Amount</string>
     <string name="paymnt_type">Payment Type</string>
+    <string name="select_paymnt_type">Select Payment Type</string>
     <string name="trans_type">Transaction Type</string>
     <string name="trans_save">Transaction Saved</string>
     <string name="saving_trans">Saving Transaction</string>

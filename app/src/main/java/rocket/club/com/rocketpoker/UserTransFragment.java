@@ -65,7 +65,7 @@ public class UserTransFragment extends Fragment {
     View.OnClickListener clickListener = null;
     public static final String FETCH_TRANS_URL = AppGlobals.SERVER_URL + "fetchTransaction.php";
     public static final String MEMBER_TRANS_URL = AppGlobals.SERVER_URL + "memberTransaction.php";
-    public static final String MEMBER_SEARCH_URL = AppGlobals.SERVER_URL + "searchMember.php";
+    public static final String MEMBER_SEARCH_URL = AppGlobals.SERVER_URL + AppGlobals.SEARCH_MEMBER;
     private final String TAG = "UserTransFragment";
 
     @Override

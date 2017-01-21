@@ -84,9 +84,10 @@ public class AppGlobals {
     }
 
     // variables
-
+    public final String[] monthList = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
     public static final String SERVER_URL = "http://45.79.130.11/rocketPoker/";
     public static final String EDITORS_URL = "addEvents.php";
+    public static final String SEARCH_MEMBER = "searchMember.php";
     public final String FETCH_IMAGE = SERVER_URL + "fetchImage.php";
     public boolean enableLog = true;
     public int chunkSize = 100;
