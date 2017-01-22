@@ -321,6 +321,9 @@ public class LandingActivity extends AppCompatActivity
             case R.id.salary_transactions:
                 fragmentClass = SalaryTransFragment.class;
                 break;
+            case R.id.exp_transactions:
+                fragmentClass = ExpenseTransFragment.class;
+                break;
             case  R.id.transactions:
                 fragmentClass = TransactionFragment.class;
                 args = new Bundle();

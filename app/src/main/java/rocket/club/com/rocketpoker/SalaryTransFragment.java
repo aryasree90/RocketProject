@@ -125,7 +125,7 @@ public class SalaryTransFragment extends Fragment {
                             appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
                             return;
                         }
-
+                        appGlobals.toastMsg(context, empNum, appGlobals.LENGTH_LONG);
                         Map<String, String> search_map = new HashMap<String, String>();
                         search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                         search_map.put("mem_mobile", empNum);
@@ -170,11 +170,7 @@ public class SalaryTransFragment extends Fragment {
                             return;
                         }
 
-//                        int amtToPay = Integer.parseInt(tot) - Integer.parseInt(salary);
-
-//                        if(amtToPay > 0) {
-                            salary = "" + (Integer.parseInt(adv) + Integer.parseInt(salary));
-//                        }
+                        salary = "" + (Integer.parseInt(adv) + Integer.parseInt(salary));
 
                         Map<String, String> salary_map = new HashMap<String, String>();
                         salary_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
@@ -248,14 +244,12 @@ public class SalaryTransFragment extends Fragment {
                                 String adv = empDetails.getSalary();
                                 String mnth = empDetails.getMonth();
 
-                                if(TextUtils.isEmpty(adv))
-                                    adv = "0";
-
                                 int salToPay = Integer.parseInt(tot) - Integer.parseInt(adv);
 
                                 if(salToPay > 0) {
                                     bal = "" + salToPay;
                                 }
+
 
                                 if(TextUtils.isEmpty(bal))
                                     bal = "0";

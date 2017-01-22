@@ -183,11 +183,15 @@
 
     <string name="user_trans">User Transaction</string>
     <string name="sal_trans">Salary Transaction</string>
-    <string name="exp_trans">Expense Transaction</string>
+    <string name="exp_trans">Club Expenses</string>
+
+    <string name="empty_exp_type">Select an Expense Type</string>
+    <string name="empty_exp_text">Enter an Expense Type</string>
+    <string name="empty_exp_amount">Enter an amount</string>
 
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
-
+    <string name="newItem">New</string>
     <string name="eventHeader">Event Header</string>
     <string name="eventSummary">Event Summary</string>
     <string name="addEvent">Add New Event</string>
@@ -205,6 +209,7 @@
 
     <string name="amount">Amount</string>
     <string name="paymnt_type">Payment Type</string>
+    <string name="exp_type">Expense Type</string>
     <string name="select_paymnt_type">Select Payment Type</string>
     <string name="trans_type">Transaction Type</string>
     <string name="trans_save">Transaction Saved</string>
@@ -281,6 +286,8 @@ pocket be sure to find yourself a welcoming spot at our action heavy board.</str
     <string name="save_new_game">Saving New Game</string>
     <string name="save_live_update">Saving Live Update</string>
     <string name="search_member">Searching Members</string>
+    <string name="fetch_exp_type">Fetch Expense Type</string>
+    <string name="fetch_exp_type_fail">Unable to Fetch Expense Type</string>
     <string name="assign_detail">Updating Details</string>
     <string name="saving">Saving</string>
     <string name="send_invitation">Sending Invitation</string>
