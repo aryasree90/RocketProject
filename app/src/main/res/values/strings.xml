@@ -188,6 +188,7 @@
     <string name="empty_exp_type">Select an Expense Type</string>
     <string name="empty_exp_text">Enter an Expense Type</string>
     <string name="empty_exp_amount">Enter an amount</string>
+    <string name="exp_text_avail">Expense Type already added</string>
 
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
@@ -210,6 +211,7 @@
     <string name="amount">Amount</string>
     <string name="paymnt_type">Payment Type</string>
     <string name="exp_type">Expense Type</string>
+    <string name="new_exp_type">New Expense Type</string>
     <string name="select_paymnt_type">Select Payment Type</string>
     <string name="trans_type">Transaction Type</string>
     <string name="trans_save">Transaction Saved</string>

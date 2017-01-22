@@ -10,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/exp_trans"
+        android:text="@string/add_exp_type"
         android:textSize="15sp" />
 
     <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-        android:id="@+id/expType"
+        android:id="@+id/curExpType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/exp_type"
@@ -22,27 +22,12 @@
         app:met_floatingLabel="normal" />
 
     <EditText
-        android:id="@+id/expTypeText"
+        android:id="@+id/newExpType"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
         android:singleLine="true"
-        android:hint="@string/exp_type"
+        android:hint="@string/new_exp_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/amount"
-        android:hint="@string/amount"
-        android:inputType="number"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/expDesc"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="150dp" />
 
     <TextView
         android:layout_width="match_parent"

@@ -329,6 +329,9 @@ public class LandingActivity extends AppCompatActivity
                 args = new Bundle();
                 args.putString(TransactionFragment.MOB_TRANS, appGlobals.sharedPref.getLoginMobile());
                 break;
+            case R.id.add_exp_type:
+                fragmentClass = AddExpenseType.class;
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }
