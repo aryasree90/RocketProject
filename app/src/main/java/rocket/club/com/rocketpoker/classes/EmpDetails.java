@@ -9,10 +9,13 @@ public class EmpDetails {
     private String empNum;
     private String empName;
     private String empSalary;
-//    private String advSalary;
     private String salary;
     private String month;
     private String payType;
+
+    private String reg_mob;
+    private String name;
+    private String userId;
 
     public String getEmpId() {
         return empId;
@@ -30,10 +33,6 @@ public class EmpDetails {
         return empSalary;
     }
 
-//    public String getAdvSalary() {
-//        return advSalary;
-//    }
-
     public String getSalary() {
         return salary;
     }
@@ -44,5 +43,17 @@ public class EmpDetails {
 
     public String getPayType() {
         return payType;
+    }
+
+    public String getReg_mob() {
+        return reg_mob;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

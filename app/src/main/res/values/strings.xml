@@ -144,6 +144,7 @@
     <string name="camera">Camera</string>
     <string name="select_media">Select Media</string>
     <string name="live_update_type">Select Type</string>
+    <string name="cur_sal">Current Salary :&#160;</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -215,6 +216,7 @@
     <string name="select_paymnt_type">Select Payment Type</string>
     <string name="trans_type">Transaction Type</string>
     <string name="trans_save">Transaction Saved</string>
+    <string name="sal_save">Salary Saved</string>
     <string name="saving_trans">Saving Transaction</string>
     <string name="trans_fail">Unable to save transaction</string>
     <string name="invalid_amt">Invalid Amount</string>
@@ -287,6 +289,7 @@ pocket be sure to find yourself a welcoming spot at our action heavy board.</str
     <string name="save_new_summary">Saving New Summary</string>
     <string name="save_new_game">Saving New Game</string>
     <string name="save_live_update">Saving Live Update</string>
+    <string name="save_sal">Saving Salary</string>
     <string name="search_member">Searching Members</string>
     <string name="fetch_exp_type">Fetch Expense Type</string>
     <string name="fetch_exp_type_fail">Unable to Fetch Expense Type</string>

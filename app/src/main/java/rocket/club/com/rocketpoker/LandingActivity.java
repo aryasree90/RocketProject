@@ -332,6 +332,9 @@ public class LandingActivity extends AppCompatActivity
             case R.id.add_exp_type:
                 fragmentClass = AddExpenseType.class;
                 break;
+            case R.id.add_emp_sal:
+                fragmentClass = AddEmpSalary.class;
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }

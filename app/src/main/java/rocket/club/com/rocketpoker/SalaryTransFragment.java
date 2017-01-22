@@ -129,6 +129,7 @@ public class SalaryTransFragment extends Fragment {
                         Map<String, String> search_map = new HashMap<String, String>();
                         search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                         search_map.put("mem_mobile", empNum);
+                        search_map.put("type", "2");
                         progressDialog = appGlobals.showDialog(context, getString(R.string.search_member));
                         serverCall(search_map, MEMBER_SEARCH_URL);
 
