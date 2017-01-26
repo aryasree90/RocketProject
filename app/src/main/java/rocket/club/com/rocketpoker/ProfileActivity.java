@@ -81,7 +81,7 @@ public class ProfileActivity extends ActionBarActivity {
     int year, month, day;
     String imagePath = "";
     final String VALIDATION_URL = AppGlobals.SERVER_URL + "userProfile.php";
-    final String GAME_LIST_URL = AppGlobals.SERVER_URL + "fetchFromTable.php";
+    final String GAME_LIST_URL = AppGlobals.SERVER_URL + AppGlobals.FETCH_FROM_TABLE;
 
     Dialog dialog = null;
     View.OnClickListener clickListener = null;

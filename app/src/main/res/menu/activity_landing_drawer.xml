@@ -45,6 +45,14 @@
                     android:id="@+id/exp_transactions"
                     android:icon="@mipmap/ic_currency"
                     android:title="@string/exp_trans" />
+                <item
+                    android:id="@+id/salary_list"
+                    android:icon="@mipmap/ic_currency"
+                    android:title="@string/sal_list" />
+                <item
+                    android:id="@+id/exp_list"
+                    android:icon="@mipmap/ic_currency"
+                    android:title="@string/exp_list" />
             </menu>
         </item>
     </group>

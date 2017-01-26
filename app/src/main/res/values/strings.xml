@@ -182,9 +182,23 @@
     <string name="bal">Bal :</string>
     <string name="month">Month :</string>
 
+    <string name="exp_label1">Expense</string>
+    <string name="exp_label2">Amount</string>
+    <string name="exp_label3">Month</string>
+
+    <string name="sal_label1">Emp Id</string>
+    <string name="sal_label2">Amount</string>
+    <string name="sal_label3">Month</string>
+
+    <string name="popup_text1">Payment</string>
+    <string name="popup_text2"></string>
+    <string name="popup_text3"></string>
+
     <string name="user_trans">User Transaction</string>
     <string name="sal_trans">Salary Transaction</string>
     <string name="exp_trans">Club Expenses</string>
+    <string name="sal_list">Salary Details</string>
+    <string name="exp_list">Expense Details</string>
 
     <string name="empty_exp_type">Select an Expense Type</string>
     <string name="empty_exp_text">Enter an Expense Type</string>

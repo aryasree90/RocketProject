@@ -335,6 +335,16 @@ public class LandingActivity extends AppCompatActivity
             case R.id.add_emp_sal:
                 fragmentClass = AddEmpSalary.class;
                 break;
+            case R.id.salary_list:
+                fragmentClass = ClubDetails.class;
+                args = new Bundle();
+                args.putInt(ClubDetails.ID, ClubDetails.SAL_ID);
+                break;
+            case R.id.exp_list:
+                fragmentClass = ClubDetails.class;
+                args = new Bundle();
+                args.putInt(ClubDetails.ID, ClubDetails.EXP_ID);
+                break;
             default:
                 fragmentClass = HomeFragment.class;
         }

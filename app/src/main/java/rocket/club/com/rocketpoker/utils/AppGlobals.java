@@ -89,6 +89,8 @@ public class AppGlobals {
     public static final String EDITORS_URL = "addEvents.php";
     public static final String SEARCH_MEMBER = "searchMember.php";
     public final String FETCH_IMAGE = SERVER_URL + "fetchImage.php";
+    public static final String FETCH_FROM_TABLE = "fetchFromTable.php";
+    public static final String FETCH_FROM_DIST_TABLE = "fetchFromDistTable.php";
     public boolean enableLog = true;
     public int chunkSize = 100;
     public final int LENGTH_LONG = 1;
@@ -226,6 +228,10 @@ public class AppGlobals {
         return convertTime(System.currentTimeMillis());
     }
 
+    public static String convertDateTime(long timeStamp) {
+        String dateTime = convertDate(timeStamp) + " " + convertTime(timeStamp);
+        return dateTime;
+    }
 
     public static String convertTime(long timeStamp) {
         String time = (String) DateFormat.format("hh:mm a", timeStamp);
@@ -233,8 +239,13 @@ public class AppGlobals {
     }
 
     public static String convertDate(long timeStamp) {
-        String time = (String) DateFormat.format("yyyy-MM-dd", timeStamp);
-        return time;
+        String date = (String) DateFormat.format("yyyy-MM-dd", timeStamp);
+        return date;
+    }
+
+    public static String getMonthYear(long timeStamp) {
+        String month = (String) DateFormat.format("MMM yy", timeStamp);
+        return month;
     }
 
     public int getScreenHeight(Context context) {

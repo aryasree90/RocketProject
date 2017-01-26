@@ -17,6 +17,9 @@ public class EmpDetails {
     private String name;
     private String userId;
 
+    private String timeStamp;
+    private String cashier_mob;
+
     public String getEmpId() {
         return empId;
     }
@@ -55,5 +58,13 @@ public class EmpDetails {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public String getCashier_mob() {
+        return cashier_mob;
     }
 }
