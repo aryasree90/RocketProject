@@ -11,6 +11,7 @@
     <string name="login_mobile">Enter Mobile No.</string>
     <string name="btn_login">Login</string>
     <string name="btn_continue">Continue</string>
+    <string name="show_trans">Filter Transactions</string>
     <string name="btn_clear1">Clear</string>
     <string name="btn_clear">C</string>
     <string name="login_invalid_num">Enter a valid Number</string>
@@ -199,6 +200,9 @@
     <string name="exp_trans">Club Expenses</string>
     <string name="sal_list">Salary Details</string>
     <string name="exp_list">Expense Details</string>
+
+    <string name="from_month">From Month</string>
+    <string name="to_month">To Month</string>
 
     <string name="empty_exp_type">Select an Expense Type</string>
     <string name="empty_exp_text">Enter an Expense Type</string>

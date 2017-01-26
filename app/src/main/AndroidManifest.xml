@@ -68,6 +68,8 @@
             android:name=".LandingActivity"
             android:label="@string/title_activity_landing"></activity>
         <activity
+            android:name=".FilterTransaction"></activity>
+        <activity
             android:name=".EventDetailActivity"
             android:label="@string/title_activity_event_detail">
         </activity>

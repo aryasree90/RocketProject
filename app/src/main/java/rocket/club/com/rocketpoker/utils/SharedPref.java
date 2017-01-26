@@ -23,12 +23,12 @@ public class SharedPref {
     private final String CHAT_NOTIF = "chatNotif";
     private final String USER_TYPE = "userType";
     private final String LIKE_EVENT = "likeEvent";
+    private final String ROCKET_ID = "rocketId";
 
     public SharedPref(Context ctx) {
         pref = ctx.getSharedPreferences("MySharedPref", ctx.MODE_PRIVATE);
         editor= pref.edit();
     }
-
 
     public void setLoginMobile(String mobile) {
         editor.putString(LOGIN_MOBILE, mobile);
@@ -85,6 +85,11 @@ public class SharedPref {
         editor.commit();
     }
 
+    public void setRocketId(String rocketId) {
+        editor.putString(ROCKET_ID, rocketId);
+        editor.commit();
+    }
+
     public String getLoginMobile() {
         return pref.getString(LOGIN_MOBILE, "null");
     }
@@ -127,5 +132,9 @@ public class SharedPref {
 
     public String getLikeEventList() {
         return pref.getString(LIKE_EVENT, "");
+    }
+
+    public String getRocketId() {
+        return pref.getString(ROCKET_ID, "");
     }
 }

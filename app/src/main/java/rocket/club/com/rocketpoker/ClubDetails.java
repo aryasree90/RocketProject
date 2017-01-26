@@ -2,6 +2,7 @@ package rocket.club.com.rocketpoker;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -47,7 +48,7 @@ public class ClubDetails extends Fragment {
 
     Context context = null;
     AppGlobals appGlobals = null;
-    Button btnClear = null;
+    Button btnClear = null, showTransBtn;
     View.OnClickListener clickListener = null;
     MaterialBetterSpinner filter1, filter2, filter3;
     TextView label1, label2, label3, label;
@@ -90,6 +91,8 @@ public class ClubDetails extends Fragment {
         label2 = (TextView) view.findViewById(R.id.label2);
         label3 = (TextView) view.findViewById(R.id.label3);
 
+        showTransBtn = (Button) view.findViewById(R.id.showTransBtn);
+        showTransBtn.setVisibility(View.VISIBLE);
         btnClear = (Button) view.findViewById(R.id.clearBtn);
 
         clubDetailsView = (RecyclerView) view.findViewById(R.id.clubList);
@@ -196,6 +199,20 @@ public class ClubDetails extends Fragment {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
+                    case R.id.showTransBtn:
+
+                        String trans = "";
+                        if(setId == EXP_ID) {
+                            trans = FilterTransaction.EXPENSE;
+                        } else {
+                            trans = FilterTransaction.SALARY;
+                        }
+
+                        Intent filterTrans = new Intent(context, FilterTransaction.class);
+                        filterTrans.putExtra(FilterTransaction.FILTER_TRANS, trans);
+                        startActivity(filterTrans);
+
+                        break;
                     case R.id.clearBtn:
                         filter1.setText("");
                         filter2.setText("");
@@ -206,6 +223,7 @@ public class ClubDetails extends Fragment {
             }
         };
         btnClear.setOnClickListener(clickListener);
+        showTransBtn.setOnClickListener(clickListener);
     }
 
     private void loadFilter() {
