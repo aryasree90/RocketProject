@@ -237,6 +237,7 @@ public class UserTransFragment extends Fragment {
                         clearFields();
                         break;
                     case R.id.userTrans:
+
                         String searchId =  memId.getText().toString();
 
                         Intent filterTrans = new Intent(context, FilterTransaction.class);
@@ -260,6 +261,11 @@ public class UserTransFragment extends Fragment {
                         // Insert the fragment by replacing any existing fragment
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();*/
+
+                        break;
+                    case R.id.showTransBtn:
+
+
 
                         break;
                 }

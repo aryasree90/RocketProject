@@ -6,9 +6,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,13 +53,13 @@ import rocket.club.com.rocketpoker.utils.LogClass;
 /**
  * Created by Admin on 1/26/2017.
  */
-public class FilterTransaction extends Activity {
+public class FilterTransaction extends AppCompatActivity {
 
     Context context = null;
     AppGlobals appGlobals = null;
     View.OnClickListener clickListener = null;
 
-    Button clearBtn;
+    Button clearBtn, searchBtn;
     TextView label;
     RecyclerView filterView;
     MaterialBetterSpinner filter1;
@@ -77,6 +80,8 @@ public class FilterTransaction extends Activity {
     private String filterTrans = "";
     private boolean normalUser = true;
     String startTime = "", endTime = "", rocketId = "";
+    Toolbar toolBar = null;
+    ActionBar actionBar = null;
 
     public static final String FETCH_DET = AppGlobals.SERVER_URL + "fetchTransWithQuery.php";
     public static final String FETCH_ID = AppGlobals.SERVER_URL + "fetchRocketId.php";
@@ -96,6 +101,20 @@ public class FilterTransaction extends Activity {
         appGlobals = AppGlobals.getInstance(context);
         connectionDetector = new ConnectionDetector(context);
 
+        toolBar = (Toolbar)findViewById(R.id.hometoolbar);
+        setSupportActionBar(toolBar);
+
+        actionBar = getSupportActionBar();
+//        actionBar.setTitle("Chat Room");
+        toolBar.setNavigationIcon(R.mipmap.ic_arrow_back);
+        toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        searchBtn = (Button) findViewById(R.id.searchBtn);
         clearBtn = (Button) findViewById(R.id.clearBtn);
         label = (TextView) findViewById(R.id.label);
         filter1 = (MaterialBetterSpinner) findViewById(R.id.filter1);
@@ -118,7 +137,7 @@ public class FilterTransaction extends Activity {
                     if(bundle.containsKey(USER_ID)) {
                         rocketId = bundle.getString(USER_ID);
                     } else {
-                        rocketId = appGlobals.sharedPref.getUserId();
+                        rocketId = appGlobals.sharedPref.getRocketId();
                     }
 
                 } else {
@@ -135,10 +154,11 @@ public class FilterTransaction extends Activity {
         initLayout();
 
         if(normalUser) {
-            rocketId = appGlobals.sharedPref.getRocketId();
+            if(rocketId.isEmpty())
+                rocketId = appGlobals.sharedPref.getRocketId();
             typeList.clear();
             typeList.add(rocketId);
-            loadFilter(false);
+            loadFilter(true);
         } else {
             Map<String, String> map = new HashMap<String, String>();
             map.put("mobile", appGlobals.sharedPref.getLoginMobile());
@@ -167,7 +187,8 @@ public class FilterTransaction extends Activity {
             }
         }
 
-        label.setText(labelText);
+//        label.setText(labelText);
+        actionBar.setTitle(labelText);
         filter1.setHint(filter1Text);
 
         typeList.clear();
@@ -270,6 +291,9 @@ public class FilterTransaction extends Activity {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
+                    case R.id.searchBtn:
+                        fetchDetails();
+                        break;
                     case R.id.clearBtn:
 
                         filter1.setText("");
@@ -280,21 +304,20 @@ public class FilterTransaction extends Activity {
                         break;
                     case R.id.filter2:
                         showDatePickerDialog(filter2, true);
-                        callServer();
                         break;
                     case R.id.filter3:
                         showDatePickerDialog(filter3, false);
-                        callServer();
                         break;
                 }
             }
         };
+        searchBtn.setOnClickListener(clickListener);
         clearBtn.setOnClickListener(clickListener);
         filter2.setOnClickListener(clickListener);
         filter3.setOnClickListener(clickListener);
     }
 
-    private void callServer() {
+    private void fetchDetails() {
 
         String memId = filter1.getText().toString();
 

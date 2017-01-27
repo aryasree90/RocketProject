@@ -117,6 +117,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="add_new_friend">Add New Friend</string>
     <string name="invite_to_play">Invite To Play</string>
+    <string name="search">Search</string>
     <string name="search_friends">Search Friends</string>
     <string name="search_members">Search Members</string>
     <string name="list_friends">Game Members</string>
