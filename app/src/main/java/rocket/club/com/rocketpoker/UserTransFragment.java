@@ -59,7 +59,7 @@ public class UserTransFragment extends Fragment {
     RelativeLayout memberDetails;
     MaterialBetterSpinner transTypeSpinner = null, payTypeSpinner = null;
     ArrayAdapter<String> transTypeAdapter = null, payTypeAdapter = null;
-    Button save, clear, userTrans, filterTrans;
+    Button save, clear, userTrans;
 
     String[] TRANSACTION_TYPE_LIST = null, PAY_TYPE_LIST = null;
     ProgressDialog progressDialog = null;
@@ -135,7 +135,6 @@ public class UserTransFragment extends Fragment {
         });
 
         userTrans = (Button) view.findViewById(R.id.userTrans);
-        filterTrans = (Button) view.findViewById(R.id.showTransBtn);
         save = (Button) view.findViewById(R.id.btn_save);
         clear = (Button) view.findViewById(R.id.btn_clear);
 
@@ -238,9 +237,15 @@ public class UserTransFragment extends Fragment {
                         clearFields();
                         break;
                     case R.id.userTrans:
-                        String searchMob =  memNum.getText().toString();
+                        String searchId =  memId.getText().toString();
 
-                        Class fragmentClass = TransactionFragment.class;
+                        Intent filterTrans = new Intent(context, FilterTransaction.class);
+                        filterTrans.putExtra(FilterTransaction.FILTER_TRANS, FilterTransaction.USER);
+                        filterTrans.putExtra(FilterTransaction.USER_ID, searchId);
+                        filterTrans.putExtra(FilterTransaction.USER_TYPE, false);
+                        startActivity(filterTrans);
+
+                        /*Class fragmentClass = TransactionFragment.class;
                         Bundle args = new Bundle();
                         args.putString(TransactionFragment.MOB_TRANS, searchMob);
                         Fragment fragment = null;
@@ -254,15 +259,7 @@ public class UserTransFragment extends Fragment {
 
                         // Insert the fragment by replacing any existing fragment
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-                        break;
-                    case R.id.showTransBtn:
-
-                        Intent filterTrans = new Intent(context, FilterTransaction.class);
-                        filterTrans.putExtra(FilterTransaction.FILTER_TRANS, FilterTransaction.USER);
-                        filterTrans.putExtra(FilterTransaction.USER_TYPE, false);
-                        startActivity(filterTrans);
+                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();*/
 
                         break;
                 }
@@ -272,7 +269,6 @@ public class UserTransFragment extends Fragment {
         save.setOnClickListener(clickListener);
         clear.setOnClickListener(clickListener);
         userTrans.setOnClickListener(clickListener);
-        filterTrans.setOnClickListener(clickListener);
     }
 
     private void serverCall(final Map<String, String> map, final String URL) {

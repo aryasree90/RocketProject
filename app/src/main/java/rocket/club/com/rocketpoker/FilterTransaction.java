@@ -71,11 +71,12 @@ public class FilterTransaction extends Activity {
     public static final String SALARY = "salary";
     public static final String USER = "user";
     public static final String USER_TYPE = "User Type";
+    public static final String USER_ID = "User Id";
 
     private List<String> typeList = new ArrayList<>();
     private String filterTrans = "";
     private boolean normalUser = true;
-    String startTime = "", endTime = "";
+    String startTime = "", endTime = "", rocketId = "";
 
     public static final String FETCH_DET = AppGlobals.SERVER_URL + "fetchTransWithQuery.php";
     public static final String FETCH_ID = AppGlobals.SERVER_URL + "fetchRocketId.php";
@@ -113,6 +114,13 @@ public class FilterTransaction extends Activity {
                     } else {
                         normalUser = true;
                     }
+
+                    if(bundle.containsKey(USER_ID)) {
+                        rocketId = bundle.getString(USER_ID);
+                    } else {
+                        rocketId = appGlobals.sharedPref.getUserId();
+                    }
+
                 } else {
                     normalUser = false;
                 }
@@ -127,10 +135,10 @@ public class FilterTransaction extends Activity {
         initLayout();
 
         if(normalUser) {
-            String rocketId = appGlobals.sharedPref.getRocketId();
+            rocketId = appGlobals.sharedPref.getRocketId();
             typeList.clear();
             typeList.add(rocketId);
-            loadFilter();
+            loadFilter(false);
         } else {
             Map<String, String> map = new HashMap<String, String>();
             map.put("mobile", appGlobals.sharedPref.getLoginMobile());
@@ -165,13 +173,43 @@ public class FilterTransaction extends Activity {
         typeList.clear();
         typeList.add("NA");
 
-        loadFilter();
+        loadFilter(false);
     }
 
-    private void loadFilter() {
+    private void loadFilter(boolean callServer) {
         ArrayAdapter<String> expTypeAdapter1 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, typeList);
         filter1.setAdapter(expTypeAdapter1);
+
+        if(callServer) {
+            fetchDetServer(rocketId);
+        }
+    }
+
+    private void fetchDetServer(String memId) {
+
+        if(startTime.isEmpty()) {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, -1);
+            startTime = "" + cal.getTimeInMillis();
+        }
+
+        if(endTime.isEmpty()) {
+            endTime = "" + System.currentTimeMillis();
+        }
+
+        if(memId.equals("All")) {
+            memId = "";
+        }
+
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+        map.put("memId", memId);
+        map.put("start", startTime);
+        map.put("end", endTime);
+        map.put("type", filterTrans);
+
+        serverCall(map, FETCH_DET);
     }
 
     private void showDatePickerDialog(final Button btn, final boolean start) {
@@ -257,13 +295,6 @@ public class FilterTransaction extends Activity {
     }
 
     private void callServer() {
-        if(startTime.isEmpty()) {
-            return;
-        }
-
-        if(endTime.isEmpty()) {
-            return;
-        }
 
         String memId = filter1.getText().toString();
 
@@ -274,14 +305,7 @@ public class FilterTransaction extends Activity {
         if(normalUser && TextUtils.isEmpty(memId))
             memId = appGlobals.sharedPref.getLoginMobile();
 
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-        map.put("memId", memId);
-        map.put("start", startTime);
-        map.put("end", endTime);
-        map.put("type", filterTrans);
-
-        serverCall(map, FETCH_DET);
+        fetchDetServer(memId);
     }
 
     private void serverCall(final Map<String,String> params, final String url) {
@@ -299,6 +323,7 @@ public class FilterTransaction extends Activity {
                                 return;
 
                             typeList.clear();
+                            typeList.add("All");
                             for(DetailsListClass temp : tempClass) {
                                 if (filterTrans.equals(EXPENSE)) {
                                     typeList.add(temp.getItem1());
@@ -307,17 +332,18 @@ public class FilterTransaction extends Activity {
                                 }
                             }
                             if(typeList.size() > 0)
-                                loadFilter();
+                                loadFilter(true);
                         } else if(url.equals(FETCH_DET)) {
-Log.d("__________________", "_______________________________ " + response);
+
                             if(response.isEmpty())
                                 return;
 
                             DetailsListClass[] detailList = null;
-
+                            filterView.setVisibility(View.INVISIBLE);
                             if(filterTrans.equals(EXPENSE)) {
                                 ExpTrans[] expTrans = gson.fromJson(response, ExpTrans[].class);
                                 if(expTrans.length <= 0) {
+
                                     return;
                                 }
                                 detailList = loadExpDetails(expTrans);
