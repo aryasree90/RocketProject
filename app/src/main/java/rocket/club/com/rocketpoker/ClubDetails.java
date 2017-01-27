@@ -267,11 +267,13 @@ public class ClubDetails extends Fragment {
                             loadSalaryDet(empSalaryList);
                         }
 
-                        clubAdapter = new ClubDetailsAdapter(detailList, context, ClubDetails.this, setId);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-                        clubDetailsView.setLayoutManager(mLayoutManager);
-                        clubDetailsView.setItemAnimator(new DefaultItemAnimator());
-                        clubDetailsView.setAdapter(clubAdapter);
+                        if(detailList.length > 0) {
+                            clubAdapter = new ClubDetailsAdapter(detailList, context, ClubDetails.this, setId);
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+                            clubDetailsView.setLayoutManager(mLayoutManager);
+                            clubDetailsView.setItemAnimator(new DefaultItemAnimator());
+                            clubDetailsView.setAdapter(clubAdapter);
+                        }
 
                         loadFilter();
                         appGlobals.cancelDialog(progressDialog);

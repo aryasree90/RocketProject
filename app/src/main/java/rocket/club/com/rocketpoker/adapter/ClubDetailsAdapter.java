@@ -80,7 +80,8 @@ public class ClubDetailsAdapter extends RecyclerView.Adapter<ClubDetailsAdapter.
             @Override
             public void onClick(View v) {
 //                Toast.makeText(context, detailList.getItem4(), Toast.LENGTH_LONG).show();
-                createMediaDialog(detailList.getItem4(), detailList.getItem5(), detailList.getItem6());
+                if(clubDetails != null)
+                    createMediaDialog(detailList.getItem4(), detailList.getItem5(), detailList.getItem6());
             }
         });
     }

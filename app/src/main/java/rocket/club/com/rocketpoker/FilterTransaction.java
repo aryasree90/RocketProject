@@ -43,6 +43,7 @@ import rocket.club.com.rocketpoker.adapter.ClubDetailsAdapter;
 import rocket.club.com.rocketpoker.classes.DetailsListClass;
 import rocket.club.com.rocketpoker.classes.EmpDetails;
 import rocket.club.com.rocketpoker.classes.ExpTrans;
+import rocket.club.com.rocketpoker.classes.UserTransDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -99,6 +100,7 @@ public class FilterTransaction extends Activity {
         filter1 = (MaterialBetterSpinner) findViewById(R.id.filter1);
         filter2 = (Button) findViewById(R.id.filter2);
         filter3 = (Button) findViewById(R.id.filter3);
+        filterView = (RecyclerView) findViewById(R.id.clubList);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
@@ -232,6 +234,11 @@ public class FilterTransaction extends Activity {
                 switch(v.getId()) {
                     case R.id.clearBtn:
 
+                        filter1.setText("");
+                        filter2.setText("");
+                        filter3.setText("");
+                        filterView.setVisibility(View.INVISIBLE);
+
                         break;
                     case R.id.filter2:
                         showDatePickerDialog(filter2, true);
@@ -302,10 +309,42 @@ public class FilterTransaction extends Activity {
                             if(typeList.size() > 0)
                                 loadFilter();
                         } else if(url.equals(FETCH_DET)) {
-                            Log.d("__________________", "____________________" + response);
+Log.d("__________________", "_______________________________ " + response);
+                            if(response.isEmpty())
+                                return;
+
+                            DetailsListClass[] detailList = null;
+
+                            if(filterTrans.equals(EXPENSE)) {
+                                ExpTrans[] expTrans = gson.fromJson(response, ExpTrans[].class);
+                                if(expTrans.length <= 0) {
+                                    return;
+                                }
+                                detailList = loadExpDetails(expTrans);
+                            } else if(filterTrans.equals(SALARY)) {
+                                EmpDetails[] empDet = gson.fromJson(response, EmpDetails[].class);
+                                if(empDet.length <= 0) {
+                                    return;
+                                }
+                                detailList = loadEmpDetails(empDet);
+                            } else if(filterTrans.equals(USER)) {
+                                UserTransDetails[] userDet = gson.fromJson(response, UserTransDetails[].class);
+                                if(userDet.length <= 0) {
+                                    return;
+                                }
+                                detailList = loadUserDetails(userDet);
+                            }
+
+                            if(detailList != null) {
+                                filterView.setVisibility(View.VISIBLE);
+                                ClubDetailsAdapter clubAdapter = new ClubDetailsAdapter(detailList, context, null, 1);
+                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+                                filterView.setLayoutManager(mLayoutManager);
+                                filterView.setItemAnimator(new DefaultItemAnimator());
+                                filterView.setAdapter(clubAdapter);
+                            }
                         }
 
-//                        loadFilter();
                         appGlobals.cancelDialog(progressDialog);
                     }
                 },
@@ -325,5 +364,55 @@ public class FilterTransaction extends Activity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    private DetailsListClass[] loadExpDetails(ExpTrans[] expTrans) {
+
+        DetailsListClass[] detailList = new DetailsListClass[expTrans.length];
+        int pos = 0;
+
+        for(ExpTrans transItem : expTrans) {
+            DetailsListClass tempClass = new DetailsListClass();
+
+            String month = AppGlobals.getMonthYear(Long.parseLong(transItem.getTimeStamp()));
+            tempClass.setItems(transItem.getExpType(), transItem.getExpAmount(), month);
+            tempClass.setExtraItems(transItem.getDescription(), transItem.getAdded_by(), "");
+            detailList[pos++] = tempClass;
+
+        }
+        return detailList;
+    }
+
+    private DetailsListClass[] loadUserDetails(UserTransDetails[] userTrans) {
+
+        DetailsListClass[] detailList = new DetailsListClass[userTrans.length];
+        int pos = 0;
+
+        for(UserTransDetails userDet : userTrans) {
+            DetailsListClass tempClass = new DetailsListClass();
+
+            String date = AppGlobals.convertDateTime(Long.parseLong(userDet.getTimeStamp()));
+            tempClass.setItems(userDet.getTrans_type(), userDet.getAmount(), date);
+            tempClass.setExtraItems(userDet.getExtra(), userDet.getCashier_mob(), "");
+            detailList[pos++] = tempClass;
+
+        }
+        return detailList;
+    }
+
+    private DetailsListClass[] loadEmpDetails(EmpDetails[] empDet) {
+
+        DetailsListClass[] detailList = new DetailsListClass[empDet.length];
+        int pos = 0;
+
+        for(EmpDetails empItem : empDet) {
+            DetailsListClass tempClass = new DetailsListClass();
+
+            tempClass.setItems(empItem.getEmpNum(), empItem.getSalary(), empItem.getMonth());
+            tempClass.setExtraItems(empItem.getPayType(), empItem.getTimeStamp(), empItem.getCashier_mob());
+            detailList[pos++] = tempClass;
+
+        }
+        return detailList;
     }
 }

@@ -2,6 +2,7 @@ package rocket.club.com.rocketpoker;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -58,7 +59,7 @@ public class UserTransFragment extends Fragment {
     RelativeLayout memberDetails;
     MaterialBetterSpinner transTypeSpinner = null, payTypeSpinner = null;
     ArrayAdapter<String> transTypeAdapter = null, payTypeAdapter = null;
-    Button save, clear, userTrans;
+    Button save, clear, userTrans, filterTrans;
 
     String[] TRANSACTION_TYPE_LIST = null, PAY_TYPE_LIST = null;
     ProgressDialog progressDialog = null;
@@ -134,6 +135,7 @@ public class UserTransFragment extends Fragment {
         });
 
         userTrans = (Button) view.findViewById(R.id.userTrans);
+        filterTrans = (Button) view.findViewById(R.id.showTransBtn);
         save = (Button) view.findViewById(R.id.btn_save);
         clear = (Button) view.findViewById(R.id.btn_clear);
 
@@ -255,6 +257,14 @@ public class UserTransFragment extends Fragment {
                         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
                         break;
+                    case R.id.showTransBtn:
+
+                        Intent filterTrans = new Intent(context, FilterTransaction.class);
+                        filterTrans.putExtra(FilterTransaction.FILTER_TRANS, FilterTransaction.USER);
+                        filterTrans.putExtra(FilterTransaction.USER_TYPE, false);
+                        startActivity(filterTrans);
+
+                        break;
                 }
             }
         };
@@ -262,6 +272,7 @@ public class UserTransFragment extends Fragment {
         save.setOnClickListener(clickListener);
         clear.setOnClickListener(clickListener);
         userTrans.setOnClickListener(clickListener);
+        filterTrans.setOnClickListener(clickListener);
     }
 
     private void serverCall(final Map<String, String> map, final String URL) {

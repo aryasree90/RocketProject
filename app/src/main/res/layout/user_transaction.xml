@@ -158,7 +158,6 @@
                     android:text="@string/btn_clear1"/>
 
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

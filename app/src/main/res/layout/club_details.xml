@@ -13,22 +13,6 @@
         android:gravity="center"
         android:textSize="15sp" />
 
-    <Button
-        android:id="@+id/showTransBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|end"
-        android:visibility="gone"
-        android:text="@string/show_trans"/>
-
-    <Button
-        android:id="@+id/clearBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|end"
-        android:text="@string/btn_clear1"/>
-
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -108,4 +92,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/showTransBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/show_trans"/>
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_clear1"/>
+
+    </LinearLayout>
 </LinearLayout>
