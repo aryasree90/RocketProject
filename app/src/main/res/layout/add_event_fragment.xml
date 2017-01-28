@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/actType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textStyle="bold" />
+        android:layout_height="30dp"
+        android:id="@+id/actType"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:background="#003399"
+        android:textColor="@color/common_google_signin_btn_text_dark"/>
+
+
+
+
 
     <LinearLayout
         android:id="@+id/textLayout"
@@ -25,7 +30,7 @@
         android:id="@+id/eventImage"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:src="@drawable/logo"/>
+        android:src="@drawable/upload_images"/>
 
     <EditText
         android:id="@+id/headerText"
@@ -38,7 +43,7 @@
         android:id="@+id/summaryText"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:hint="@string/eventSummary"
         android:singleLine="false" />
 
@@ -46,23 +51,33 @@
             android:id="@+id/btnLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
+            android:weightSum="1"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/saveBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="@color/common_google_signin_btn_text_dark_default"
+                android:id="@+id/saveBtn"
+                android:background="@color/clr_btn_save"
+                android:layout_weight=".4"
                 android:text="@string/save"/>
 
             <Button
-                android:id="@+id/clearBtn"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="@color/wallet_bright_foreground_holo_dark"
+                android:id="@+id/clearBtn"
+                android:layout_marginLeft="3dp"
+                android:background="@color/clr_btn_clear"
+                android:layout_weight=".4"
                 android:text="@string/btn_clear1"/>
+
+
+
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

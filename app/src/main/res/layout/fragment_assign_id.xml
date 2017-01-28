@@ -5,27 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/txt_assign_user_id"
+        android:text="@string/assign_user_id"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:textAlignment="center"
+        android:background="#003399"
+        android:textColor="@color/common_google_signin_btn_text_dark"/>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:orientation="vertical"
         android:weightSum="1">
 
         <EditText
             android:id="@+id/searchText"
-            android:layout_width="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search_with_mob"
-            android:inputType="number"
-            android:layout_weight="0.85"/>
+            android:inputType="number"/>
 
-        <ImageButton
-            android:id="@+id/searchBtn"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:background="@color/colorBlueButton"
-            android:src="@mipmap/ic_go"
-            android:layout_weight="0.15" />
+
+
+
+
+        <LinearLayout
+            android:id="@+id/lnr_searchclearBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/searchBtn"
+                android:text="@string/btn_search"
+                android:layout_weight=".4"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:background="#6677AD"
+                />
+
+            <Button
+                android:id="@+id/searchclearBtn"
+                android:text="@string/btn_clear1"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                android:layout_width="wrap_content"
+                android:layout_weight=".4"
+                android:layout_height="30dp"
+                android:layout_marginLeft="3dp"
+                android:background="#F4CA68"
+                />
+
+        </LinearLayout>
+
+
+
 
     </LinearLayout>
 
@@ -65,7 +112,7 @@
                 android:layout_height="@dimen/friend_btn"
                 android:layout_weight="1"
                 android:layout_margin="5dp"
-                android:background="@drawable/rounded_cornered_green"
+                android:background="@color/clr_btn_save"
                 android:text="@string/save" />
 
             <Button
@@ -74,7 +121,7 @@
                 android:layout_height="@dimen/friend_btn"
                 android:layout_weight="1"
                 android:layout_margin="5dp"
-                android:background="@drawable/rounded_cornered_red"
+                android:background="@color/clr_btn_clear"
                 android:text="@string/btn_clear1" />
 
         </LinearLayout>
