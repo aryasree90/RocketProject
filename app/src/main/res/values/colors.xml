@@ -10,6 +10,12 @@
 
     <color name="transparentBlack">#64000000</color>
 
+    <color name="clr_btn_save">#77BFA2</color>
+    <color name="clr_btn_clear">#FFD3B6</color>
+
+
+
+
     <color name="colorPrimary">#FE0000</color>
     <color name="colorPrimaryDark">#CB4F4F</color>
     <color name="textColorPrimary">#FFFFFF</color>

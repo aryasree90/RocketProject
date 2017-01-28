@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -34,9 +35,20 @@ public class SplashScreen extends Activity {
         context = getApplicationContext();
         appGlobals = AppGlobals.getInstance(context);
 
-        StartAnimations();
+        startRotation();
+//        startAnimations();
     }
-    private void StartAnimations() {
+
+    private void startRotation() {
+        ImageView rotate_image =(ImageView) findViewById(R.id.splash);
+        RotateAnimation rotate = new RotateAnimation(30, 360, Animation.RELATIVE_TO_SELF, 0.5f,  Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(2500);
+        rotate_image.startAnimation(rotate);
+
+        startThread();
+    }
+
+    private void startAnimations() {
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.alpha);
         anim.reset();
         LinearLayout l=(LinearLayout) findViewById(R.id.lin_lay);
@@ -49,6 +61,10 @@ public class SplashScreen extends Activity {
         iv.clearAnimation();
         iv.startAnimation(anim);
 
+        startThread();
+    }
+
+    private void startThread()  {
         splashTread = new Thread() {
             @Override
             public void run() {
