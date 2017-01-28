@@ -325,9 +325,18 @@ public class LandingActivity extends AppCompatActivity
                 fragmentClass = ExpenseTransFragment.class;
                 break;
             case  R.id.transactions:
-                fragmentClass = TransactionFragment.class;
+                /*fragmentClass = TransactionFragment.class;
                 args = new Bundle();
-                args.putString(TransactionFragment.MOB_TRANS, appGlobals.sharedPref.getLoginMobile());
+                args.putString(TransactionFragment.MOB_TRANS, appGlobals.sharedPref.getLoginMobile());*/
+
+                String searchId =  appGlobals.sharedPref.getRocketId();
+
+                Intent filterTrans = new Intent(context, FilterTransaction.class);
+                filterTrans.putExtra(FilterTransaction.FILTER_TRANS, FilterTransaction.USER);
+                filterTrans.putExtra(FilterTransaction.USER_ID, searchId);
+                filterTrans.putExtra(FilterTransaction.USER_TYPE, true);
+                startActivity(filterTrans);
+
                 break;
             case R.id.add_exp_type:
                 fragmentClass = AddExpenseType.class;

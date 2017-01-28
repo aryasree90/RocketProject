@@ -476,6 +476,7 @@ public class ProfileActivity extends ActionBarActivity {
         ProfileDetailsClass profileDetails = profileJson.fromJson(response, ProfileDetailsClass[].class)[0];
 
         rocketId.setText(getString(R.string.rocket_id) + " : " + profileDetails.getUserId());
+        appGlobals.sharedPref.setRocketId(profileDetails.getUserId());
         fullName.setText(profileDetails.getName());
         fullName.setEnabled(true);
         appGlobals.sharedPref.setUserName(profileDetails.getName());
