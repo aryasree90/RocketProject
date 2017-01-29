@@ -130,11 +130,14 @@ public class AddEventFragment extends Fragment {
                             if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists())
                                 userImage = appGlobals.convertImageToBase64(imagePath);
 
+                            String imageName = header.replaceAll(" ", "") + "_" + timeStamp + appGlobals.IMG_FILE_EXTENSION;
+
                             Map<String,String> map = new HashMap<String,String>();
                             map.put("image", userImage);
                             map.put("header", header);
                             map.put("summary", summary);
                             map.put("timeStamp", timeStamp);
+                            map.put("imageName", imageName);
                             map.put("task", activityType);
                             map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             serverCall(map);
