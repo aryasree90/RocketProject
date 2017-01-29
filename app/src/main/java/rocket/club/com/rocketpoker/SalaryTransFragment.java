@@ -51,7 +51,7 @@ public class SalaryTransFragment extends Fragment {
     private static final String TAG = "SalaryTransFragment";
 
     Button save, clear;
-    ImageButton searchBtn;
+    Button searchBtn;
     EditText searchUser, salAmount;
     LinearLayout transSalary = null;
     RelativeLayout showMemLayout = null;
@@ -89,7 +89,7 @@ public class SalaryTransFragment extends Fragment {
         memName = (TextView) view.findViewById(R.id.memberName);
         memNum = (TextView) view.findViewById(R.id.memberNumber);
         searchUser = (EditText) view.findViewById(R.id.searchText);
-        searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
+        searchBtn = (Button) view.findViewById(R.id.searchBtn);
         transSalary = (LinearLayout) view.findViewById(R.id.trans_salary);
         memNotFound = (TextView) view.findViewById(R.id.txt_member_not_found);
         showMemLayout = (RelativeLayout) view.findViewById(R.id.show_member_details);

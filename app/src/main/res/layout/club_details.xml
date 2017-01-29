@@ -7,11 +7,16 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/label"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="15sp" />
+        android:layout_height="30dp"
+        android:id="@+id/label"
+        android:textSize="18sp"
+        android:layout_margin="2dp"
+        android:textAlignment="center"
+        android:background="#003399"
+        android:textColor="@color/common_google_signin_btn_text_dark"/>
+
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -93,24 +98,30 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2">
 
-        <Button
-            android:id="@+id/showTransBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/show_trans"/>
+
 
         <Button
             android:id="@+id/clearBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:background="@drawable/round_cornered_clear_btn"
+            android:layout_width="match_parent"
+            android:textColor="@color/common_plus_signin_btn_text_dark"
+            android:layout_height="30dp"
             android:text="@string/btn_clear1"/>
+
+
+        <Button
+            android:id="@+id/showTransBtn"
+            android:layout_width="match_parent"
+            android:textColor="@color/common_plus_signin_btn_text_dark"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorGreenButton"
+            android:layout_height="wrap_content"
+            android:text="@string/show_trans"/>
 
     </LinearLayout>
 </LinearLayout>

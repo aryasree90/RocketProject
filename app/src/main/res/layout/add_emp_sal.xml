@@ -53,7 +53,7 @@
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:layout_height="30dp"
                 android:layout_width="wrap_content"
-                android:background="#6677AD"
+                 android:background="@drawable/round_cornered_search_btn"
                 />
 
             <Button
@@ -64,7 +64,7 @@
                 android:layout_weight=".4"
                 android:layout_height="30dp"
                 android:layout_marginLeft="3dp"
-                android:background="#F4CA68"
+                 android:background="@drawable/round_cornered_search_clear_btn"
                 />
 
         </LinearLayout>
@@ -150,7 +150,7 @@
                 android:layout_height="30dp"
                 android:textColor="@color/common_google_signin_btn_text_dark_default"
                 android:id="@+id/btn_save"
-                android:background="@color/clr_btn_save"
+                android:background="@drawable/round_cornered_save_btn"
                 android:layout_weight=".4"
                 android:text="@string/save"/>
 
@@ -160,7 +160,7 @@
                 android:textColor="@color/wallet_bright_foreground_holo_dark"
                 android:id="@+id/btn_clear"
                 android:layout_marginLeft="3dp"
-                android:background="@color/clr_btn_clear"
+                android:background="@drawable/round_cornered_clear_btn"
                 android:layout_weight=".4"
                 android:text="@string/btn_clear1"/>
 

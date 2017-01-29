@@ -12,24 +12,70 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_margin="5dp"
-            android:weightSum="1">
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/txt_salary_transaction_heading"
+                android:text="@string/sal_trans"
+                android:textSize="18sp"
+                android:layout_margin="2dp"
+                android:textAlignment="center"
+                android:background="#003399"
+                android:textColor="@color/common_google_signin_btn_text_dark"/>
+
 
             <EditText
                 android:id="@+id/searchText"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:hint="@string/search_member_num_id"
-                android:inputType="number"
-                android:layout_weight="0.85"/>
+                android:inputType="number"/>
 
-            <ImageButton
-                android:id="@+id/searchBtn"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:background="@color/colorBlueButton"
-                android:src="@mipmap/ic_go"
-                android:layout_weight="0.15" />
+
+
+
+
+            <LinearLayout
+                android:id="@+id/lnr_searchclearBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_margin="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <Button
+                    android:id="@+id/searchBtn"
+                    android:text="@string/btn_search"
+                    android:layout_weight=".4"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                     android:background="@drawable/round_cornered_search_btn"
+                    />
+
+                <Button
+                    android:id="@+id/clearBtn"
+                    android:text="@string/btn_clear1"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:layout_width="wrap_content"
+                    android:layout_weight=".4"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="3dp"
+                     android:background="@drawable/round_cornered_search_clear_btn"
+                    />
+
+            </LinearLayout>
+
+
+
 
         </LinearLayout>
 
@@ -173,25 +219,40 @@
                 android:textSize="15sp"
                 android:textColor="@color/colorPrimary"/>
 
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:weightSum="1"
                 android:gravity="center">
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_default"
                     android:id="@+id/btn_save"
+                    android:background="@drawable/round_cornered_save_btn"
+                    android:layout_weight=".4"
                     android:text="@string/save"/>
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
+                    android:textColor="@color/wallet_bright_foreground_holo_dark"
                     android:id="@+id/btn_clear"
+                    android:layout_marginLeft="3dp"
+                    android:background="@drawable/round_cornered_clear_btn"
+                    android:layout_weight=".4"
                     android:text="@string/btn_clear1"/>
 
             </LinearLayout>
+
+
+
+
 
         </LinearLayout>
     </LinearLayout>

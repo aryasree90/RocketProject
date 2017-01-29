@@ -22,8 +22,9 @@
             <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                 android:id="@+id/filter1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:singleLine="true"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
@@ -33,9 +34,13 @@
             <Button
                 android:id="@+id/filter2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:singleLine="true"
                 android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:textColor="@color/common_google_signin_btn_text_dark"
                 android:hint="@string/from_month"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp" />
@@ -43,33 +48,46 @@
             <Button
                 android:id="@+id/filter3"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:textColor="@color/common_google_signin_btn_text_dark_default"
+                android:layout_height="40dp"
                 android:singleLine="true"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:hint="@string/to_month"
                 android:layout_weight="1" />
 
         </LinearLayout>
 
-
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/lnr_searchclearBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <Button
                 android:id="@+id/searchBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/search"/>
+                android:text="@string/btn_search"
+                android:layout_weight=".4"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                 android:background="@drawable/round_cornered_search_btn"
+                />
 
             <Button
                 android:id="@+id/clearBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/btn_clear1"/>
+                android:text="@string/btn_clear1"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                android:layout_width="wrap_content"
+                android:layout_weight=".4"
+                android:layout_height="30dp"
+                android:layout_marginLeft="3dp"
+                 android:background="@drawable/round_cornered_search_clear_btn"
+                />
 
         </LinearLayout>
 
