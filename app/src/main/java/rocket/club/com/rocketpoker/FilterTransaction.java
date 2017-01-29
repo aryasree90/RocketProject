@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -31,7 +32,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,7 +66,7 @@ public class FilterTransaction extends AppCompatActivity {
     AppGlobals appGlobals = null;
     View.OnClickListener clickListener = null;
 
-    Button clearBtn, searchBtn;
+    Button clearBtn, searchBtn, graphBtn;
     TextView label;
     RecyclerView filterView;
     MaterialBetterSpinner filter1;
@@ -114,6 +121,7 @@ public class FilterTransaction extends AppCompatActivity {
             }
         });
 
+        graphBtn = (Button) findViewById(R.id.graphBtn);
         searchBtn = (Button) findViewById(R.id.searchBtn);
         clearBtn = (Button) findViewById(R.id.clearBtn);
         label = (TextView) findViewById(R.id.label);
@@ -294,6 +302,13 @@ public class FilterTransaction extends AppCompatActivity {
                     case R.id.searchBtn:
                         fetchDetails();
                         break;
+                    case R.id.graphBtn:
+
+                        if(!appGlobals.chartList.isEmpty()) {
+                            Intent chartIntent = new Intent(FilterTransaction.this, TransactionGraph.class);
+                            startActivity(chartIntent);
+                        }
+                        break;
                     case R.id.clearBtn:
 
                         filter1.setText("");
@@ -313,6 +328,7 @@ public class FilterTransaction extends AppCompatActivity {
         };
         searchBtn.setOnClickListener(clickListener);
         clearBtn.setOnClickListener(clickListener);
+        graphBtn.setOnClickListener(clickListener);
         filter2.setOnClickListener(clickListener);
         filter3.setOnClickListener(clickListener);
     }
@@ -357,12 +373,12 @@ public class FilterTransaction extends AppCompatActivity {
                             if(typeList.size() > 0)
                                 loadFilter(true);
                         } else if(url.equals(FETCH_DET)) {
-
                             if(response.isEmpty())
                                 return;
 
-                            DetailsListClass[] detailList = null;
                             filterView.setVisibility(View.INVISIBLE);
+
+                            DetailsListClass[] detailList = null;
                             if(filterTrans.equals(EXPENSE)) {
                                 ExpTrans[] expTrans = gson.fromJson(response, ExpTrans[].class);
                                 if(expTrans.length <= 0) {
@@ -427,7 +443,6 @@ public class FilterTransaction extends AppCompatActivity {
             tempClass.setItems(transItem.getExpType(), transItem.getExpAmount(), month);
             tempClass.setExtraItems(transItem.getDescription(), transItem.getAdded_by(), "");
             detailList[pos++] = tempClass;
-
         }
         return detailList;
     }
@@ -437,15 +452,21 @@ public class FilterTransaction extends AppCompatActivity {
         DetailsListClass[] detailList = new DetailsListClass[userTrans.length];
         int pos = 0;
 
+        appGlobals.chartList.clear();
+
         for(UserTransDetails userDet : userTrans) {
-            DetailsListClass tempClass = new DetailsListClass();
+            DetailsListClass detailClass = new DetailsListClass();
 
             String date = AppGlobals.convertDateTime(Long.parseLong(userDet.getTimeStamp()));
-            tempClass.setItems(userDet.getTrans_type(), userDet.getAmount(), date);
-            tempClass.setExtraItems(userDet.getExtra(), userDet.getCashier_mob(), "");
-            detailList[pos++] = tempClass;
+            detailClass.setItems(userDet.getTrans_type(), userDet.getAmount(), date);
+            detailClass.setExtraItems(userDet.getExtra(), userDet.getCashier_mob(), "");
+            detailList[pos++] = detailClass;
 
+            DetailsListClass tempClass = new DetailsListClass();
+            tempClass.setItems(userDet.getTrans_type(), userDet.getAmount(), userDet.getTimeStamp());
+            appGlobals.chartList.add(tempClass);
         }
+
         return detailList;
     }
 
@@ -460,7 +481,6 @@ public class FilterTransaction extends AppCompatActivity {
             tempClass.setItems(empItem.getEmpNum(), empItem.getSalary(), empItem.getMonth());
             tempClass.setExtraItems(empItem.getPayType(), empItem.getTimeStamp(), empItem.getCashier_mob());
             detailList[pos++] = tempClass;
-
         }
         return detailList;
     }

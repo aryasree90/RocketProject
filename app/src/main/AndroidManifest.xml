@@ -70,6 +70,8 @@
         <activity
             android:name=".FilterTransaction"></activity>
         <activity
+            android:name=".TransactionGraph"></activity>
+        <activity
             android:name=".EventDetailActivity"
             android:label="@string/title_activity_event_detail">
         </activity>

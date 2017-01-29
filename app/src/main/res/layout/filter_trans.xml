@@ -66,15 +66,22 @@
             android:gravity="center"
             android:layout_margin="5dp"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/graphBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/graph"/>
 
             <Button
                 android:id="@+id/searchBtn"
                 android:text="@string/btn_search"
-                android:layout_weight=".4"
+                android:layout_weight="1"
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:layout_height="30dp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                  android:background="@drawable/round_cornered_search_btn"
                 />
 
@@ -82,8 +89,8 @@
                 android:id="@+id/clearBtn"
                 android:text="@string/btn_clear1"
                 android:textColor="@color/common_google_signin_btn_text_dark"
-                android:layout_width="wrap_content"
-                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:layout_marginLeft="3dp"
                  android:background="@drawable/round_cornered_search_clear_btn"
