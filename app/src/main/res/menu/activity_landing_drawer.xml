@@ -10,7 +10,7 @@
             <menu>
                 <item
                     android:id="@+id/role_assign"
-                    android:icon="@mipmap/ic_role"
+                    android:icon="@mipmap/ic_id"
                     android:title="@string/admin_assign_role" />
                 <item
                     android:id="@+id/id_assign"
@@ -21,6 +21,7 @@
                     android:icon="@mipmap/ic_id"
                     android:title="@string/add_exp_type" />
                 <item
+
                     android:id="@+id/add_emp_sal"
                     android:icon="@mipmap/ic_id"
                     android:title="@string/add_emp_sal" />

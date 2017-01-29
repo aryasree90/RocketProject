@@ -52,7 +52,7 @@ public class AssignIdFragment extends Fragment {
     ConnectionDetector connectionDetector = null;
 
     EditText searchFriend;
-    ImageButton searchBtn;
+    Button searchBtn;
     LinearLayout memberDetails = null;
     Button changeId, clearBtn;
     TextView errorMsg, memberName, memberNum, memberId;
@@ -81,7 +81,7 @@ public class AssignIdFragment extends Fragment {
 
         memberDetails = (LinearLayout) view.findViewById(R.id.show_friend_details);
         searchFriend = (EditText) view.findViewById(R.id.searchText);
-        searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
+        searchBtn = (Button) view.findViewById(R.id.searchBtn);
         errorMsg = (TextView) view.findViewById(R.id.txt_friend_not_found);
 
         memberId = (TextView) view.findViewById(R.id.member_id);

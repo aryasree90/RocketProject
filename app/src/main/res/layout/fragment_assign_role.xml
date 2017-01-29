@@ -7,6 +7,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/txt_assign_user_role"
+        android:text="@string/assign_user_role"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:textAlignment="center"
+        android:background="#003399"
+        android:textColor="@color/common_google_signin_btn_text_dark"/>
+
+
+
     <EditText
         android:id="@+id/selectMember"
         android:layout_width="match_parent"
@@ -18,5 +33,36 @@
         android:id="@+id/selectedMembers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
+        android:weightSum="1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            android:id="@+id/btn_save"
+            android:background="@color/clr_btn_save"
+            android:layout_weight=".4"
+            android:text="@string/save"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textColor="@color/wallet_bright_foreground_holo_dark"
+            android:id="@+id/btn_clear"
+            android:layout_marginLeft="3dp"
+            android:background="@color/clr_btn_clear"
+            android:layout_weight=".4"
+            android:text="@string/btn_clear1"/>
+
+    </LinearLayout>
 
 </LinearLayout>

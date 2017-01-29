@@ -55,7 +55,7 @@ public class AddEmpSalary extends Fragment {
     EditText amount, searchNum;
     TextView errMsg, curSal, txtMemNotFound;
     TextView memNum, memName, memId;
-    ImageButton searchBtn;
+    Button searchBtn;
     Button save, clear;
     LinearLayout salLayout;
 
@@ -79,7 +79,7 @@ public class AddEmpSalary extends Fragment {
         searchNum = (EditText) view.findViewById(R.id.searchText);
         txtMemNotFound = (TextView) view.findViewById(R.id.txt_friend_not_found);
         curSal = (TextView) view.findViewById(R.id.cur_salary);
-        searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
+        searchBtn = (Button) view.findViewById(R.id.searchBtn);
         errMsg = (TextView) view.findViewById(R.id.err_msg);
         salLayout = (LinearLayout) view.findViewById(R.id.salLayout);
 

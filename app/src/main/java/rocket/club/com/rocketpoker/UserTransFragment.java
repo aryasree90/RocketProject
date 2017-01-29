@@ -54,8 +54,8 @@ public class UserTransFragment extends Fragment {
     EditText searchMem, amount, description;
     TextView memNotFound, memId, memName, memNum;
     TextView creditAvail, bonusAvail;
-    ImageButton searchBtn;
-    LinearLayout transDetails;
+    Button searchBtn;
+    LinearLayout transDetails,searchClearBtn;
     RelativeLayout memberDetails;
     MaterialBetterSpinner transTypeSpinner = null, payTypeSpinner = null;
     ArrayAdapter<String> transTypeAdapter = null, payTypeAdapter = null;
@@ -87,9 +87,10 @@ public class UserTransFragment extends Fragment {
 
         searchMem = (EditText) view.findViewById(R.id.searchText);
         memNotFound = (TextView) view.findViewById(R.id.txt_member_not_found);
-        searchBtn = (ImageButton) view.findViewById(R.id.searchBtn);
+        searchBtn = (Button) view.findViewById(R.id.searchBtn);
         memberDetails = (RelativeLayout) view.findViewById(R.id.show_member_details);
         transDetails = (LinearLayout) view.findViewById(R.id.trans_details);
+        searchClearBtn = (LinearLayout) view.findViewById(R.id.lnr_searchclearBtn);
 
         memId = (TextView) view.findViewById(R.id.memberId);
         memName = (TextView) view.findViewById(R.id.memberName);
@@ -292,6 +293,7 @@ public class UserTransFragment extends Fragment {
                         if(URL.equals(MEMBER_SEARCH_URL)){
                             try {
                                 memNotFound.setVisibility(View.GONE);
+                                searchClearBtn.setVisibility(View.GONE);
                                 Gson gson = new Gson();
                                 UserDetails userDetails = gson.fromJson(response, UserDetails.class);
 
@@ -379,5 +381,6 @@ public class UserTransFragment extends Fragment {
 
         memberDetails.setVisibility(View.INVISIBLE);
         transDetails.setVisibility(View.INVISIBLE);
+        searchClearBtn.setVisibility(View.VISIBLE);
     }
 }
