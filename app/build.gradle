@@ -34,4 +34,5 @@ dependencies {
     compile 'com.weiwangcn.betterspinner:library-material:1.1.0'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.hbb20:ccp:1.5.1'
+    compile files('libs/achartengine-1.1.0.jar')
 }

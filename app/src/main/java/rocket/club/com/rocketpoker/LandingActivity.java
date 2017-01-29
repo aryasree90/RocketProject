@@ -329,13 +329,16 @@ public class LandingActivity extends AppCompatActivity
                 args = new Bundle();
                 args.putString(TransactionFragment.MOB_TRANS, appGlobals.sharedPref.getLoginMobile());*/
 
-                String searchId =  appGlobals.sharedPref.getRocketId();
+                Intent filterTrans = new Intent(context, FilterTransaction.class);
+                startActivity(filterTrans);
+
+                /*String searchId =  appGlobals.sharedPref.getRocketId();
 
                 Intent filterTrans = new Intent(context, FilterTransaction.class);
                 filterTrans.putExtra(FilterTransaction.FILTER_TRANS, FilterTransaction.USER);
                 filterTrans.putExtra(FilterTransaction.USER_ID, searchId);
                 filterTrans.putExtra(FilterTransaction.USER_TYPE, true);
-                startActivity(filterTrans);
+                startActivity(filterTrans);*/
 
                 break;
             case R.id.add_exp_type:

@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +59,7 @@ import java.util.Map;
 import rocket.club.com.rocketpoker.CommonUtilities;
 import rocket.club.com.rocketpoker.ConnectionDetector;
 import rocket.club.com.rocketpoker.R;
+import rocket.club.com.rocketpoker.classes.DetailsListClass;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.receiver.LocationTrigger;
 import rocket.club.com.rocketpoker.service.GooglePlayServiceLocation;
@@ -101,6 +103,7 @@ public class AppGlobals {
     final long oneMinute = 60 * oneSecond;
     public ArrayList<String> selectedNums = new ArrayList<>();
     public ArrayList<Integer> selectedPos = new ArrayList<>();
+    public ArrayList<DetailsListClass> chartList = new ArrayList<>();
 
     private LocationService.LocationResult locationResult = null;
     LocationService locationService = null;
@@ -487,9 +490,12 @@ public class AppGlobals {
             protected void onPostExecute(Bitmap bmp) {
                 super.onPostExecute(bmp);
                 itemImage.setVisibility(View.VISIBLE);
+                Log.d("________________", "____________________ image");
                 if(bmp != null) {
+                    Log.d("________________", "____________________ not null");
                     itemImage.setImageBitmap(bmp);
                 } else {
+                    Log.d("________________", "____________________ null");
                     itemImage.setImageResource(R.drawable.default_profile);
                 }
             }
