@@ -5,42 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-        android:id="@+id/monthYear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:hint="Filter 1"
-        android:textColorHint="#05ab9a"
-        app:met_floatingLabel="normal" />
+    <include layout="@layout/sub_toolbar" />
 
-    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-        android:id="@+id/year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/monthYear"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:hint="Filter 2"
-        android:textColorHint="#05ab9a"
-        app:met_floatingLabel="normal" />
+    <LinearLayout
+        android:id="@+id/spinnerLayout"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:layout_below="@+id/hometoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-        android:id="@+id/type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/year"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:textColorHint="#05ab9a"
-        app:met_floatingLabel="normal" />
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/filter1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:hint="Filter 1"
+            android:textColorHint="#05ab9a"
+            app:met_floatingLabel="normal" />
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/filter2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:hint="Filter 2"
+            android:textColorHint="#05ab9a"
+            app:met_floatingLabel="normal" />
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/filter3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:hint="Filter 3"
+            android:textColorHint="#05ab9a"
+            app:met_floatingLabel="normal" />
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/monthYear"
+        android:layout_below="@+id/spinnerLayout"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:hint="Filter 3"

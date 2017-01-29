@@ -6,11 +6,15 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
@@ -24,7 +28,9 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import rocket.club.com.rocketpoker.classes.DetailsListClass;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -33,65 +39,195 @@ import rocket.club.com.rocketpoker.utils.AppGlobals;
 /**
  * Created by Admin on 1/28/2017.
  */
-public class TransactionGraph extends Activity {
+public class TransactionGraph extends AppCompatActivity {
 
     private View mChart;
     private Context context = null;
     private AppGlobals appGlobals = null;
+    MaterialBetterSpinner filter1, filter2, filter3;
+    ArrayAdapter<String> filter1Adapter, filter2Adapter, filter3Adapter;
+    List<String> yearList = new ArrayList<>();
+
+    String[] filter1Val = {"Month", "Year"};
+    String[] filter2Val = null;
+    String[] filter3Val = {"All", "Cash In", "Cash Out"};
 
     XYSeries cashIn = new XYSeries("Cash In");
     XYSeries cashOut = new XYSeries("Cash Out");
+
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
+    final SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+    final SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
+        initializeWidgets();
+
+        Date mon = new Date(System.currentTimeMillis());
+        int curMonth = Integer.parseInt(monthFormat.format(mon));
+
+        setGraphData(1, curMonth, 1);
+    }
+
+    private void initializeWidgets() {
+
         context = getApplicationContext();
         appGlobals = AppGlobals.getInstance(context);
 
-        String[] monthYear = {"Month", "Year"};
-        ArrayAdapter<String> monthYearAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, monthYear);
-        MaterialBetterSpinner monthYearSpinner = (MaterialBetterSpinner)
-                findViewById(R.id.monthYear);
-        monthYearSpinner.setAdapter(monthYearAdapter);
+        Toolbar toolBar = (Toolbar)findViewById(R.id.hometoolbar);
+        setSupportActionBar(toolBar);
 
-        String[] year = {"2017"};
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, year);
-        MaterialBetterSpinner yearSpinner = (MaterialBetterSpinner)
-                findViewById(R.id.year);
-        yearSpinner.setAdapter(yearAdapter);
-
-        String[] type = {"Cash In", "Cash Out"};
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, type);
-        MaterialBetterSpinner typeSpinner = (MaterialBetterSpinner)
-                findViewById(R.id.year);
-        typeSpinner.setAdapter(typeAdapter);
-
-        monthYearSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Graph");
+        toolBar.setNavigationIcon(R.mipmap.ic_arrow_back);
+        toolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            public void onClick(View v) {
+                finish();
             }
         });
 
-        setMonthData(0);
 
+        createYearList();
+
+        filter1Adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, filter1Val);
+        filter1 = (MaterialBetterSpinner)
+                findViewById(R.id.filter1);
+        filter1.setAdapter(filter1Adapter);
+
+        filter2 = (MaterialBetterSpinner)
+                findViewById(R.id.filter2);
+        resetFilter2(appGlobals.monthList);
+
+        filter3Adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, filter3Val);
+        filter3 = (MaterialBetterSpinner)
+                findViewById(R.id.filter3);
+        filter3.setAdapter(filter3Adapter);
+
+        createClickListeners();
     }
 
-    private void setMonthData(int type) {
+    private void createClickListeners() {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        filter1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0) {
+                    filter2Val = appGlobals.monthList;
+                } else {
+                    filter2Val = yearList.toArray(new String[yearList.size()]);
+                }
+                resetFilter2(filter2Val);
+                resetGraph();
+            }
+        });
+
+        filter2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                resetGraph();
+            }
+        });
+
+        filter3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                resetGraph();
+            }
+        });
+    }
+
+    private void resetGraph() {
+        String filter1Str = filter1.getText().toString();
+        String filter2Str = filter2.getText().toString();
+        String filter3Str = filter3.getText().toString();
+
+        int filter1Pos = 0, filter2Pos = 0, filter3Pos = 0;
+        for (String str : filter1Val) {
+            ++filter1Pos;
+            if (str.equals(filter1Str)) {
+                break;
+            }
+        }
+
+        if(filter2Str.isEmpty()) {
+            Date curDate = new Date(System.currentTimeMillis());
+            if(filter1Pos == 1) {
+                filter2Pos = Integer.parseInt(monthFormat.format(curDate));
+            } else {
+                String yearVal = yearFormat.format(curDate);
+
+                for(String str : filter2Val) {
+                    ++filter2Pos;
+                    if(str.equals(yearVal)) {
+                        break;
+                    }
+                }
+            }
+
+        } else {
+            for (String str : filter2Val) {
+                ++filter2Pos;
+                if (str.equals(filter2Str)) {
+                    break;
+                }
+            }
+        }
+
+        if(filter3Str.isEmpty()) {
+            filter3Pos = 1;
+        } else {
+            for (String str : filter3Val) {
+                ++filter3Pos;
+                if (str.equals(filter3Str)) {
+                    break;
+                }
+            }
+        }
+        setGraphData(filter1Pos, filter2Pos, filter3Pos);
+    }
+
+    private void resetFilter2(String[] val) {
+        filter2Val = val;
+        filter2Adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, val);
+        filter2.setAdapter(filter2Adapter);
+
+        filter2.setText("");
+    }
+
+    private void createYearList() {
+        yearList.clear();
+
+        Date dateYear = new Date(System.currentTimeMillis());
+        int curYear = Integer.parseInt(yearFormat.format(dateYear));
+        final int startYear = 2017;
+        if(curYear > startYear) {
+            int diff = curYear - startYear;
+            for(int i=0; i<diff; i++) {
+                yearList.add("" + (startYear + i));
+            }
+        } else {
+            yearList.add("" + startYear);
+        }
+    }
+
+    private void setGraphData(int filter1Pos, int filter2Pos, int filter3Pos) {
+
+        cashIn.clear();
+        cashOut.clear();
+
         int maxAmt = 0, loopCount = 0;
 
-        if(type == 0) {
-            sdf = new SimpleDateFormat("dd");
+        if(filter1Pos == 1) {
             loopCount = 31;
         } else {
-            sdf = new SimpleDateFormat("MM");
             loopCount = 12;
         }
 
@@ -100,19 +236,56 @@ public class TransactionGraph extends Activity {
 
             for(DetailsListClass detailList : appGlobals.chartList) {
                 Date curDate = new Date(Long.parseLong(detailList.getItem3()));
-                int day = Integer.parseInt(sdf.format(curDate))-1;
-                if (i == day) {
-                    String transType = detailList.getItem1();
-                    if (transType.equals("Cash In")) {
-                        inAmt += Integer.parseInt(detailList.getItem2());
-                    } else if (transType.equals("Cash Out")) {
-                        outAmt += Integer.parseInt(detailList.getItem2());
+
+                if(filter1Pos == 1) {
+                    int month = Integer.parseInt(monthFormat.format(curDate));
+                    if(filter2Pos == month) {
+                        int day = Integer.parseInt(dateFormat.format(curDate)) - 1;
+
+                        if (i == day) {
+                            String transType = detailList.getItem1();
+                            if (transType.equals("Cash In")) {
+                                inAmt += Integer.parseInt(detailList.getItem2());
+                            } else if (transType.equals("Cash Out")) {
+                                outAmt += Integer.parseInt(detailList.getItem2());
+                            }
+                        }
+                    }
+                } else {
+                    String yearVal = yearFormat.format(curDate);
+                    int year = 0;
+
+                    for(String str : filter2Val) {
+                        ++year;
+                        if(str.equals(yearVal)) {
+                            break;
+                        }
+                    }
+
+                    if(filter2Pos == year) {
+                        int month = Integer.parseInt(monthFormat.format(curDate)) - 1;
+
+                        if (i == month) {
+                            String transType = detailList.getItem1();
+                            if (transType.equals("Cash In")) {
+                                inAmt += Integer.parseInt(detailList.getItem2());
+                            } else if (transType.equals("Cash Out")) {
+                                outAmt += Integer.parseInt(detailList.getItem2());
+                            }
+                        }
                     }
                 }
             }
+
             cashIn.add(i, inAmt);
             cashOut.add(i, outAmt);
-            Log.d("_______________", "_______________________" + i + " " + inAmt + " " + outAmt);
+
+            if(filter3Pos == 2) {
+                cashOut.clear();
+            } else if(filter3Pos == 3) {
+                cashIn.clear();
+            }
+
             if(inAmt > maxAmt) {
                 maxAmt = inAmt;
             }
