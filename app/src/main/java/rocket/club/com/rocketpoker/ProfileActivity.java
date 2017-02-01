@@ -71,7 +71,7 @@ public class ProfileActivity extends ActionBarActivity {
     Context context = null;
     AppGlobals appGlobals = null;
     Button gotoHome, clear;
-    CircleImageView profileImage;
+    ImageView profileImage;
     EditText fullName, email, nickName, dob;
     TextView skipProfile, rocketId, emptyImage;
     ConnectionDetector connectionDetector = null;
@@ -118,7 +118,7 @@ public class ProfileActivity extends ActionBarActivity {
         email = (EditText) findViewById(R.id.email);
         nickName = (EditText) findViewById(R.id.nickName);
         dob = (EditText) findViewById(R.id.DOB);
-        profileImage = (CircleImageView) findViewById(R.id.userProfilePic);
+        profileImage = (ImageView) findViewById(R.id.userProfilePic);
         emptyImage = (TextView) findViewById(R.id.emptyImage);
         skipProfile = (TextView) findViewById(R.id.skipProfile);
         rocketId = (TextView) findViewById(R.id.rocketId);

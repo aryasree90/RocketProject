@@ -50,8 +50,8 @@
     <string name="frnd_req_accept">&#160; accepted your friend request</string>
     <string name="empty_frnd_req">You have 0 Friend Request</string>
     <string name="empty_service">No Services</string>
-    <string name="empty_update">No Updates</string>
-    <string name="empty_events">No Events</string>
+    <string name="empty_update">No New Updates!!!!</string>
+    <string name="empty_events">0 Events to Display! </string>
     <string name="skip">Skip >></string>
 
     <string-array name="member_list">
