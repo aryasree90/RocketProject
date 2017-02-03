@@ -79,6 +79,7 @@ public class FriendsFragment extends Fragment {
 
     LinearLayout showFriendDetails = null;
     ImageView friendImage = null;
+    ImageButton clearBtn;
     TextView friendName, friendMobile,friendNotFoundTxt;
     ArrayList<UserDetails> list = null;
     String searchAFriend = "";
@@ -123,6 +124,7 @@ public class FriendsFragment extends Fragment {
 
         friendsListView = (RecyclerView) view.findViewById(R.id.friends_recycler_view);
         addNewFriend = (Button) view.findViewById(R.id.add_new_friend);
+        clearBtn = (ImageButton) view.findViewById(R.id.search_clear);
 
         if(pageType == AppGlobals.FRIEND_LIST) {
             addNewFriend.setText(getString(R.string.add_new_friend));
@@ -291,10 +293,13 @@ public class FriendsFragment extends Fragment {
                         if(dialog != null)
                             dialog.cancel();
                         break;
+                    case R.id.search_clear:
+                        searchFriend.setText("");
+                        break;
                 }
             }
         };
-
+        clearBtn.setOnClickListener(clickListener);
         addNewFriend.setOnClickListener(clickListener);
     }
 
