@@ -114,6 +114,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_GAME_NAME_TABLE = "CREATE TABLE " + rocketsGameNameTable + "(" + _id +
             " integer primary key autoincrement not null, " + gameName + " text)";
 
+    public static final String TRUNCATE_TABLE = "DELETE FROM " + friendsTable + ";";
+    public static final String TRUNCATE_MSG_TABLE = "DELETE FROM " + messageTable + ";";
+    public static final String TRUNCATE_GAME_INVITE = "DELETE FROM " + gameInviteTable + ";";
+    public static final String TRUNCATE_ROCKETS_INFO = "DELETE FROM " + rocketsInfoTable + ";";
+    public static final String TRUNCATE_ROCKETS_LIVE_UPDATE = "DELETE FROM " + rocketsLiveUpdateTable + ";";
+    public static final String TRUNCATE_ROCKETS_TASKS = "DELETE FROM " + rocketsTasks + ";";
+    public static final String TRUNCATE_GAME_NAME_TABLE = "DELETE FROM " + rocketsGameNameTable + ";";
+
+
     public static final String SELECT_ALL_FRIENDS = "SELECT * FROM " + friendsTable;
     public static final String SELECT_PENDING = "SELECT * FROM " + friendsTable + " WHERE " +
             status + "=0";
@@ -610,5 +619,23 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
 
         return gameList;
+    }
+
+
+    public void truncateTables() {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(TRUNCATE_TABLE);
+        db.execSQL(TRUNCATE_MSG_TABLE);
+        db.execSQL(TRUNCATE_GAME_INVITE);
+        db.execSQL(TRUNCATE_ROCKETS_INFO);
+        db.execSQL(TRUNCATE_ROCKETS_LIVE_UPDATE);
+        db.execSQL(TRUNCATE_ROCKETS_TASKS);
+        db.execSQL(TRUNCATE_GAME_NAME_TABLE);
+    }
+
+    public void removeOldData() {
+
     }
 }
