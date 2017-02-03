@@ -48,6 +48,7 @@ public class AddGameTypeFragment extends Fragment {
     Button save, clear;
     ArrayList<String> gameList = null;
     ProgressDialog progressDialog = null;
+    MaterialBetterSpinner gameSpinner = null;
 
     final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
 
@@ -66,6 +67,11 @@ public class AddGameTypeFragment extends Fragment {
         DBHelper db = new DBHelper(context);
         String[] GAME_LIST = db.getRocketsGameList();
         gameList = new ArrayList<String>(Arrays.asList(GAME_LIST));
+
+        ArrayAdapter<String> gameListAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_dropdown_item_1line, GAME_LIST);
+
+        gameSpinner.setAdapter(gameListAdapter);
     }
 
     private void initializeWidgets(View view) {
@@ -78,6 +84,7 @@ public class AddGameTypeFragment extends Fragment {
 
         save = (Button) view.findViewById(R.id.saveBtn);
         clear = (Button) view.findViewById(R.id.clearBtn);
+        gameSpinner = (MaterialBetterSpinner) view.findViewById(R.id.curGameList);
 
         loadGameNameSpinner();
     }
@@ -139,6 +146,7 @@ public class AddGameTypeFragment extends Fragment {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
                         CommonUtilities.getRocketsNewGame(context, response);
                         clearFields();
+                        loadGameNameSpinner();
                         appGlobals.cancelDialog(progressDialog);
                     }
                 },

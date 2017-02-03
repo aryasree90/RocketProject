@@ -131,7 +131,7 @@ public class SalaryTransFragment extends Fragment {
                             appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
                             return;
                         }
-                        appGlobals.toastMsg(context, empNum, appGlobals.LENGTH_LONG);
+
                         Map<String, String> search_map = new HashMap<String, String>();
                         search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                         search_map.put("mem_mobile", empNum);
