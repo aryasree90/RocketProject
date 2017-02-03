@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:background="@color/appBackground"
-    android:padding="5dp"
+    android:padding="2dp"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:id="@+id/txt_salary_transaction_heading"
             android:text="@string/sal_trans"
             android:textSize="18sp"
@@ -56,10 +56,10 @@
                 <Button
                     android:id="@+id/searchBtn"
                     android:text="@string/btn_search"
-                    android:layout_weight=".4"
+                    android:layout_weight=".5"
                     android:textColor="@color/common_google_signin_btn_text_dark"
-                    android:layout_height="30dp"
-                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
                      android:background="@drawable/round_cornered_search_btn"
                     />
 
@@ -67,9 +67,9 @@
                     android:id="@+id/clearBtn"
                     android:text="@string/btn_clear1"
                     android:textColor="@color/common_google_signin_btn_text_dark"
-                    android:layout_width="wrap_content"
-                    android:layout_weight=".4"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="40dp"
                     android:layout_marginLeft="3dp"
                      android:background="@drawable/round_cornered_search_clear_btn"
                     />
@@ -86,24 +86,26 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_member_not_found"
             android:text="@string/member_not_found"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:textSize="15sp"
+            android:background="@color/common_google_signin_btn_text_dark_pressed"
             android:textColor="@color/colorPrimary"/>
 
         <RelativeLayout
             android:id="@+id/show_member_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@color/colorAccent"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/memberId"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -111,7 +113,7 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:layout_below="@+id/memberId"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -136,9 +138,10 @@
             android:id="@+id/trans_salary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -217,7 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/err_msg"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:textSize="15sp"
                 android:textColor="@color/colorPrimary"/>
 
