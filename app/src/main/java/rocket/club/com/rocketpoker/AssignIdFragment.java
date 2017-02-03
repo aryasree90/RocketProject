@@ -52,8 +52,8 @@ public class AssignIdFragment extends Fragment {
     ConnectionDetector connectionDetector = null;
 
     EditText searchFriend;
-    Button searchBtn;
-    LinearLayout memberDetails = null;
+    Button searchBtn, searchClearBtn;
+    LinearLayout memberDetails = null, searchClearBtnLayout;
     Button changeId, clearBtn;
     TextView errorMsg, memberName, memberNum, memberId;
     View.OnClickListener clickListener = null;
@@ -80,8 +80,10 @@ public class AssignIdFragment extends Fragment {
         connectionDetector = new ConnectionDetector(context);
 
         memberDetails = (LinearLayout) view.findViewById(R.id.show_friend_details);
+        searchClearBtnLayout = (LinearLayout) view.findViewById(R.id.lnr_searchclearBtn);
         searchFriend = (EditText) view.findViewById(R.id.searchText);
         searchBtn = (Button) view.findViewById(R.id.searchBtn);
+        searchClearBtn = (Button) view.findViewById(R.id.searchclearBtn);
         errorMsg = (TextView) view.findViewById(R.id.txt_friend_not_found);
 
         memberId = (TextView) view.findViewById(R.id.member_id);
@@ -135,10 +137,14 @@ public class AssignIdFragment extends Fragment {
                     case R.id.clearBtn:
                         clearFields();
                         break;
+                    case R.id.searchclearBtn:
+                        searchFriend.setText("");
+                        break;
                 }
             }
         };
         searchBtn.setOnClickListener(clickListener);
+        searchClearBtn.setOnClickListener(clickListener);
         changeId.setOnClickListener(clickListener);
         clearBtn.setOnClickListener(clickListener);
     }
@@ -152,6 +158,7 @@ public class AssignIdFragment extends Fragment {
         memberId.setText("");
         memberNum.setText("");
         memberName.setText("");
+        searchClearBtnLayout.setVisibility(View.VISIBLE);
     }
 
     private void serverCall(final Map<String, String> params, final String url) {
@@ -170,12 +177,14 @@ public class AssignIdFragment extends Fragment {
                                 memberNum.setText(userDetails.getMobile());
 
                                 memberDetails.setVisibility(View.VISIBLE);
+                                searchClearBtnLayout.setVisibility(View.GONE);
                             } catch (Exception e) {
                                 appGlobals.toastMsg(context, getString(R.string.friend_not_found), appGlobals.LENGTH_LONG);
                                 searchFriend.setText("");
                                 errorMsg.setVisibility(View.VISIBLE);
                                 searchFriend.setEnabled(true);
                                 searchFriend.requestFocus();
+                                searchClearBtnLayout.setVisibility(View.VISIBLE);
                                 appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
                             }
                         } else if(response.equals("success")){

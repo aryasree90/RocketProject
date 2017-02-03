@@ -76,7 +76,7 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final RegisterDetails regDetail = registerDetails[position];
 
-        holder.memberDetail.setText(regDetail.getName() + " " + regDetail.getReg_mob());
+        holder.memberDetail.setText(regDetail.getName() + "\n" + regDetail.getReg_mob());
 
         final int pos = Integer.parseInt(regDetail.getUser_type());
         holder.memberType.setText(MEMBER_TYPES[pos]);
