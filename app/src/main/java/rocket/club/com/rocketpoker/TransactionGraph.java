@@ -69,6 +69,10 @@ public class TransactionGraph extends AppCompatActivity {
         Date mon = new Date(System.currentTimeMillis());
         int curMonth = Integer.parseInt(monthFormat.format(mon));
 
+        filter1.setText(filter1Val[0]);
+        filter2.setText(appGlobals.monthList[curMonth]);
+        filter3.setText(filter3Val[0]);
+
         setGraphData(1, curMonth, 1);
     }
 
@@ -81,7 +85,7 @@ public class TransactionGraph extends AppCompatActivity {
         setSupportActionBar(toolBar);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Graph");
+        actionBar.setTitle(getString(R.string.graph));
         toolBar.setNavigationIcon(R.mipmap.ic_arrow_back);
         toolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +93,6 @@ public class TransactionGraph extends AppCompatActivity {
                 finish();
             }
         });
-
 
         createYearList();
 
@@ -199,7 +202,7 @@ public class TransactionGraph extends AppCompatActivity {
                 android.R.layout.simple_dropdown_item_1line, val);
         filter2.setAdapter(filter2Adapter);
 
-        filter2.setText("");
+        filter2.setText(val[0]);
     }
 
     private void createYearList() {
@@ -333,9 +336,9 @@ public class TransactionGraph extends AppCompatActivity {
 // Creating a XYMultipleSeriesRenderer to customize the whole chart
         XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
         multiRenderer.setXLabels(0);
-        multiRenderer.setChartTitle("Income vs Expense Chart");
-        multiRenderer.setXTitle("Month");
-        multiRenderer.setYTitle("Amount");
+        multiRenderer.setChartTitle(getString(R.string.trans_graph));
+        multiRenderer.setXTitle(filter1.getText().toString());
+        multiRenderer.setYTitle(getString(R.string.amount));
 
 /***
  * Customizing graphs

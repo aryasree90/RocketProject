@@ -122,6 +122,7 @@ public class FilterTransaction extends AppCompatActivity {
         });
 
         graphBtn = (Button) findViewById(R.id.graphBtn);
+        graphBtn.setVisibility(View.INVISIBLE);
         searchBtn = (Button) findViewById(R.id.searchBtn);
         clearBtn = (Button) findViewById(R.id.clearBtn);
         label = (TextView) findViewById(R.id.label);
@@ -166,6 +167,7 @@ public class FilterTransaction extends AppCompatActivity {
                 rocketId = appGlobals.sharedPref.getRocketId();
             typeList.clear();
             typeList.add(rocketId);
+            graphBtn.setVisibility(View.VISIBLE);
             loadFilter(true);
         } else {
             Map<String, String> map = new HashMap<String, String>();

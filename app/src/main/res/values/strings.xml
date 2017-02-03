@@ -201,6 +201,9 @@
     <string name="exp_label2">Amount</string>
     <string name="exp_label3">Month</string>
 
+    <string name="all">All</string>
+    <string name="trans_graph">Transaction Graph</string>
+
     <string name="sal_label1">Emp Id</string>
     <string name="sal_label2">Amount</string>
     <string name="sal_label3">Month</string>
