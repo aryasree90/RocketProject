@@ -244,7 +244,7 @@ public class FriendsFragment extends Fragment {
                         DBHelper db = new DBHelper(context);
                         ContactClass contactFrnd = db.getContacts(frndMob);
 
-                        if(contactFrnd != null) {
+                        if(contactFrnd != null && contactFrnd.getStatus() == AppGlobals.ACCEPTED_FRIENDS) {
                             String param = "";
                             if(!TextUtils.isEmpty(contactFrnd.getContactName())) {
                                 param = contactFrnd.getContactName();

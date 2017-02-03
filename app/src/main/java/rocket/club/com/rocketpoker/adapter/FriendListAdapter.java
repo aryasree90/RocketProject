@@ -1,7 +1,10 @@
 package rocket.club.com.rocketpoker.adapter;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,13 +18,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import rocket.club.com.rocketpoker.InvitationListFragment;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
+import rocket.club.com.rocketpoker.classes.UserDetails;
+import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 /**
  * Created by Admin on 7/22/2016.
@@ -34,8 +52,10 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
     private CheckBox checkBox = null;
     private List<FriendsListClass> friendsList;
     private List<FriendsListClass> tempList;
+    ProgressDialog progressDialog = null;
     private View.OnClickListener clickListener = null;
     final private String TAG = "FriendsListAdapter";
+    final String FRIEND_REQ_URL = AppGlobals.SERVER_URL + "frndReq.php";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView friendName, friendNumber;
@@ -96,7 +116,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
         holder.addFriend.setVisibility(View.GONE);
 
-        final String friendName = holder.friendName.getText().toString();
+        final MyViewHolder tempHolder = holder;
 
         if(pageType == AppGlobals.FRIEND_LIST) {
             holder.selectedItem.setVisibility(View.GONE);
@@ -106,7 +126,21 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
                 holder.addFriend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, friendName, Toast.LENGTH_LONG).show();
+
+                        String friendMob = friendList.getMobile();
+
+                        UserDetails userDetails = new UserDetails();
+                        userDetails.setMobile(friendList.getMobile());
+                        userDetails.setUserName(friendList.getName());
+                        userDetails.setUserImage(friendList.getImage());
+                        userDetails.setStatus(-1);
+
+                        Map<String, String> frnd_map = new HashMap<String, String>();
+                        frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                        frnd_map.put("frnd_mobile", friendMob);
+                        frnd_map.put("task", appGlobals.NEW_FRND_REQ);
+                        progressDialog = appGlobals.showDialog(context, context.getString(R.string.saving));
+                        serverCall(frnd_map, FRIEND_REQ_URL, userDetails);
                     }
                 });
             }
@@ -115,6 +149,47 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             checkBox = holder.selectedItem;
             setClickListener(friendList.getMobile(), position);
         }
+    }
+
+    private void serverCall(final Map<String, String> map, final String URL, final UserDetails userDetails) {
+
+        if(!appGlobals.isNetworkConnected(context)) {
+            appGlobals.toastMsg(context, context.getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+            appGlobals.cancelDialog(progressDialog);
+            return;
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(URL.equals(FRIEND_REQ_URL)) {
+                            if(response.equals("Success")) {
+                                ArrayList<UserDetails> list = new ArrayList<UserDetails>();
+                                list.add(userDetails);
+                                DBHelper db = new DBHelper(context);
+                                db.insertContactDetails(list, false);
+                                appGlobals.toastMsg(context, context.getString(R.string.req_sent), appGlobals.LENGTH_LONG);
+                            }
+                        }
+                        appGlobals.cancelDialog(progressDialog);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        appGlobals.cancelDialog(progressDialog);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
     private void showImageDialog(String imageUrl) {

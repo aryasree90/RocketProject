@@ -603,7 +603,6 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void startContactSync() {
-        Log.d("___________________", "_______________________ Loading contacts");
         ContactAsync contactAsync = new ContactAsync(ProfileActivity.this);
         contactAsync.execute();
     }
