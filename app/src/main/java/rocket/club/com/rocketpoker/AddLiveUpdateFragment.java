@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class AddLiveUpdateFragment extends Fragment {
     ConnectionDetector connectionDetector = null;
     private static final String TAG = "AddLiveUpdateFragment";
 
+    LinearLayout updtDetLayout = null;
     MaterialBetterSpinner updateTypeSpinner = null, gameTypeSpinner = null;
     ArrayAdapter<String> updateTypeAdapter = null, gameTypeAdapter = null;
     EditText header, text1, text2, text3, comments;
@@ -94,6 +96,8 @@ public class AddLiveUpdateFragment extends Fragment {
         updateTypeSpinner = (MaterialBetterSpinner) view.findViewById(R.id.updateType);
         updateTypeSpinner.setAdapter(updateTypeAdapter);
 
+        updtDetLayout = (LinearLayout) view.findViewById(R.id.updt_det_layout);
+
         gameTypeSpinner = (MaterialBetterSpinner) view.findViewById(R.id.gameType);
         loadGameNameSpinner();
         gameTypeSpinner.setVisibility(View.GONE);
@@ -115,6 +119,7 @@ public class AddLiveUpdateFragment extends Fragment {
                 header.setVisibility(View.VISIBLE);
                 text1.setVisibility(View.VISIBLE);
                 gameTypeSpinner.setVisibility(View.GONE);
+                updtDetLayout.setVisibility(View.VISIBLE);
 
                 if(position == 0) {         //Winner
 
@@ -214,6 +219,7 @@ public class AddLiveUpdateFragment extends Fragment {
         text2.setText("");
         text3.setText("");
         comments.setText("");
+        updtDetLayout.setVisibility(View.GONE);
     }
 
     private void serverCall(final Map<String,String> params) {

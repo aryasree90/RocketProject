@@ -142,10 +142,12 @@
     <string name="assign_user_role">ASSIGN USER ROLE</string>
     <string name="assign_user_id">ASSIGN USER ID</string>
     <string name="add_new_live_updates">ADD NEW LIVE UPDATES</string>
-    <string name="common_notif_msg">Common Notification</string>
-    <string name="chat_notif_msg">Chat Notification</string>
+    <string name="common_notif_msg">Your Common App Notification has been Changed....</string>
+    <string name="common_notif_msg_note">If you Turn Off App Notification, you won\'t receive any notification updates. Please turn on the facility to get instant notification.</string>
+    <string name="chat_notif_msg">Your Chat Notification Settings has been updated...</string>
     <string name="date_time">Select Date and Time</string>
     <string name="confirm_time">Confirm</string>
+    <string name="trans_msg">No Transactions to Display.</string>
     <string name="select_friend">Select atleast 1 friend</string>
     <string name="select_game">Select a game type</string>
     <string name="select_time">Select time</string>

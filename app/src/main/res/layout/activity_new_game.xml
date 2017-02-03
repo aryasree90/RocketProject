@@ -4,61 +4,74 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="2dp"
+   android:padding="4dp"
+    android:background="@color/appBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:id="@+id/txt_add_new_game"
         android:text="@string/add_new_game"
         android:textSize="18sp"
         android:gravity="center"
-        android:layout_marginBottom="20dp"
-        android:layout_margin="2dp"
         android:textAlignment="center"
         android:background="#003399"
         android:textColor="@color/common_google_signin_btn_text_dark"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/common_google_signin_btn_text_dark_pressed">
 
     <EditText
         android:id="@+id/gameName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="false"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
         android:hint="@string/game_name"/>
 
-
     <LinearLayout
+        android:id="@+id/btnLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:background="@drawable/background_multicolor"
         android:weightSum="1"
-        android:gravity="center">
+        android:orientation="horizontal">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:id="@+id/saveBtn"
-            android:background="@drawable/round_cornered_save_btn"
-            android:layout_weight=".4"
+            android:background="@color/clr_btn_save"
+            android:layout_weight=".5"
             android:text="@string/save"/>
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:textColor="@color/wallet_bright_foreground_holo_dark"
             android:id="@+id/clearBtn"
-            android:layout_marginLeft="3dp"
-            android:background="@drawable/round_cornered_clear_btn"
-            android:layout_weight=".4"
+            android:background="@color/clr_btn_clear"
+            android:layout_weight=".5"
             android:text="@string/btn_clear1"/>
+
+
+
+
 
     </LinearLayout>
 
 
+    </LinearLayout>
 
 </LinearLayout>

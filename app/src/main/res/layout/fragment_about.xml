@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/appBackground"
+    android:padding="8dp"
     tools:context="rocket.club.com.rocketpoker.AboutFragment">
 
     <include

@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
+    android:background="@color/appBackground"
     android:orientation="vertical">
 <!--
 
@@ -20,20 +22,16 @@
 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="center|center_horizontal"
-        android:background="@drawable/rounded_cornered_layout"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="7dp"
+        android:layout_height="match_parent"
+        android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
         <ImageView

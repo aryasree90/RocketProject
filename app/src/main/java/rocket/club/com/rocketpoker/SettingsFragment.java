@@ -134,12 +134,15 @@ public class SettingsFragment extends Fragment {
 
         dialogMsg = (TextView) dialog.findViewById(R.id.txt_msg);
         dialogMsg.setText(msg);
+
+
+
         okButton = (Button) dialog.findViewById(R.id.okDialog);
         okButton.setOnClickListener(onClickListener);
 
         dialog.show();
 
-        appGlobals.setDialogLayoutParams(dialog, context, false, true);
+        appGlobals.setDialogLayoutParams(dialog, context, false, false);
     }
 
     private void createSignOutDialog() {
@@ -155,6 +158,8 @@ public class SettingsFragment extends Fragment {
         nobtn.setOnClickListener(onClickListener);
 
         dialog.show();
+
+        appGlobals.setDialogLayoutParams(dialog, context, false, false);
     }
 
 }
