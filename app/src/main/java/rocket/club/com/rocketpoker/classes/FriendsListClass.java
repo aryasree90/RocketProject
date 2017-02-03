@@ -9,6 +9,7 @@ public class FriendsListClass {
     private String name;
     private String mobile;
     private String image;
+    private int status;
 
     public FriendsListClass(int id, String name, String mobile, String image) {
         this.id = id;
@@ -17,10 +18,11 @@ public class FriendsListClass {
         this.image = image;
     }
 
-    public FriendsListClass(String name, String mobile, String image) {
+    public FriendsListClass(String name, String mobile, String image, int status) {
         this.name = name;
         this.mobile = mobile;
         this.image = image;
+        this.status = status;
     }
 
     public int getId() {
@@ -37,5 +39,9 @@ public class FriendsListClass {
 
     public String getImage() {
         return image;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

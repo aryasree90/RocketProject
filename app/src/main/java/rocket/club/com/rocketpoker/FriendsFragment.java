@@ -163,11 +163,11 @@ public class FriendsFragment extends Fragment {
         try {
             friendsList.clear();
             DBHelper db = new DBHelper(context);
-            ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.ALL_FRIENDS);
+            ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.SUGGESTED_FRIENDS);
             for(ContactClass contactClass : contactList) {
                 String name = contactClass.getContactName();
                 String image = contactClass.getUserImage();
-                friendsList.add(new FriendsListClass(name, contactClass.getPhoneNumber(), image));
+                friendsList.add(new FriendsListClass(name, contactClass.getPhoneNumber(), image, contactClass.getStatus()));
             }
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
@@ -359,7 +359,7 @@ public class FriendsFragment extends Fragment {
                             if(response.equals("Success")) {
                                 if (list != null && list.size() == 1) {
                                     DBHelper db = new DBHelper(context);
-                                    db.insertContactDetails(list);
+                                    db.insertContactDetails(list, false);
                                     appGlobals.toastMsg(context, getString(R.string.req_sent), appGlobals.LENGTH_LONG);
                                 } else {
                                     appGlobals.toastMsg(context, getString(R.string.req_not_sent), appGlobals.LENGTH_LONG);

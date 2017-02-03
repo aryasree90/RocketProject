@@ -117,6 +117,9 @@ public class DBHelper extends SQLiteOpenHelper {
             status + "=0";
     public static final String SELECT_FRIENDS = "SELECT * FROM " + friendsTable + " WHERE " +
             status + "=1";
+    public static final String SELECT_SUGGESTED_FRIENDS = "SELECT * FROM " + friendsTable + " WHERE " +
+            status + "=" + AppGlobals.ACCEPTED_FRIENDS + " or " +
+            status + "=" + AppGlobals.SUGGESTED_FRIENDS;
 
     public static final String SELECT_FRIENDS_USING_MOB = "SELECT * FROM " + friendsTable + " WHERE " +
             mobile + "=?";
@@ -153,40 +156,41 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
-    public boolean insertContactDetails(ArrayList<UserDetails> userDetails){
-        SQLiteDatabase db = this.getWritableDatabase();
+    public boolean insertContactDetails(ArrayList<UserDetails> userDetails, boolean sync){
 
         for(UserDetails details : userDetails) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(this.mobile, details.getMobile());
-            contentValues.put(this.userName, details.getUserName());
-            contentValues.put(this.nickName, details.getNickName());
-            contentValues.put(this.status, details.getStatus());
-            contentValues.put(this.userImage, details.getUserImage());
 
-            db.insert(friendsTable, null, contentValues);
+            ContactClass detailClass = getContacts(details.getMobile());
+
+            if(detailClass == null) {
+
+                if(sync)
+                    details.setStatus(AppGlobals.SUGGESTED_FRIENDS);
+
+                SQLiteDatabase db = this.getWritableDatabase();
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(this.mobile, details.getMobile());
+                contentValues.put(this.userName, details.getUserName());
+                contentValues.put(this.nickName, details.getNickName());
+                contentValues.put(this.status, details.getStatus());
+                contentValues.put(this.userImage, details.getUserImage());
+
+                db.insert(friendsTable, null, contentValues);
+
+                if(db != null)
+                    db.close();
+            } else if(!sync) {
+                updateContacts(details.getStatus(), details.getMobile());
+            }
         }
-        if(db != null)
-            db.close();
         return true;
     }
 
-    public void updateContacts(int statusValue, String updtMob, Context context) {
+    public void updateContacts(int statusValue, String updtMob) {
         SQLiteDatabase db = this.getWritableDatabase();
         final String where = mobile + "=" + updtMob;
         if(statusValue == 1) {
-
-/*            AppGlobals appGlobals = AppGlobals.getInstance(context);
-
-            String imageFileName = appGlobals.ROCKETS + "_" + updtMob + appGlobals.IMG_FILE_EXTENSION;
-
-            HashMap<String, String> params = new HashMap<>();
-            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
-            params.put("id", updtMob);
-            params.put("task", AppGlobals.NOTIF_FRND_REQ_RESP);
-
-            appGlobals.serverCallToDownloadImage(context, params, imageFileName);*/
-
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
             db.update(friendsTable, cv, where, null);
@@ -204,6 +208,7 @@ public class DBHelper extends SQLiteOpenHelper {
         * 1 Accepted Friends
         * 2 Pending Friends
         * 3 All Friends
+        * 4 Suggested Friends
         */
 
         Cursor res = null;
@@ -212,6 +217,8 @@ public class DBHelper extends SQLiteOpenHelper {
             res = db.rawQuery(SELECT_FRIENDS, null );
         } else if(type == AppGlobals.PENDING_FRIENDS) {
             res = db.rawQuery(SELECT_PENDING, null );
+        } else if(type == AppGlobals.SUGGESTED_FRIENDS) {
+            res = db.rawQuery(SELECT_SUGGESTED_FRIENDS, null );
         } else {
             res = db.rawQuery(SELECT_ALL_FRIENDS, null );
         }

@@ -93,14 +93,14 @@ public final class CommonUtilities {
             if(type.equals(AppGlobals.NOTIF_FRND_REQ)) {
                 ArrayList<UserDetails> list = new ArrayList<>();
                 list.add(userDetails);
-                db.insertContactDetails(list);
+                db.insertContactDetails(list, false);
                 notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_rec);
 
                 Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ);
                 context.sendBroadcast(autoIntent);
 
             } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
-                db.updateContacts(userDetails.getStatus(), notif.getSender(), context);
+                db.updateContacts(userDetails.getStatus(), notif.getSender());
                 if(userDetails.getStatus() == 1) {
                     notifMsg = notif.getSender() + context.getString(R.string.frnd_req_accept);
                 }

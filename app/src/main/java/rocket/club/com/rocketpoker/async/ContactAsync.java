@@ -2,8 +2,24 @@ package rocket.club.com.rocketpoker.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import rocket.club.com.rocketpoker.ProfileActivity;
+import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.ContactHelper;
 import rocket.club.com.rocketpoker.classes.UserDetails;
@@ -25,6 +41,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void> {
 
@@ -32,7 +51,8 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
     AppGlobals appGlobals = null;
     private ProfileActivity activity;
     private static final String TAG = "ContactAsync";
-    private static String FETCH_CONTACT_URL = AppGlobals.SERVER_URL + "/fetch_contacts.php";
+    private static String FETCH_CONTACT_URL1 = AppGlobals.SERVER_URL + "/fetch_contacts.php";
+    private static String FETCH_CONTACT_URL = AppGlobals.SERVER_URL + "/fetchContacts.php";
 
     public ContactAsync(ProfileActivity act){
         this.activity = act;
@@ -82,6 +102,61 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
 
     private void sendContactsToServer(ArrayList<ContactClass> contactList, ContactHelper contactHelper) {
 
+        JsonArray contactJsonArray = new JsonArray();
+        for(ContactClass contactClass : contactList) {
+            JsonObject contactJson = new JsonObject();
+            contactJson.addProperty(contactClass.getContactName(), contactClass.getPhoneNumber());
+            contactJsonArray.add(contactJson);
+        }
+
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+        map.put("contact", contactJsonArray.toString());
+        map.put("isLast", "" + contactHelper.isAtLast());
+        map.put("isFirst", "" + contactHelper.isFirst());
+
+        serverCall(map);
+    }
+
+    private void serverCall(final Map<String,String> params) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, FETCH_CONTACT_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        appGlobals.logClass.setLogMsg(TAG, response, LogClass.DEBUG_MSG);
+
+                        if(!response.isEmpty()) {
+                            Gson gson = new Gson();
+
+                            UserDetails[] details = gson.fromJson(response, UserDetails[].class);
+
+                            if(details.length > 0) {
+                                ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
+                                DBHelper db = new DBHelper(context);
+                                db.insertContactDetails(userDetails, true);
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
+    private void sendContactsToServer1(ArrayList<ContactClass> contactList, ContactHelper contactHelper) {
+
         String resultstr = "";
         try {
             HttpClient httpclient = new DefaultHttpClient();
@@ -97,7 +172,7 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
             appGlobals.logClass.setLogMsg(TAG, "Reached " + contactHelper.isFirst(), LogClass.DEBUG_MSG);
 
             JSONObject jsonData = new JSONObject();
-            jsonData.put("ownId", appGlobals.sharedPref.getUserId());
+            jsonData.put("ownId", appGlobals.sharedPref.getLoginMobile());
             jsonData.put("contact", contactJsonArray.toString());
             jsonData.put("isLast", contactHelper.isAtLast());
             jsonData.put("isFirst", contactHelper.isFirst());
@@ -133,15 +208,15 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
                 int len = list.length - 1;
                 for(int i=0; i<len; i++) {
                     String item[] = list[i].split("':'");
-                    appGlobals.logClass.setLogMsg(TAG, item[0] + " " + item[1], LogClass.DEBUG_MSG);
+                    appGlobals.logClass.setLogMsg(TAG, "Contacts " + item[0] + " " + item[1], LogClass.DEBUG_MSG);
 //                    userDetails.setUserId(item[0]);
                     userDetails.setMobile(item[1]);
                     userDetails.setUserName(item[2]);
 
                     userDetailList.add(userDetails);
                 }
-                DBHelper db = new DBHelper(context);
-                db.insertContactDetails(userDetailList);
+                /*DBHelper db = new DBHelper(context);
+                db.insertContactDetails(userDetailList);*/
             }
         } catch (Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);

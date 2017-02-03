@@ -60,6 +60,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import rocket.club.com.rocketpoker.async.ContactAsync;
 import rocket.club.com.rocketpoker.classes.ProfileDetailsClass;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -573,10 +574,14 @@ public class ProfileActivity extends ActionBarActivity {
 
     private void checkPermission() {
         if(!appGlobals.checkLocationPermission(context, AppGlobals.READ_EXTERNAL_STORAGE)
-                || !appGlobals.checkLocationPermission(context, AppGlobals.WRITE_EXTERNAL_STORAGE)) {
+                || !appGlobals.checkLocationPermission(context, AppGlobals.WRITE_EXTERNAL_STORAGE)
+                || !appGlobals.checkLocationPermission(context, AppGlobals.READ_CONTACTS)) {
             ActivityCompat.requestPermissions(ProfileActivity.this,
-                    new String[]{AppGlobals.READ_EXTERNAL_STORAGE, AppGlobals.WRITE_EXTERNAL_STORAGE},
+                    new String[]{AppGlobals.READ_EXTERNAL_STORAGE,
+                            AppGlobals.WRITE_EXTERNAL_STORAGE, AppGlobals.READ_CONTACTS},
                     AppGlobals.REQUEST_EXTERNAL_STORAGE);
+        } else {
+            startContactSync();
         }
     }
 
@@ -590,9 +595,16 @@ public class ProfileActivity extends ActionBarActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     appGlobals.logClass.setLogMsg(TAG, "Permission Granted", LogClass.DEBUG_MSG);
+                    startContactSync();
                 }
                 return;
             }
         }
+    }
+
+    private void startContactSync() {
+        Log.d("___________________", "_______________________ Loading contacts");
+        ContactAsync contactAsync = new ContactAsync(ProfileActivity.this);
+        contactAsync.execute();
     }
 }

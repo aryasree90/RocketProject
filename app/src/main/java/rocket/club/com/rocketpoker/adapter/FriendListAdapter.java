@@ -84,10 +84,11 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
         String thumbName = appGlobals.thumbImageName(friendList.getImage());
 
-        if(!TextUtils.isEmpty(thumbName)) {
+        if(friendList.getStatus() != AppGlobals.SUGGESTED_FRIENDS && !TextUtils.isEmpty(thumbName)) {
             String imageUrl = AppGlobals.SERVER_URL + thumbName;
             appGlobals.loadImageFromServerWithDefault(imageUrl, holder.friendImage, "", false, context);
         } else {
+            holder.friendImage.setVisibility(View.VISIBLE);
             holder.friendImage.setImageResource(R.drawable.default_profile);
         }
 
@@ -102,24 +103,19 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
         /*if(friendList.getImage() == null || TextUtils.isEmpty(friendList.getImage())) {
             String imagePath = appGlobals.getRocketsPath(context) + "";
-
             HashMap<String, String> params = new HashMap<>();
             params.put("mobile", appGlobals.sharedPref.getLoginMobile());
             params.put("frndMob", friendList.getMobile());
-
             appGlobals.searchUpdatedImage(context, params, imagePath, holder.friendImage);
         } else {
             String imagePath = appGlobals.getRocketsPath(context) + "/" + friendList.getImage();
             File filePath = new File(imagePath);
-
             if (filePath.exists()) {
                 holder.friendImage.setVisibility(View.VISIBLE);
                 holder.friendImage.setImageURI(Uri.fromFile(filePath));
-
                 HashMap<String, String> params = new HashMap<>();
                 params.put("mobile", appGlobals.sharedPref.getLoginMobile());
                 params.put("frndMob", friendList.getMobile());
-
                 appGlobals.searchUpdatedImage(context, params, imagePath, holder.friendImage);
             } else {
                 String imageUrl = AppGlobals.SERVER_URL + friendList.getImage();

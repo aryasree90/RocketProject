@@ -122,8 +122,9 @@ public class AppGlobals {
     public static final String ACCESS_COARSE_LOC = android.Manifest.permission.ACCESS_COARSE_LOCATION;
     public static final String ACCESS_FINE_LOC = android.Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String CALL_PHONE = android.Manifest.permission.CALL_PHONE;
-    public static final String READ_EXTERNAL_STORAGE = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    public static final String READ_EXTERNAL_STORAGE = android.Manifest.permission.READ_EXTERNAL_STORAGE;
     public static final String WRITE_EXTERNAL_STORAGE = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    public static final String READ_CONTACTS = android.Manifest.permission.READ_CONTACTS;
 
     public static final int REQUEST_CODE_SMS = 100;
     public static final int REQUEST_CODE_LOCATION = 101;
@@ -164,6 +165,7 @@ public class AppGlobals {
     public static final int ACCEPTED_FRIENDS = 1;
     public static final int PENDING_FRIENDS = 2;
     public static final int ALL_FRIENDS = 3;
+    public static final int SUGGESTED_FRIENDS = 4;
 
     //Notification keys
     public static final String USER_TYPE = "user_type";

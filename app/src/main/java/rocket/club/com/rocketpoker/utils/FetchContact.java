@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.ContactHelper;
@@ -68,10 +69,14 @@ public class FetchContact {
         while(cursor.moveToNext()) {
 
             String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            String phoneNumber = getCanonicalPhoneNumber(context, number);
+            String phoneNumber = number;//getCanonicalPhoneNumber(context, number);
 
             if(phoneNumber != null) {
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+                if(phoneNumber.startsWith("0")) {
+                    phoneNumber = phoneNumber.substring(1);
+                }
 
                 ContactClass contactClass = new ContactClass();
                 contactClass.setContactName(name);
@@ -137,7 +142,7 @@ public class FetchContact {
             }
             phNumberProto = phoneUtil.parse(phonenumber, countryIso);
         } catch (NumberParseException e) {
-            appGlobals.logClass.setLogMsg(TAG, "NumberParseException " + e.toString(), LogClass.ERROR_MSG);
+//            appGlobals.logClass.setLogMsg(TAG, "NumberParseException " + e.toString(), LogClass.ERROR_MSG);
             return null;
         } catch (Exception e) {
             appGlobals.logClass.setLogMsg(TAG, "Exception " + e.toString(), LogClass.ERROR_MSG);
