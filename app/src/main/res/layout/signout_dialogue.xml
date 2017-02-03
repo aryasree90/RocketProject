@@ -1,35 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/txt_add_new_game"
+        android:gravity="center"
+        android:background="@color/colorPrimaryDark"/>
+
     <TextView
         android:id="@+id/txt_signout"
         android:textSize="18sp"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/signoutNotify"
+        android:layout_marginBottom="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+
+
+
+
+
+
     <LinearLayout
+        android:id="@+id/btnLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
         android:gravity="center"
-        android:layout_marginTop="10dp"
+        android:background="@drawable/background_multicolor"
+        android:weightSum="1"
         android:orientation="horizontal">
 
         <Button
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:id="@+id/signoutYes"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:text="YES" />
+            android:background="@color/clr_btn_save"
+            android:layout_weight=".5"
+            android:text="YES"/>
+
         <Button
-            android:id="@+id/signoutNo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:text="NO" />
-        </LinearLayout>
+            android:textColor="@color/wallet_bright_foreground_holo_dark"
+            android:id="@+id/signoutNo"
+            android:background="@color/clr_btn_clear"
+            android:layout_weight=".5"
+            android:text="NO"/>
+
+
+
+
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

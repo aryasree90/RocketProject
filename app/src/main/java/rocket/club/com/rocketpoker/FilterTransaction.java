@@ -67,7 +67,7 @@ public class FilterTransaction extends AppCompatActivity {
     View.OnClickListener clickListener = null;
 
     Button clearBtn, searchBtn, graphBtn;
-    TextView label;
+    TextView label,trans_msg;
     RecyclerView filterView;
     MaterialBetterSpinner filter1;
     Button filter2, filter3;
@@ -126,6 +126,7 @@ public class FilterTransaction extends AppCompatActivity {
         searchBtn = (Button) findViewById(R.id.searchBtn);
         clearBtn = (Button) findViewById(R.id.clearBtn);
         label = (TextView) findViewById(R.id.label);
+        trans_msg = (TextView) findViewById(R.id.no_transaction_msg);
         filter1 = (MaterialBetterSpinner) findViewById(R.id.filter1);
         filter2 = (Button) findViewById(R.id.filter2);
         filter3 = (Button) findViewById(R.id.filter3);
@@ -375,8 +376,11 @@ public class FilterTransaction extends AppCompatActivity {
                             if(typeList.size() > 0)
                                 loadFilter(true);
                         } else if(url.equals(FETCH_DET)) {
-                            if(response.isEmpty())
+                            if(response.isEmpty()) {
+                                filterView.setVisibility(View.GONE);
+                                trans_msg.setVisibility(View.VISIBLE);
                                 return;
+                            }
 
                             filterView.setVisibility(View.INVISIBLE);
 
@@ -384,26 +388,35 @@ public class FilterTransaction extends AppCompatActivity {
                             if(filterTrans.equals(EXPENSE)) {
                                 ExpTrans[] expTrans = gson.fromJson(response, ExpTrans[].class);
                                 if(expTrans.length <= 0) {
-
+                                    filterView.setVisibility(View.GONE);
+                                    trans_msg.setVisibility(View.VISIBLE);
                                     return;
                                 }
                                 detailList = loadExpDetails(expTrans);
                             } else if(filterTrans.equals(SALARY)) {
                                 EmpDetails[] empDet = gson.fromJson(response, EmpDetails[].class);
                                 if(empDet.length <= 0) {
+                                    filterView.setVisibility(View.GONE);
+                                    trans_msg.setVisibility(View.VISIBLE);
                                     return;
                                 }
                                 detailList = loadEmpDetails(empDet);
                             } else if(filterTrans.equals(USER)) {
                                 UserTransDetails[] userDet = gson.fromJson(response, UserTransDetails[].class);
                                 if(userDet.length <= 0) {
+                                    filterView.setVisibility(View.GONE);
+                                    trans_msg.setVisibility(View.VISIBLE);
                                     return;
                                 }
                                 detailList = loadUserDetails(userDet);
                             }
 
-                            if(detailList != null) {
+                            if(detailList == null || detailList.length == 0) {
+                                filterView.setVisibility(View.GONE);
+                                trans_msg.setVisibility(View.VISIBLE);
+                            } else {
                                 filterView.setVisibility(View.VISIBLE);
+                                trans_msg.setVisibility(View.GONE);
                                 ClubDetailsAdapter clubAdapter = new ClubDetailsAdapter(detailList, context, null, 1);
                                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
                                 filterView.setLayoutManager(mLayoutManager);

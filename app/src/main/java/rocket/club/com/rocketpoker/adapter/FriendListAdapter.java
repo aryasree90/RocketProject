@@ -3,6 +3,8 @@ package rocket.club.com.rocketpoker.adapter;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -145,6 +147,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             } else if(friendList.getStatus() == AppGlobals.PENDING_REQUEST) {
                 holder.addFriend.setVisibility(View.VISIBLE);
                 holder.addFriend.setEnabled(false);
+                holder.addFriend.setText("Request Sent");
+                holder.addFriend.setBackgroundResource(R.drawable.round_cornered_clear_btn);
             }
         } else {
             holder.selectedItem.setVisibility(View.VISIBLE);

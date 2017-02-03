@@ -469,7 +469,7 @@ public class FriendsFragment extends Fragment {
 
         dialog.show();
 
-        appGlobals.setDialogLayoutParams(dialog, context, false, true);
+        appGlobals.setDialogLayoutParams(dialog, context, false, false);
 
     }
 

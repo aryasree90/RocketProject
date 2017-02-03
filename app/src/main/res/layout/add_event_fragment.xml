@@ -2,14 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@drawable/background_multicolor"
+    android:background="@color/appBackground"
     android:layout_height="match_parent"
-    android:padding="15dp">
+    android:padding="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/common_google_signin_btn_text_light_pressed"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:orientation="vertical">
 
         <TextView
@@ -18,17 +20,15 @@
             android:id="@+id/actType"
             android:textSize="18sp"
             android:gravity="center"
-            android:background="@drawable/text_multicolor"
+            android:background="#003399"
             android:textColor="@color/common_google_signin_btn_text_dark"/>
 
         <LinearLayout
             android:id="@+id/textLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-
             android:layout_below="@+id/actType"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:orientation="vertical">
 
             <ImageView
@@ -40,10 +40,9 @@
             <EditText
                 android:id="@+id/headerText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/eventHeader"
-                android:background="@color/common_plus_signin_btn_text_light_disabled"
                 android:singleLine="true"/>
 
             <EditText
@@ -51,7 +50,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/common_plus_signin_btn_text_light_disabled"
                 android:hint="@string/eventSummary"
                 android:singleLine="false" />
 

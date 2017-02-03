@@ -35,21 +35,11 @@
                         android:id="@+id/rocket_img"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.5"
                         android:scaleType="fitCenter"
                         android:contentDescription="@string/content_description"
                         android:background="@android:color/transparent"
                         android:src="@drawable/logo"/>
-
-                    <ImageButton
-                        android:id="@+id/refresh"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.1"
-                        android:scaleType="fitCenter"
-                        android:contentDescription="@string/content_description"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/ic_menu_share"/>
 
                     <RelativeLayout
                         android:layout_width="0dp"
@@ -89,7 +79,7 @@
                         android:layout_width="0dp"
                         android:layout_height="35dp"
                         android:layout_weight="0.1"
-                        android:layout_marginRight="5dp">
+                        android:layout_marginRight="8dp">
 
                         <ImageButton
                             android:id="@+id/invite_to_play"
@@ -115,6 +105,27 @@
                             android:background="@drawable/shape_count"/>
 
                     </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1"
+                        android:layout_marginRight="5dp">
+
+
+                        <ImageButton
+                            android:id="@+id/refresh"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scaleType="fitXY"
+                            android:contentDescription="@string/content_description"
+                            android:background="@android:color/transparent"
+                            android:layout_marginTop="8dp"
+                            android:src="@mipmap/ic_sync_contact"/>
+
+                    </RelativeLayout>
+
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>

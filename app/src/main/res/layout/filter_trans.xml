@@ -23,7 +23,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -112,6 +112,17 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/no_transaction_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/trans_msg"
+            android:textColor="@color/colorBlueButton"
+            android:gravity="center"
+            android:textSize="15sp" />
+
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -150,6 +161,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/clubList"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>
