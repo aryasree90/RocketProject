@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginRight="60dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:background="@drawable/recv_bubble">
@@ -34,12 +35,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chat message comes here"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height=".2dp"
+                android:background="@android:color/darker_gray"/>
+
+
 
             <TextView
                 android:id="@+id/sender_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:textSize="10dp"
+                android:textColor="@color/common_plus_signin_btn_text_light"
                 android:textStyle="italic"
                 android:text="00:00"/>
 
@@ -61,6 +70,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="right"
+            android:layout_marginLeft="60dp"
             android:paddingRight="5dp"
             android:paddingLeft="5dp"
             android:background="@drawable/send_bubble">
@@ -70,12 +80,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chat message comes here"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height=".2dp"
+                android:background="@android:color/darker_gray"/>
+
 
             <TextView
                 android:id="@+id/sent_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="italic"
+                android:textSize="10dp"
+                android:textColor="@color/common_plus_signin_btn_text_light"
                 android:text="00:00"/>
 
         </LinearLayout>

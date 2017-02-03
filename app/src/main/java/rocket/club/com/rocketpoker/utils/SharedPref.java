@@ -26,6 +26,8 @@ public class SharedPref {
     private final String ROCKET_ID = "rocketId";
     private final String CONTACT_INIT = "contactInit";
     private final String INIT_LOAD = "initLoad";
+    private final String CHAT_COUNT = "chatCount";
+    private final String INVITE_COUNT = "inviteCount";
 
     public SharedPref(Context ctx) {
         pref = ctx.getSharedPreferences("MySharedPref", ctx.MODE_PRIVATE);
@@ -102,6 +104,16 @@ public class SharedPref {
         editor.commit();
     }
 
+    public void setChatCount(int count) {
+        editor.putInt(CHAT_COUNT, count);
+        editor.commit();
+    }
+
+    public void setInviteCount(int count) {
+        editor.putInt(INVITE_COUNT, count);
+        editor.commit();
+    }
+
     public String getLoginMobile() {
         return pref.getString(LOGIN_MOBILE, "null");
     }
@@ -156,5 +168,13 @@ public class SharedPref {
 
     public boolean isInitLoad() {
         return pref.getBoolean(INIT_LOAD, true);
+    }
+
+    public int getChatCount() {
+        return pref.getInt(CHAT_COUNT, 0);
+    }
+
+    public int getInviteCount() {
+        return pref.getInt(INVITE_COUNT, 0);
     }
 }

@@ -109,6 +109,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
+        appGlobals.sharedPref.setChatCount(0);
+
         IntentFilter chatMsgFilter = new IntentFilter(AppGlobals.CHAT_ROOM);
         registerReceiver(mHandleMessageReceiver, chatMsgFilter);
 

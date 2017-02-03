@@ -72,6 +72,8 @@ public class InvitationListFragment extends Fragment {
         fullInviteList = db.getInvitations();
 
         setListAdapter();
+
+        appGlobals.sharedPref.setInviteCount(0);
     }
 
     private void setListAdapter() {

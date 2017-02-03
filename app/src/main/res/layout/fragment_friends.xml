@@ -19,18 +19,34 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
-        <EditText
-            android:id="@+id/search_friend"
+        <FrameLayout
+            android:id="@+id/searchLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/search_friends" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/search_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_friends"
+                android:singleLine="true" />
+
+            <ImageButton
+                android:id="@+id/search_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="right|center_vertical"
+                android:background="@null"
+                android:src="@mipmap/ic_clear" />
+
+        </FrameLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/friends_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/search_friend"
+            android:layout_below="@+id/searchLayout"
             android:scrollbars="vertical" />
 
         <Button

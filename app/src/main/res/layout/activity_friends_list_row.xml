@@ -50,10 +50,15 @@
     <Button
         android:id="@+id/add_friend"
         android:text="@string/add_friend"
+        android:textColor="@color/common_google_signin_btn_text_dark_pressed"
         android:visibility="gone"
+        android:padding="2dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:background="@drawable/round_cornered_search_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_height="25dp" />
 
 </RelativeLayout>
