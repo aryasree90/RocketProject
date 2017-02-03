@@ -37,6 +37,15 @@
         android:layout_marginTop="10dp"
         android:hint="@string/update_header"/>
 
+    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+        android:id="@+id/gameType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="@string/game_type"
+        android:textColorHint="#05ab9a"
+        app:met_floatingLabel="normal" />
+
     <EditText
         android:id="@+id/updateText1"
         android:layout_width="match_parent"

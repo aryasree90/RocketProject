@@ -10,9 +10,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +41,7 @@ import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
+import rocket.club.com.rocketpoker.utils.MultiSelectionSpinner;
 
 public class AddLiveUpdateFragment extends Fragment {
 
@@ -48,8 +51,8 @@ public class AddLiveUpdateFragment extends Fragment {
     ConnectionDetector connectionDetector = null;
     private static final String TAG = "AddLiveUpdateFragment";
 
-    MaterialBetterSpinner updateTypeSpinner = null;
-    ArrayAdapter<String> updateTypeAdapter = null;
+    MaterialBetterSpinner updateTypeSpinner = null, gameTypeSpinner = null;
+    ArrayAdapter<String> updateTypeAdapter = null, gameTypeAdapter = null;
     EditText header, text1, text2, text3, comments;
     Button save, clear;
     ProgressDialog progressDialog = null;
@@ -67,6 +70,17 @@ public class AddLiveUpdateFragment extends Fragment {
         return view;
     }
 
+    private void loadGameNameSpinner() {
+        DBHelper db = new DBHelper(context);
+        String[] GAME_LIST = db.getRocketsGameList();
+
+        gameTypeAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_dropdown_item_1line, GAME_LIST);
+
+        gameTypeSpinner.setAdapter(gameTypeAdapter);
+
+    }
+
     private void initializeWidgets(View view) {
 
         context = getActivity();
@@ -80,6 +94,10 @@ public class AddLiveUpdateFragment extends Fragment {
         updateTypeSpinner = (MaterialBetterSpinner) view.findViewById(R.id.updateType);
         updateTypeSpinner.setAdapter(updateTypeAdapter);
 
+        gameTypeSpinner = (MaterialBetterSpinner) view.findViewById(R.id.gameType);
+        loadGameNameSpinner();
+        gameTypeSpinner.setVisibility(View.GONE);
+
         header = (EditText) view.findViewById(R.id.updateHeader);
         text1 = (EditText) view.findViewById(R.id.updateText1);
         text2 = (EditText) view.findViewById(R.id.updateText2);
@@ -88,6 +106,45 @@ public class AddLiveUpdateFragment extends Fragment {
 
         save = (Button) view.findViewById(R.id.saveBtn);
         clear = (Button) view.findViewById(R.id.clearBtn);
+
+        updateTypeSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String headerHint = "", text1Hint = "", text2Hint = "";
+
+                header.setVisibility(View.VISIBLE);
+                text1.setVisibility(View.VISIBLE);
+                gameTypeSpinner.setVisibility(View.GONE);
+
+                if(position == 0) {         //Winner
+
+                    header.setHint(getString(R.string.winner_name));
+                    gameTypeSpinner.setHint(getString(R.string.game_type));
+                    text2.setHint(getString(R.string.table_no));
+
+                    text1.setVisibility(View.GONE);
+                    gameTypeSpinner.setVisibility(View.VISIBLE);
+
+                } else if(position == 1) {  //Current running game
+
+                    gameTypeSpinner.setHint(getString(R.string.game_type));
+                    text1.setHint(getString(R.string.table_no));
+                    text2.setHint(getString(R.string.update_text));
+
+                    header.setVisibility(View.GONE);
+                    gameTypeSpinner.setVisibility(View.VISIBLE);
+
+                } else if(position == 2) {  //Yet to start
+
+                    gameTypeSpinner.setHint(getString(R.string.game_type));
+                    text1.setHint(getString(R.string.table_no));
+                    text2.setHint(getString(R.string.set_game_time));
+
+                    header.setVisibility(View.GONE);
+                    gameTypeSpinner.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
     }
 
@@ -99,17 +156,22 @@ public class AddLiveUpdateFragment extends Fragment {
                     case R.id.saveBtn:
 
                         String updateType = updateTypeSpinner.getText().toString();
+
                         String updateHeader = header.getText().toString();
                         String updateText1 = text1.getText().toString();
                         String updateText2 = text2.getText().toString();
                         String updateText3 = text3.getText().toString();
                         String updateComments = comments.getText().toString();
 
-                        if(TextUtils.isEmpty(updateType)) {
-                            appGlobals.toastMsg(context, "Select a type", appGlobals.LENGTH_LONG);
-                            return;
-                        } else if(TextUtils.isEmpty(updateHeader)) {
-                            appGlobals.toastMsg(context, "Enter Header", appGlobals.LENGTH_LONG);
+                        if(updateType.equalsIgnoreCase("Winner")) {
+                            updateText1 = gameTypeSpinner.getText().toString();
+                        } else {
+                            updateHeader = gameTypeSpinner.getText().toString();
+                        }
+
+                        if(TextUtils.isEmpty(updateType) || TextUtils.isEmpty(updateHeader) ||
+                                TextUtils.isEmpty(updateText1)) {
+                            appGlobals.toastMsg(context, getString(R.string.enter_first_3), appGlobals.LENGTH_LONG);
                             return;
                         }
 
