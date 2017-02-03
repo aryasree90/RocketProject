@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusable="true"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
@@ -15,6 +15,7 @@
         android:id="@+id/friendImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
         android:visibility="gone" />
 
     <TextView
@@ -60,5 +61,11 @@
         android:gravity="center"
         android:layout_centerInParent="true"
         android:layout_height="25dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height=".5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray"/>
 
 </RelativeLayout>
