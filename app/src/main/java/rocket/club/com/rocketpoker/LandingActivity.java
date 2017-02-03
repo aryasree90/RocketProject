@@ -48,6 +48,7 @@ public class LandingActivity extends AppCompatActivity
 
     Toolbar toolbar;
     ImageButton imgChatRoom, imgAddFriend, imgRocket;
+    TextView chatCount, inviteCount;
     FloatingActionButton actionButton;
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
@@ -71,6 +72,9 @@ public class LandingActivity extends AppCompatActivity
         imgRocket = (ImageButton)findViewById(R.id.rocket_img);
         imgChatRoom = (ImageButton)findViewById(R.id.chat_room_img);
         imgAddFriend = (ImageButton)findViewById(R.id.invite_to_play);
+
+        chatCount = (TextView)findViewById(R.id.chatCount);
+        inviteCount = (TextView)findViewById(R.id.inviteCount);
 
         actionButton = (FloatingActionButton) findViewById(R.id.fab);
         actionButton.setVisibility(View.GONE);
@@ -390,5 +394,32 @@ public class LandingActivity extends AppCompatActivity
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        setCount();
+    }
+
+    private void setCount() {
+
+        int chatCountVal = appGlobals.sharedPref.getChatCount();
+        int inviteCountVal = appGlobals.sharedPref.getInviteCount();
+
+        if(chatCountVal > 0) {
+            chatCount.setText("" + chatCountVal);
+            chatCount.setVisibility(View.VISIBLE);
+        } else {
+            chatCount.setVisibility(View.GONE);
+        }
+
+        if(inviteCountVal > 0) {
+            inviteCount.setText("" + inviteCountVal);
+            inviteCount.setVisibility(View.VISIBLE);
+        } else {
+            inviteCount.setVisibility(View.GONE);
+        }
+
     }
 }

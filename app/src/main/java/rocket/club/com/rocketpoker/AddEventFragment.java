@@ -149,9 +149,10 @@ public class AddEventFragment extends Fragment {
                         clearFields();
                         break;
                     case R.id.eventImage:
-                        Intent galleryIntent = new Intent();
-                        galleryIntent.setType("image/*");
-                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+/*                        Intent galleryIntent = new Intent();
+                        galleryIntent.setType("image*//*");
+                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);*/
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(Intent.createChooser(galleryIntent, "Select File"), 1);
                         break;
                 }

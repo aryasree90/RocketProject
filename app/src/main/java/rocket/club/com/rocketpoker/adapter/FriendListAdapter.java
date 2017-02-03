@@ -200,16 +200,11 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
         dialog.setContentView(R.layout.activity_image_view);
 
-//        dialog.setTitle(getString(R.string.set_game_time));
-
         ImageView fullImage = (ImageView) dialog.findViewById(R.id.fullImage);
         appGlobals.loadImageFromServerWithDefault(imageUrl, fullImage, "", false, context);
 
-
         dialog.show();
-
         appGlobals.setDialogLayoutParams(dialog, context, false, true);
-
     }
 
 

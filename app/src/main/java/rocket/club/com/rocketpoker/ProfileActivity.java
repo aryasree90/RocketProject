@@ -195,9 +195,10 @@ public class ProfileActivity extends ActionBarActivity {
                         break;
                     case R.id.btnGallery:
                     case R.id.userProfilePic:
-                        Intent galleryIntent = new Intent();
-                        galleryIntent.setType("image/*");
-                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                        /*Intent galleryIntent = new Intent();
+                        galleryIntent.setType("image*//*");
+                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);*/
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(Intent.createChooser(galleryIntent, "Select File"),GALLERY);
 
                         resetMediaDialog();

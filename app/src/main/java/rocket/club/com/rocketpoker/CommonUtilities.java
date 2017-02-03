@@ -149,6 +149,9 @@ public final class CommonUtilities {
             DBHelper db = new DBHelper(context);
             db.insertMessages(newChatList);
 
+            int count = appGlobals.sharedPref.getChatCount();
+            appGlobals.sharedPref.setChatCount(++count);
+
             if(AppGlobals.inChatRoom) {
                 Intent autoIntent = new Intent(AppGlobals.CHAT_ROOM);
                 autoIntent.putExtra(ChatRoomActivity.CHAT_MESSAGE, message);
@@ -175,6 +178,9 @@ public final class CommonUtilities {
 
         DBHelper db = new DBHelper(context);
         db.insertInvitationDetails(gameInvite);
+
+        int count = appGlobals.sharedPref.getInviteCount();
+        appGlobals.sharedPref.setInviteCount(++count);
 
         String notifMsg = "You have received a Game Invitation from " + gameInvite.getSenderMob();
         Intent notificationIntent = new Intent(context, LandingActivity.class);
