@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/appBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,6 +18,7 @@
         android:id="@+id/notifLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="10dp"
@@ -27,6 +29,7 @@
             android:layout_height="30dp"
             android:layout_weight="0.85"
             android:textSize="15sp"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:text="@string/settings_notification"/>
 
         <ToggleButton
@@ -56,6 +59,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="30dp"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:layout_weight="0.85"
             android:textSize="15sp"
             android:text="@string/settings_chat"/>
@@ -90,6 +94,7 @@
             android:layout_height="30dp"
             android:layout_weight="0.85"
             android:textSize="15sp"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:text="@string/profile"/>
 
 
@@ -115,6 +120,7 @@
             android:id="@+id/txt_signout"
             android:layout_width="0dp"
             android:layout_height="30dp"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:layout_weight="0.85"
             android:textSize="15sp"
             android:text="@string/sign_out"/>

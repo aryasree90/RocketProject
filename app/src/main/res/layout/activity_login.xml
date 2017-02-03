@@ -3,28 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:gravity="center"
-    android:background="#ffffff"
+    android:background="@color/appBackground"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryDark">
 
     <ImageView
         android:layout_width="180dp"
         android:layout_height="160dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:src="@drawable/logo"
+        android:layout_gravity="center"
         android:contentDescription="@string/content_description"/>
+
+
     <LinearLayout
         android:id="@+id/loginLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:padding="10dp"
+        android:visibility="visible"
         android:gravity="center">
 
         <LinearLayout
@@ -51,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:background="@color/clr_btn_clear"
                 android:layout_marginStart="20dp"
                 android:text="@string/btn_clear"/>
 
@@ -58,9 +67,10 @@
 
         <Button
             android:id="@+id/btn_login"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_cornered_green"
             android:text="@string/btn_login"/>
 
     </LinearLayout>
@@ -70,7 +80,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:visibility="gone"
         android:gravity="center">
 
         <TextView
@@ -125,23 +136,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:padding="10dp"
             android:layout_marginTop="20dp"
             android:gravity="center">
 
             <Button
                 android:id="@+id/btn_otp"
                 android:layout_width="100dp"
+                android:layout_weight=".5"
+                android:background="@color/clr_btn_save"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_continue"/>
 
             <Button
                 android:id="@+id/btn_clear1"
                 android:layout_width="100dp"
+                android:layout_weight=".5"
+                android:background="@color/clr_btn_clear"
+                android:layout_marginLeft="2dp"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_clear1"/>
 
-        </LinearLayout>
 
     </LinearLayout>
 
+    </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -15,7 +15,8 @@
 
 
 
-
+    <color name="appBackground">#919799</color>
+    <color name="headerBackground">#42B1D6</color>
     <color name="colorPrimary">#FE0000</color>
     <color name="colorPrimaryDark">#CB4F4F</color>
     <color name="textColorPrimary">#FFFFFF</color>

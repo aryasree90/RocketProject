@@ -6,10 +6,7 @@
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+   android:padding="5dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="rocket.club.com.rocketpoker.LandingActivity"
     tools:showIn="@layout/app_bar_landing">
@@ -35,8 +32,12 @@
             <TextView
                 android:id="@+id/emptyEventItem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/clr_btn_save"
                 android:layout_gravity="center"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
                 android:visibility="gone"
                 android:text="@string/empty_events"/>
 
@@ -47,10 +48,10 @@
             android:id="@+id/newFriendsLayout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:background="@drawable/rounded_cornered_layout"
             android:layout_below="@+id/eventLayout"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             android:padding="5dp"
             android:elevation="2dp">
 
@@ -61,11 +62,10 @@
             <LinearLayout
                 android:id="@+id/linr_emptyfriendname"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:visibility="gone"
-                android:layout_marginBottom="5dp"
                 android:orientation="vertical">
 
 
@@ -74,7 +74,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginBottom="5dp"
                 android:text="@string/empty_frnd_req"/>
 
                 <Button
@@ -91,11 +90,11 @@
         <LinearLayout
             android:id="@+id/liveUpdateLayout"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:orientation="horizontal"
             android:background="@drawable/rounded_cornered_layout"
             android:layout_below="@+id/newFriendsLayout"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             android:padding="5dp"
             android:elevation="2dp">
 
@@ -107,7 +106,11 @@
             <TextView
                 android:id="@+id/emptyUpdateItem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                android:textColor="@color/colorBlueButton"
+                android:textSize="18sp"
                 android:layout_gravity="center"
                 android:visibility="gone"
                 android:text="@string/empty_update"/>
