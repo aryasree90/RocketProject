@@ -125,6 +125,7 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
                     @Override
                     public void onResponse(String response) {
                         appGlobals.logClass.setLogMsg(TAG, response, LogClass.DEBUG_MSG);
+                        appGlobals.sharedPref.setContactInit(true);
 
                         if(!response.isEmpty()) {
                             Gson gson = new Gson();

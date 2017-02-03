@@ -105,12 +105,14 @@ public class LandingActivity extends AppCompatActivity
         File imageFile = new File(imgPath);
 
         if(!imageFile.exists()) {
+
             HashMap<String, String> params = new HashMap<>();
             params.put("mobile", appGlobals.sharedPref.getLoginMobile());
             params.put("frndMob", appGlobals.sharedPref.getLoginMobile());
 
             appGlobals.searchUpdatedImage(context, params, imgPath, circularImageView);
         }
+
         if(imageFile.exists())
             circularImageView.setImageURI(Uri.fromFile(imageFile));
 

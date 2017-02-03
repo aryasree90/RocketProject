@@ -603,7 +603,9 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void startContactSync() {
-        ContactAsync contactAsync = new ContactAsync(ProfileActivity.this);
-        contactAsync.execute();
+        if(!appGlobals.sharedPref.isContactInit()) {
+            ContactAsync contactAsync = new ContactAsync(ProfileActivity.this);
+            contactAsync.execute();
+        }
     }
 }
