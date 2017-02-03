@@ -218,9 +218,9 @@
     <string name="from_month">From Month</string>
     <string name="to_month">To Month</string>
 
-    <string name="empty_exp_type">Select an Expense Type</string>
-    <string name="empty_exp_text">Enter an Expense Type</string>
-    <string name="empty_exp_amount">Enter an amount</string>
+    <string name="empty_exp_type">Select Expense Type</string>
+    <string name="empty_exp_text">Enter Expense Type</string>
+    <string name="empty_exp_amount">Enter amount</string>
     <string name="exp_text_avail">Expense Type already added</string>
 
     <string name="empty_sal">Employee salary not provided</string>

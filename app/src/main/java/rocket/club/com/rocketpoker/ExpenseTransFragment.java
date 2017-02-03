@@ -172,7 +172,7 @@ public class ExpenseTransFragment extends Fragment {
                         save_map.put("amount", amt);
                         save_map.put("timeStamp", "" + System.currentTimeMillis());
                         save_map.put("desc", desc);
-                        progressDialog = appGlobals.showDialog(context, getString(R.string.fetch_exp_type));
+                        progressDialog = appGlobals.showDialog(context, getString(R.string.assign_detail));
                         serverCall(save_map, SAVE_EXP);
 
                         break;
@@ -193,6 +193,7 @@ public class ExpenseTransFragment extends Fragment {
         expText.setText("");
         expText.setVisibility(View.GONE);
         amount.setText("");
+        expDesc.setText("");
     }
 
     private void serverCall(final Map<String,String> params, final String url) {
