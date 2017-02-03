@@ -35,11 +35,21 @@
                         android:id="@+id/rocket_img"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="0.7"
                         android:scaleType="fitCenter"
                         android:contentDescription="@string/content_description"
                         android:background="@android:color/transparent"
                         android:src="@drawable/logo"/>
+
+                    <ImageButton
+                        android:id="@+id/refresh"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/content_description"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_menu_share"/>
 
                     <RelativeLayout
                         android:layout_width="0dp"

@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 
 import com.google.android.gcm.GCMRegistrar;
 
+import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 
 
@@ -107,6 +108,8 @@ public class SettingsFragment extends Fragment {
         appGlobals.sharedPref.setRegId("");
         appGlobals.currentFragmentClass = null;
         GCMRegistrar.setRegisteredOnServer(context, false);
+        DBHelper db = new DBHelper(context);
+
 
         Intent loginActivity = new Intent(context, LoginActivity.class);
         loginActivity.putExtra(LoginActivity.pageType, LoginActivity.loginPage);
@@ -156,5 +159,4 @@ public class SettingsFragment extends Fragment {
 
         dialog.show();
     }
-
 }

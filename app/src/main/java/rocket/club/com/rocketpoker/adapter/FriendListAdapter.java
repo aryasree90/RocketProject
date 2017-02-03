@@ -118,7 +118,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
         holder.addFriend.setVisibility(View.GONE);
 
         if(pageType == AppGlobals.FRIEND_LIST) {
-            Log.d(TAG, "___________________________ " + friendList.getStatus() + " " + friendList.getMobile());
             holder.selectedItem.setVisibility(View.GONE);
             if(friendList.getStatus() == AppGlobals.SUGGESTED_FRIENDS) {
                 holder.addFriend.setVisibility(View.VISIBLE);

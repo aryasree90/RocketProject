@@ -34,6 +34,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import rocket.club.com.rocketpoker.async.ContactAsync;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -47,7 +48,7 @@ public class LandingActivity extends AppCompatActivity
     View.OnClickListener clickListener = null;
 
     Toolbar toolbar;
-    ImageButton imgChatRoom, imgAddFriend, imgRocket;
+    ImageButton imgChatRoom, imgAddFriend, imgRocket, refreshContact;
     TextView chatCount, inviteCount;
     FloatingActionButton actionButton;
     DrawerLayout drawer;
@@ -63,6 +64,7 @@ public class LandingActivity extends AppCompatActivity
 
         initializeWidgets();
         setClickListener();
+        checkContactSync();
     }
 
     private void initializeWidgets() {
@@ -75,6 +77,7 @@ public class LandingActivity extends AppCompatActivity
 
         chatCount = (TextView)findViewById(R.id.chatCount);
         inviteCount = (TextView)findViewById(R.id.inviteCount);
+        refreshContact = (ImageButton)findViewById(R.id.refresh);
 
         actionButton = (FloatingActionButton) findViewById(R.id.fab);
         actionButton.setVisibility(View.GONE);
@@ -180,10 +183,17 @@ public class LandingActivity extends AppCompatActivity
                         startActivity(profileIntent);
                         finish();
                         break;
+                    case R.id.refresh:
+                        if(!appGlobals.contactSyncInProgress) {
+                            ContactAsync contactAsync = new ContactAsync(context);
+                            contactAsync.execute();
+                        }
+                        break;
                 }
             }
         };
 
+        refreshContact.setOnClickListener(clickListener);
         imgRocket.setOnClickListener(clickListener);
         imgChatRoom.setOnClickListener(clickListener);
         imgAddFriend.setOnClickListener(clickListener);
@@ -420,6 +430,18 @@ public class LandingActivity extends AppCompatActivity
         } else {
             inviteCount.setVisibility(View.GONE);
         }
+    }
 
+    private void checkContactSync() {
+        long curTime = System.currentTimeMillis();
+
+        long lastUpdated = appGlobals.sharedPref.getContactSyncTime();
+
+        long diff = ((curTime - lastUpdated)/1000)/3600;
+
+        if(diff >= 24 && !appGlobals.contactSyncInProgress) {
+            ContactAsync contactAsync = new ContactAsync(context);
+            contactAsync.execute();
+        }
     }
 }

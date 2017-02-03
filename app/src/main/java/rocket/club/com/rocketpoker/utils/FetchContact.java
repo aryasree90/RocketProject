@@ -16,6 +16,7 @@ import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class FetchContact {
 
@@ -77,6 +78,9 @@ public class FetchContact {
                 if(phoneNumber.startsWith("0")) {
                     phoneNumber = phoneNumber.substring(1);
                 }
+
+                phoneNumber = phoneNumber.replaceAll(Pattern.quote("+"), "");
+                phoneNumber = phoneNumber.replaceAll(Pattern.quote(" "), "");
 
                 ContactClass contactClass = new ContactClass();
                 contactClass.setContactName(name);

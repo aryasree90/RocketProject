@@ -22,19 +22,19 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-android:background="@color/common_google_signin_btn_text_dark_pressed"
+        android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:weightSum="3">
 
             <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                 android:id="@+id/filter1"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="55dp"
                 android:singleLine="true"
                 android:gravity="center"
                 android:layout_weight="1"

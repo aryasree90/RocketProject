@@ -214,6 +214,10 @@ public class AddEventFragment extends Fragment {
                 // Get the cursor
                 Cursor cursor = context.getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
+
+                if(cursor == null)
+                    return;
+
                 // Move to first row
                 cursor.moveToFirst();
 

@@ -28,6 +28,7 @@ public class SharedPref {
     private final String INIT_LOAD = "initLoad";
     private final String CHAT_COUNT = "chatCount";
     private final String INVITE_COUNT = "inviteCount";
+    private final String CONTACT_SYNC_TIME = "contactSyncTime";
 
     public SharedPref(Context ctx) {
         pref = ctx.getSharedPreferences("MySharedPref", ctx.MODE_PRIVATE);
@@ -114,6 +115,11 @@ public class SharedPref {
         editor.commit();
     }
 
+    public void setContactSyncTime(long timeStamp) {
+        editor.putLong(CONTACT_SYNC_TIME, timeStamp);
+        editor.commit();
+    }
+
     public String getLoginMobile() {
         return pref.getString(LOGIN_MOBILE, "null");
     }
@@ -176,5 +182,9 @@ public class SharedPref {
 
     public int getInviteCount() {
         return pref.getInt(INVITE_COUNT, 0);
+    }
+
+    public long getContactSyncTime() {
+        return pref.getLong(CONTACT_SYNC_TIME, 0);
     }
 }
