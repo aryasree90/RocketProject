@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,9 +117,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
         holder.addFriend.setVisibility(View.GONE);
 
-        final MyViewHolder tempHolder = holder;
-
         if(pageType == AppGlobals.FRIEND_LIST) {
+            Log.d(TAG, "___________________________ " + friendList.getStatus() + " " + friendList.getMobile());
             holder.selectedItem.setVisibility(View.GONE);
             if(friendList.getStatus() == AppGlobals.SUGGESTED_FRIENDS) {
                 holder.addFriend.setVisibility(View.VISIBLE);
@@ -143,6 +143,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
                         serverCall(frnd_map, FRIEND_REQ_URL, userDetails);
                     }
                 });
+            } else if(friendList.getStatus() == AppGlobals.PENDING_REQUEST) {
+                holder.addFriend.setVisibility(View.VISIBLE);
+                holder.addFriend.setEnabled(false);
             }
         } else {
             holder.selectedItem.setVisibility(View.VISIBLE);

@@ -124,6 +124,10 @@ public class ProfileActivity extends ActionBarActivity {
         skipProfile = (TextView) findViewById(R.id.skipProfile);
         rocketId = (TextView) findViewById(R.id.rocketId);
 
+        if(appGlobals.sharedPref.isInitLoad()) {
+            skipProfile.setVisibility(View.GONE);
+        }
+
 //        String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
         loadGameNameSpinner();
 

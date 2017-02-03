@@ -119,7 +119,8 @@ public class DBHelper extends SQLiteOpenHelper {
             status + "=1";
     public static final String SELECT_SUGGESTED_FRIENDS = "SELECT * FROM " + friendsTable + " WHERE " +
             status + "=" + AppGlobals.ACCEPTED_FRIENDS + " or " +
-            status + "=" + AppGlobals.SUGGESTED_FRIENDS;
+            status + "=" + AppGlobals.SUGGESTED_FRIENDS + " or " +
+            status + "=" + AppGlobals.PENDING_REQUEST;
 
     public static final String SELECT_FRIENDS_USING_MOB = "SELECT * FROM " + friendsTable + " WHERE " +
             mobile + "=?";
@@ -190,12 +191,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateContacts(int statusValue, String updtMob) {
         SQLiteDatabase db = this.getWritableDatabase();
         final String where = mobile + "=" + updtMob;
-        if(statusValue == 1) {
+        if(statusValue == AppGlobals.ACCEPTED_FRIENDS || statusValue == AppGlobals.PENDING_REQUEST) {
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
             db.update(friendsTable, cv, where, null);
-        } else {
-            db.delete(friendsTable, where, null);
+        } else if(statusValue == AppGlobals.REJECT_FRIENDS){
+//            db.delete(friendsTable, where, null);
+            ContentValues cv = new ContentValues();
+            cv.put(status, AppGlobals.SUGGESTED_FRIENDS);
+            db.update(friendsTable, cv, where, null);
         }
         if(db != null)
             db.close();

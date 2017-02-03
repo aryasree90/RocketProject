@@ -100,6 +100,7 @@
         <item><string name="update3">Yet to start</string></item>
     </string-array>
 
+    <string name="enter_first_3">Enter first 3 fields</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
     <string name="otp_info">Automatically fetching OTP.\nPlease wait.</string>
@@ -258,6 +259,9 @@
     <string name="bonus_limit">No bonus available</string>
     <string name="fetch_trans">Fetching Transactions</string>
     <string name="date">Date</string>
+
+    <string name="winner_name">Winner Name</string>
+    <string name="table_no">Table No.</string>
 
 
     <!-- Contents about the club -->

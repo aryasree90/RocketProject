@@ -88,14 +88,14 @@ public class NewFriendListAdapter extends PagerAdapter {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverCall(frnd_mob, 1);
+                serverCall(frnd_mob, AppGlobals.ACCEPTED_FRIENDS);
             }
         });
 
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverCall(frnd_mob, 2);
+                serverCall(frnd_mob, AppGlobals.REJECT_FRIENDS);
             }
         });
     }

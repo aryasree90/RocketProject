@@ -131,6 +131,8 @@ public class LandingActivity extends AppCompatActivity
         } else {
             appGlobals.startLocationIntent(context);
         }
+
+        appGlobals.sharedPref.setInitLoad(false);
     }
 
     @Override

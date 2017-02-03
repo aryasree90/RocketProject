@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
@@ -52,6 +53,7 @@ public class AssignRoleFragment extends Fragment {
     RecyclerView selectedMembersList = null;
     View.OnClickListener clickListener = null;
     ProgressDialog progressDialog = null;
+    Button saveBtn, clearBtn;
 
     ArrayList<RegisterDetails> changedMembers = new ArrayList<>();
 
@@ -76,6 +78,9 @@ public class AssignRoleFragment extends Fragment {
 
         selectMember = (EditText) view.findViewById(R.id.selectMember);
         selectedMembersList = (RecyclerView) view.findViewById(R.id.selectedMembers);
+
+        saveBtn = (Button) view.findViewById(R.id.btn_save);
+        clearBtn = (Button) view.findViewById(R.id.btn_clear);
 
         registerDetails = new RegisterDetails[0];
 
@@ -103,10 +108,18 @@ public class AssignRoleFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
-
+                    case R.id.btn_save:
+                        saveChanges();
+                        break;
+                    case R.id.btn_clear:
+                        selectMember.setText("");
+                        loadDetails();
+                        break;
                 }
             }
         };
+        saveBtn.setOnClickListener(clickListener);
+        clearBtn.setOnClickListener(clickListener);
     }
 
     private void initializeData() {
@@ -127,11 +140,7 @@ public class AssignRoleFragment extends Fragment {
                             Gson gson = new Gson();
                             registerDetails = gson.fromJson(response, RegisterDetails[].class);
 
-                            mAdapter = new AdminRoleAdapter(registerDetails, context, changedMembers);
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-                            selectedMembersList.setLayoutManager(mLayoutManager);
-                            selectedMembersList.setItemAnimator(new DefaultItemAnimator());
-                            selectedMembersList.setAdapter(mAdapter);
+                            loadDetails();
                         } else if(caller == 2) {
 
                         }
@@ -159,10 +168,15 @@ public class AssignRoleFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    private void loadDetails() {
+        mAdapter = new AdminRoleAdapter(registerDetails, context, changedMembers);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        selectedMembersList.setLayoutManager(mLayoutManager);
+        selectedMembersList.setItemAnimator(new DefaultItemAnimator());
+        selectedMembersList.setAdapter(mAdapter);
+    }
 
+    public void saveChanges() {
         final String url = AppGlobals.SERVER_URL + "memberUpdateList.php";
         for(RegisterDetails regDetails : changedMembers) {
             Map<String, String> map = new HashMap<String, String>();
