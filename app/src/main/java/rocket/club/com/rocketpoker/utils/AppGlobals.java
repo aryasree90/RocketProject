@@ -163,6 +163,7 @@ public class AppGlobals {
 
     //Friends Database
     public static final int PENDING_REQUEST = -1;
+    public static final int REJECT_FRIENDS = -2;
     public static final int ACCEPTED_FRIENDS = 1;
     public static final int PENDING_FRIENDS = 2;
     public static final int ALL_FRIENDS = 3;
