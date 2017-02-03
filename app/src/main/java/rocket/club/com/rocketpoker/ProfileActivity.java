@@ -234,6 +234,10 @@ public class ProfileActivity extends ActionBarActivity {
                 // Get the cursor
                 Cursor cursor = getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
+
+                if(cursor == null)
+                    return;
+
                 // Move to first row
                 cursor.moveToFirst();
 
@@ -551,7 +555,7 @@ public class ProfileActivity extends ActionBarActivity {
         nickName.setText("");
         dob.setText("");
         genderSpinner.setText("");
-        gameTypeSpinner.setText("");
+//        gameTypeSpinner.setText("");
     }
 
     private void createMediaDialog() {
@@ -609,7 +613,7 @@ public class ProfileActivity extends ActionBarActivity {
 
     private void startContactSync() {
         if(!appGlobals.sharedPref.isContactInit()) {
-            ContactAsync contactAsync = new ContactAsync(ProfileActivity.this);
+            ContactAsync contactAsync = new ContactAsync(context);
             contactAsync.execute();
         }
     }

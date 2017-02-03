@@ -90,7 +90,7 @@ public class FriendsFragment extends Fragment {
     final String FRIEND_REQ_URL = AppGlobals.SERVER_URL + "frndReq.php";
     public static final String FRIEND_SEARCH_URL = AppGlobals.SERVER_URL + "searchFriend.php";
     final String INVITE_TO_PLAY_URL = AppGlobals.SERVER_URL + "inviteToPlay.php";
-    private int pageType = 1;
+    private int pageType = AppGlobals.FRIEND_LIST;
     ProgressDialog progressDialog = null;
 
     MaterialBetterSpinner selectGameType = null;
@@ -120,7 +120,8 @@ public class FriendsFragment extends Fragment {
         appGlobals.selectedNums.clear();
         appGlobals.selectedPos.clear();
         Bundle bundle = getArguments();
-        pageType = bundle.getInt("type");
+        if(bundle.containsKey("type"))
+            pageType = bundle.getInt("type");
 
         friendsListView = (RecyclerView) view.findViewById(R.id.friends_recycler_view);
         addNewFriend = (Button) view.findViewById(R.id.add_new_friend);
@@ -468,7 +469,7 @@ public class FriendsFragment extends Fragment {
 
         dialog.show();
 
-        appGlobals.setDialogLayoutParams(dialog, context, false, true);
+        appGlobals.setDialogLayoutParams(dialog, context, false, false);
 
     }
 

@@ -108,6 +108,7 @@ public class AppGlobals {
     private LocationService.LocationResult locationResult = null;
     LocationService locationService = null;
     public static boolean inChatRoom = false;
+    public boolean contactSyncInProgress = false;
 
 //    public final static int PERMISSION_REQ_CODE = 111;
 
@@ -540,6 +541,9 @@ public class AppGlobals {
         ProgressDialog progress = new ProgressDialog(context);
         progress.setMessage(message);
         progress.show();
+
+        progress.setCancelable(false);
+        progress.setCanceledOnTouchOutside(false);
 
         return progress;
     }

@@ -135,9 +135,10 @@ public class DBHelper extends SQLiteOpenHelper {
             timeStamp + "=?";
 
     public static final String SELECT_ROCKETS_INFO = "SELECT * FROM " + rocketsInfoTable + " WHERE " +
-            infoMsgType + "=?";
+            infoMsgType + "=? order by " + infoTimeStamp + " desc";
 
-    public static final String SELECT_ROCKETS_LIVE_UPDATE = "SELECT * FROM " + rocketsLiveUpdateTable;
+    public static final String SELECT_ROCKETS_LIVE_UPDATE = "SELECT * FROM " +
+            rocketsLiveUpdateTable  + " order by " + updateTimeStamp + " desc";
 
     public static final String SELECT_ROCKETS_GAME_LIST = "SELECT * FROM " + rocketsGameNameTable;
 

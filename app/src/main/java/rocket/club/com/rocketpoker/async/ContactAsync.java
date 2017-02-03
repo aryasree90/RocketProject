@@ -49,14 +49,12 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
 
     Context context = null;
     AppGlobals appGlobals = null;
-    private ProfileActivity activity;
     private static final String TAG = "ContactAsync";
     private static String FETCH_CONTACT_URL1 = AppGlobals.SERVER_URL + "/fetch_contacts.php";
     private static String FETCH_CONTACT_URL = AppGlobals.SERVER_URL + "/fetchContacts.php";
 
-    public ContactAsync(ProfileActivity act){
-        this.activity = act;
-        this.context = act.getApplicationContext();
+    public ContactAsync(Context context){
+        this.context = context;
     }
 
     @Override
@@ -64,6 +62,7 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
         super.onPreExecute();
 
         appGlobals = AppGlobals.getInstance(context);
+        appGlobals.contactSyncInProgress = true;
     }
 
     @Override
@@ -85,6 +84,9 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
+
+        appGlobals.sharedPref.setContactSyncTime(System.currentTimeMillis());
+        appGlobals.contactSyncInProgress = false;
     }
 
     private void contactLoop(ContactHelper contactHelper) {
