@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -51,9 +52,9 @@ public class SalaryTransFragment extends Fragment {
     private static final String TAG = "SalaryTransFragment";
 
     Button save, clear;
-    Button searchBtn;
+    Button searchBtn, clearBtn;
     EditText searchUser, salAmount;
-    LinearLayout transSalary = null;
+    LinearLayout transSalary = null, btnLayout = null;
     RelativeLayout showMemLayout = null;
     MaterialBetterSpinner payTypeSpinner;
     ProgressDialog progressDialog = null;
@@ -90,6 +91,8 @@ public class SalaryTransFragment extends Fragment {
         memNum = (TextView) view.findViewById(R.id.memberNumber);
         searchUser = (EditText) view.findViewById(R.id.searchText);
         searchBtn = (Button) view.findViewById(R.id.searchBtn);
+        clearBtn = (Button) view.findViewById(R.id.clearBtn);
+        btnLayout = (LinearLayout) view.findViewById(R.id.lnr_searchclearBtn);
         transSalary = (LinearLayout) view.findViewById(R.id.trans_salary);
         memNotFound = (TextView) view.findViewById(R.id.txt_member_not_found);
         showMemLayout = (RelativeLayout) view.findViewById(R.id.show_member_details);
@@ -112,6 +115,9 @@ public class SalaryTransFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
+                    case R.id.clearBtn:
+                        searchUser.setText("");
+                        break;
                     case R.id.searchBtn:
 
                         String empNum = searchUser.getText().toString();
@@ -136,6 +142,7 @@ public class SalaryTransFragment extends Fragment {
                         break;
                     case R.id.btn_save:
 
+                        String _id = memId.getText().toString();
                         String mob = memNum.getText().toString();
                         String salary = salAmount.getText().toString();
                         String payType = payTypeSpinner.getText().toString();
@@ -175,7 +182,7 @@ public class SalaryTransFragment extends Fragment {
 
                         Map<String, String> salary_map = new HashMap<String, String>();
                         salary_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                        salary_map.put("mem_id", memId.getText().toString());
+                        salary_map.put("mem_id", _id);
                         salary_map.put("mem_num", mob);
 //                        salary_map.put("advsalary", "");
                         salary_map.put("salary", salary);
@@ -193,6 +200,7 @@ public class SalaryTransFragment extends Fragment {
             }
         };
         searchBtn.setOnClickListener(clickListener);
+        clearBtn.setOnClickListener(clickListener);
         save.setOnClickListener(clickListener);
         clear.setOnClickListener(clickListener);
     }
@@ -204,7 +212,10 @@ public class SalaryTransFragment extends Fragment {
         memNotFound.setVisibility(View.INVISIBLE);
         showMemLayout.setVisibility(View.INVISIBLE);
         transSalary.setVisibility(View.INVISIBLE);
+        btnLayout.setVisibility(View.VISIBLE);
+        payTypeSpinner.setText("");
 
+        salAmount.setText("");
         memId.setText("");
         memName.setText("");
         memNum.setText("");
@@ -224,10 +235,6 @@ public class SalaryTransFragment extends Fragment {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
                         if(url.equals(MEMBER_SEARCH_URL)) {
                             try {
-                                memNotFound.setVisibility(View.INVISIBLE);
-                                showMemLayout.setVisibility(View.VISIBLE);
-                                transSalary.setVisibility(View.VISIBLE);
-                                searchUser.setEnabled(true);
 
                                 Gson gson = new Gson();
                                 EmpDetails[] empDetailList = gson.fromJson(response, EmpDetails[].class);
@@ -236,14 +243,33 @@ public class SalaryTransFragment extends Fragment {
 
                                 String tot = empDetails.getEmpSalary();
 
-                                memId.setText(empDetails.getEmpId());
-                                memName.setText(empDetails.getEmpName());
-                                memNum.setText(empDetails.getEmpNum());
+                                if(tot == null || tot.isEmpty()) {
+                                    memNotFound.setVisibility(View.VISIBLE);
+                                    memNotFound.setText(getString(R.string.empty_sal));
+                                    appGlobals.cancelDialog(progressDialog);
+                                    return;
+                                }
+
+                                memNotFound.setVisibility(View.INVISIBLE);
+                                showMemLayout.setVisibility(View.VISIBLE);
+                                transSalary.setVisibility(View.VISIBLE);
+                                searchUser.setEnabled(true);
+                                btnLayout.setVisibility(View.GONE);
+
+                                memId.setText(empDetails.getUserId());
+                                memName.setText(empDetails.getName());
+                                memNum.setText(empDetails.getReg_mob());
                                 totSal.setText(tot);
 
                                 String bal = "";//empDetails.getAdvSalary();
                                 String adv = empDetails.getSalary();
                                 String mnth = empDetails.getMonth();
+
+                                if(tot == null || tot.isEmpty())
+                                    tot = "0";
+
+                                if(adv == null || adv.isEmpty())
+                                    adv = "0";
 
                                 int salToPay = Integer.parseInt(tot) - Integer.parseInt(adv);
 
@@ -251,19 +277,21 @@ public class SalaryTransFragment extends Fragment {
                                     bal = "" + salToPay;
                                 }
 
-
                                 if(TextUtils.isEmpty(bal))
                                     bal = "0";
                                 if(TextUtils.isEmpty(mnth) || !getMonth().equals(mnth)) {
                                     mnth = getMonth();
                                 }
+
                                 advPaid.setText(adv);
                                 balAmt.setText(bal);
                                 month.setText(mnth);
                             }catch(Exception e) {
                                 memNotFound.setVisibility(View.VISIBLE);
+                                memNotFound.setText(getString(R.string.member_not_found));
                                 showMemLayout.setVisibility(View.INVISIBLE);
                                 transSalary.setVisibility(View.INVISIBLE);
+                                btnLayout.setVisibility(View.VISIBLE);
                             }
 
                         } else if(url.equals(MEMBER_SALARY_URL)) {

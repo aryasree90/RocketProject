@@ -223,6 +223,7 @@
     <string name="empty_exp_amount">Enter an amount</string>
     <string name="exp_text_avail">Expense Type already added</string>
 
+    <string name="empty_sal">Employee salary not provided</string>
     <string name="like_string">Interested</string>
     <string name="share_string">Share</string>
     <string name="newItem">New</string>

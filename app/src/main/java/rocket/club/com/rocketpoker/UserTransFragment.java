@@ -54,7 +54,7 @@ public class UserTransFragment extends Fragment {
     EditText searchMem, amount, description;
     TextView memNotFound, memId, memName, memNum;
     TextView creditAvail, bonusAvail;
-    Button searchBtn;
+    Button searchBtn, clearBtn;
     LinearLayout transDetails,searchClearBtn;
     RelativeLayout memberDetails;
     MaterialBetterSpinner transTypeSpinner = null, payTypeSpinner = null;
@@ -88,6 +88,7 @@ public class UserTransFragment extends Fragment {
         searchMem = (EditText) view.findViewById(R.id.searchText);
         memNotFound = (TextView) view.findViewById(R.id.txt_member_not_found);
         searchBtn = (Button) view.findViewById(R.id.searchBtn);
+        clearBtn = (Button) view.findViewById(R.id.clearBtn);
         memberDetails = (RelativeLayout) view.findViewById(R.id.show_member_details);
         transDetails = (LinearLayout) view.findViewById(R.id.trans_details);
         searchClearBtn = (LinearLayout) view.findViewById(R.id.lnr_searchclearBtn);
@@ -148,6 +149,9 @@ public class UserTransFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
+                    case R.id.clearBtn:
+                        searchMem.setText("");
+                        break;
                     case R.id.searchBtn:
                         String searchAFriend = searchMem.getText().toString();
 
@@ -266,13 +270,12 @@ public class UserTransFragment extends Fragment {
                         break;
                     case R.id.showTransBtn:
 
-
-
                         break;
                 }
             }
         };
         searchBtn.setOnClickListener(clickListener);
+        clearBtn.setOnClickListener(clickListener);
         save.setOnClickListener(clickListener);
         clear.setOnClickListener(clickListener);
         userTrans.setOnClickListener(clickListener);
