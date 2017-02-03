@@ -492,12 +492,9 @@ public class AppGlobals {
             protected void onPostExecute(Bitmap bmp) {
                 super.onPostExecute(bmp);
                 itemImage.setVisibility(View.VISIBLE);
-                Log.d("________________", "____________________ image");
                 if(bmp != null) {
-                    Log.d("________________", "____________________ not null");
                     itemImage.setImageBitmap(bmp);
                 } else {
-                    Log.d("________________", "____________________ null");
                     itemImage.setImageResource(R.drawable.default_profile);
                 }
             }

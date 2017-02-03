@@ -18,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,7 +162,13 @@ public class FriendsFragment extends Fragment {
         try {
             friendsList.clear();
             DBHelper db = new DBHelper(context);
-            ArrayList<ContactClass> contactList = db.getContacts(AppGlobals.SUGGESTED_FRIENDS);
+
+            int contactType = AppGlobals.SUGGESTED_FRIENDS;
+            if(pageType == AppGlobals.INVITE_TO_CLUB) {
+                contactType = AppGlobals.ACCEPTED_FRIENDS;
+            }
+
+            ArrayList<ContactClass> contactList = db.getContacts(contactType);
             for(ContactClass contactClass : contactList) {
                 String name = contactClass.getContactName();
                 String image = contactClass.getUserImage();

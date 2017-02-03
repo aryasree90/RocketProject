@@ -2,16 +2,11 @@ package rocket.club.com.rocketpoker.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Filter;
@@ -20,11 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,6 +40,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView friendName, friendNumber;
         CircleImageView friendImage;
+        Button addFriend;
         CheckBox selectedItem;
 
         public MyViewHolder(View view) {
@@ -57,6 +49,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             friendName = (TextView) view.findViewById(R.id.friendName);
             friendNumber = (TextView) view.findViewById(R.id.friendNumber);
             friendImage = (CircleImageView) view.findViewById(R.id.friendImage);
+            addFriend = (Button) view.findViewById(R.id.add_friend);
         }
     }
 
@@ -101,31 +94,22 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             }
         });
 
-        /*if(friendList.getImage() == null || TextUtils.isEmpty(friendList.getImage())) {
-            String imagePath = appGlobals.getRocketsPath(context) + "";
-            HashMap<String, String> params = new HashMap<>();
-            params.put("mobile", appGlobals.sharedPref.getLoginMobile());
-            params.put("frndMob", friendList.getMobile());
-            appGlobals.searchUpdatedImage(context, params, imagePath, holder.friendImage);
-        } else {
-            String imagePath = appGlobals.getRocketsPath(context) + "/" + friendList.getImage();
-            File filePath = new File(imagePath);
-            if (filePath.exists()) {
-                holder.friendImage.setVisibility(View.VISIBLE);
-                holder.friendImage.setImageURI(Uri.fromFile(filePath));
-                HashMap<String, String> params = new HashMap<>();
-                params.put("mobile", appGlobals.sharedPref.getLoginMobile());
-                params.put("frndMob", friendList.getMobile());
-                appGlobals.searchUpdatedImage(context, params, imagePath, holder.friendImage);
-            } else {
-                String imageUrl = AppGlobals.SERVER_URL + friendList.getImage();
-                appGlobals.loadImageFromServerWithDefault(imageUrl, holder.friendImage, imagePath,
-                        true, context);
-            }
-        }*/
+        holder.addFriend.setVisibility(View.GONE);
+
+        final String friendName = holder.friendName.getText().toString();
 
         if(pageType == AppGlobals.FRIEND_LIST) {
             holder.selectedItem.setVisibility(View.GONE);
+            if(friendList.getStatus() == AppGlobals.SUGGESTED_FRIENDS) {
+                holder.addFriend.setVisibility(View.VISIBLE);
+
+                holder.addFriend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, friendName, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         } else {
             holder.selectedItem.setVisibility(View.VISIBLE);
             checkBox = holder.selectedItem;
