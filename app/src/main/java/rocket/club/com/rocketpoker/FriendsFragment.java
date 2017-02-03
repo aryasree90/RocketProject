@@ -453,7 +453,8 @@ public class FriendsFragment extends Fragment {
         btnDateTime = (Button) dialog.findViewById(R.id.selectDateTime);
         Button confirmBtn = (Button) dialog.findViewById(R.id.confirmTime);
 
-        String[] GAME_LIST = getResources().getStringArray(R.array.game_list);
+        DBHelper db = new DBHelper(context);
+        String[] GAME_LIST = db.getRocketsGameList();
 
         ArrayAdapter<String> gameTypeAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_dropdown_item_1line, GAME_LIST);

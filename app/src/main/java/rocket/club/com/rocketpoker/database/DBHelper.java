@@ -20,7 +20,9 @@ import rocket.club.com.rocketpoker.classes.TaskHolder;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -386,9 +388,21 @@ public class DBHelper extends SQLiteOpenHelper {
                 int inviteCount = res.getInt(res.getColumnIndex(count));
                 int inviteStatus = res.getInt(res.getColumnIndex(status));
 
-                GameInvite gameInvite = new GameInvite(inviteSenderMob, inviteList, inviteGame, inviteSchedule, inviteTime, inviteCount, inviteStatus);
+                long gameSchedule = 0, curTime = System.currentTimeMillis();
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                    Date date = sdf.parse(inviteSchedule);
 
-                gameInviteList.add(gameInvite);
+                    gameSchedule = date.getTime();
+
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+
+                if(gameSchedule > curTime) {
+                    GameInvite gameInvite = new GameInvite(inviteSenderMob, inviteList, inviteGame, inviteSchedule, inviteTime, inviteCount, inviteStatus);
+                    gameInviteList.add(gameInvite);
+                }
 
                 res.moveToNext();
             }
