@@ -19,6 +19,7 @@ import com.google.android.gcm.GCMRegistrar;
 
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.SharedPref;
 
 
 public class SettingsFragment extends Fragment {
@@ -103,13 +104,12 @@ public class SettingsFragment extends Fragment {
     }
 
     private void redirectToLogin() {
-        appGlobals.sharedPref.setLogInStatus(false);
-        appGlobals.sharedPref.setLoginMobile("");
-        appGlobals.sharedPref.setRegId("");
+
         appGlobals.currentFragmentClass = null;
         GCMRegistrar.setRegisteredOnServer(context, false);
         DBHelper db = new DBHelper(context);
-
+        db.truncateTables();
+        appGlobals.sharedPref.clearPref();
 
         Intent loginActivity = new Intent(context, LoginActivity.class);
         loginActivity.putExtra(LoginActivity.pageType, LoginActivity.loginPage);

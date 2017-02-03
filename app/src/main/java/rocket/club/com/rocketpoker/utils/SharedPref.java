@@ -35,6 +35,11 @@ public class SharedPref {
         editor= pref.edit();
     }
 
+    public void clearPref() {
+        editor.clear();
+        editor.commit();
+    }
+
     public void setLoginMobile(String mobile) {
         editor.putString(LOGIN_MOBILE, mobile);
         editor.commit();

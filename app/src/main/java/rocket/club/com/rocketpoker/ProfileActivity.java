@@ -310,8 +310,16 @@ public class ProfileActivity extends ActionBarActivity {
         if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists()) {
             userImage = appGlobals.convertImageToBase64(imagePath);
             thumbImage = appGlobals.thumbnailImage(imagePath);
-        }
+        } else {
+            String imgFileName = appGlobals.sharedPref.getLoginMobile() + ".jpg";
+            String imgPath = appGlobals.getRocketsPath(context) + "/" + imgFileName;
+            File imageFile = new File(imgPath);
 
+            if(imageFile.exists()) {
+                userImage = appGlobals.convertImageToBase64(imgPath);
+                thumbImage = appGlobals.thumbnailImage(imgPath);
+            }
+        }
 
         if(validateFields(userFullName, userEmail, userNickName, userGender, userGameType))
             updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob,
