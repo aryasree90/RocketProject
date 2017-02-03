@@ -117,6 +117,7 @@ public class SalaryTransFragment extends Fragment {
                 switch(v.getId()) {
                     case R.id.clearBtn:
                         searchUser.setText("");
+                        memNotFound.setVisibility(View.GONE);
                         break;
                     case R.id.searchBtn:
 
@@ -208,10 +209,10 @@ public class SalaryTransFragment extends Fragment {
     private void clearFields() {
         searchUser.setText("");
         searchUser.setEnabled(true);
-        errMsg.setVisibility(View.INVISIBLE);
-        memNotFound.setVisibility(View.INVISIBLE);
-        showMemLayout.setVisibility(View.INVISIBLE);
-        transSalary.setVisibility(View.INVISIBLE);
+        errMsg.setVisibility(View.GONE);
+        memNotFound.setVisibility(View.GONE);
+        showMemLayout.setVisibility(View.GONE);
+        transSalary.setVisibility(View.GONE);
         btnLayout.setVisibility(View.VISIBLE);
         payTypeSpinner.setText("");
 
@@ -289,8 +290,8 @@ public class SalaryTransFragment extends Fragment {
                             }catch(Exception e) {
                                 memNotFound.setVisibility(View.VISIBLE);
                                 memNotFound.setText(getString(R.string.member_not_found));
-                                showMemLayout.setVisibility(View.INVISIBLE);
-                                transSalary.setVisibility(View.INVISIBLE);
+                                showMemLayout.setVisibility(View.GONE);
+                                transSalary.setVisibility(View.GONE);
                                 btnLayout.setVisibility(View.VISIBLE);
                             }
 
