@@ -55,9 +55,9 @@ public class AddEmpSalary extends Fragment {
     EditText amount, searchNum;
     TextView errMsg, curSal, txtMemNotFound;
     TextView memNum, memName, memId;
-    Button searchBtn;
+    Button searchBtn, clearBtn;
     Button save, clear;
-    LinearLayout salLayout;
+    LinearLayout salLayout, btnLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +80,9 @@ public class AddEmpSalary extends Fragment {
         txtMemNotFound = (TextView) view.findViewById(R.id.txt_friend_not_found);
         curSal = (TextView) view.findViewById(R.id.cur_salary);
         searchBtn = (Button) view.findViewById(R.id.searchBtn);
+        clearBtn = (Button) view.findViewById(R.id.clearBtn);
         errMsg = (TextView) view.findViewById(R.id.err_msg);
+        btnLayout = (LinearLayout) view.findViewById(R.id.lnr_searchclearBtn);
         salLayout = (LinearLayout) view.findViewById(R.id.salLayout);
 
         save = (Button) view.findViewById(R.id.btn_save);
@@ -164,15 +166,20 @@ public class AddEmpSalary extends Fragment {
                     case R.id.btn_clear:
                         clearFields();
                         break;
+                    case R.id.clearBtn:
+                        searchNum.setText("");
+                        break;
                 }
             }
         };
         searchBtn.setOnClickListener(onClickListener);
         save.setOnClickListener(onClickListener);
         clear.setOnClickListener(onClickListener);
+        clearBtn.setOnClickListener(onClickListener);
     }
 
     private void clearFields() {
+        btnLayout.setVisibility(View.VISIBLE);
         txtMemNotFound.setVisibility(View.INVISIBLE);
         searchNum.setEnabled(true);
         searchNum.setText("");
@@ -209,11 +216,13 @@ public class AddEmpSalary extends Fragment {
                                 memName.setText(empDetails.getName());
                                 curSal.setText(getString(R.string.cur_sal) + tot);
                                 salLayout.setVisibility(View.VISIBLE);
+                                btnLayout.setVisibility(View.GONE);
 
                             } catch (Exception e) {
                                 txtMemNotFound.setVisibility(View.VISIBLE);
                                 searchNum.setEnabled(true);
                                 salLayout.setVisibility(View.INVISIBLE);
+                                btnLayout.setVisibility(View.VISIBLE);
                             }
                         } else if(call == 2) {
                             if(response.equals("success")) {
