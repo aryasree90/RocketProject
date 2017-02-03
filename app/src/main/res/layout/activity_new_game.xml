@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:id="@+id/txt_add_new_game"
-        android:text="@string/add_transaction_heading"
+        android:text="@string/add_new_game"
         android:textSize="18sp"
         android:gravity="center"
         android:layout_marginBottom="20dp"

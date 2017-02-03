@@ -112,6 +112,7 @@
     <string name="update_text">Enter text</string>
     <string name="update_comments">Enter some comments</string>
     <string name="game_name">Enter Game Name</string>
+    <string name="game_found">Game already added</string>
 
 
     <string name="unable_to_connect_server">Unable to Connect to Server</string>

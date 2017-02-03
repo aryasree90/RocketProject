@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
+import rocket.club.com.rocketpoker.utils.MultiSelectionSpinner;
 
 /**
  * Created by Admin on 11/28/2016.
@@ -44,6 +46,7 @@ public class AddGameTypeFragment extends Fragment {
 
     EditText gameType;
     Button save, clear;
+    ArrayList<String> gameList = null;
     ProgressDialog progressDialog = null;
 
     final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
@@ -59,6 +62,12 @@ public class AddGameTypeFragment extends Fragment {
         return view;
     }
 
+    private void loadGameNameSpinner() {
+        DBHelper db = new DBHelper(context);
+        String[] GAME_LIST = db.getRocketsGameList();
+        gameList = new ArrayList<String>(Arrays.asList(GAME_LIST));
+    }
+
     private void initializeWidgets(View view) {
 
         context = getActivity();
@@ -70,6 +79,7 @@ public class AddGameTypeFragment extends Fragment {
         save = (Button) view.findViewById(R.id.saveBtn);
         clear = (Button) view.findViewById(R.id.clearBtn);
 
+        loadGameNameSpinner();
     }
 
     private void setClickListener() {
@@ -82,7 +92,14 @@ public class AddGameTypeFragment extends Fragment {
                         String game = gameType.getText().toString();
 
                         if(TextUtils.isEmpty(game)) {
-                            appGlobals.toastMsg(context, "Enter a Game", appGlobals.LENGTH_LONG);
+                            appGlobals.toastMsg(context, getString(R.string.game_name), appGlobals.LENGTH_LONG);
+                            return;
+                        }
+
+                        game = game.substring(0, 1).toUpperCase() + game.substring(1);
+
+                        if(gameList.contains(game)) {
+                            appGlobals.toastMsg(context, getString(R.string.game_found), appGlobals.LENGTH_LONG);
                             return;
                         }
 
