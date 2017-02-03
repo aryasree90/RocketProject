@@ -23,7 +23,8 @@ android:background="@color/appBackground"
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:orientation="vertical"
         android:weightSum="1">
@@ -83,9 +84,11 @@ android:background="@color/appBackground"
         android:layout_height="wrap_content"
         android:id="@+id/txt_friend_not_found"
         android:text="@string/friend_not_found"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:textSize="15sp"
-        android:layout_margin="5dp"
+        android:background="@color/common_google_signin_btn_text_dark_pressed"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:textColor="@color/colorPrimary"/>
 
     <LinearLayout
@@ -94,7 +97,8 @@ android:background="@color/appBackground"
         android:layout_height="wrap_content"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:orientation="vertical"
-        android:layout_margin="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:visibility="invisible">
 
         <EditText

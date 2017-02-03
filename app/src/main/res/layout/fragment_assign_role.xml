@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:layout_margin="5dp"
+    android:padding="2dp"
     android:layout_width="match_parent"
     android:background="@color/appBackground"
     android:layout_height="match_parent">
@@ -30,6 +30,7 @@
             android:id="@+id/textLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="2dp"
             android:background="@color/common_google_signin_btn_text_dark_default"
             android:layout_below="@+id/actType"
             android:layout_marginTop="40dp"

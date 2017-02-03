@@ -13,7 +13,8 @@ android:background="@color/appBackground"
         android:text="@string/add_employee_salary"
         android:textSize="18sp"
         android:gravity="center"
-        android:layout_margin="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:textAlignment="center"
         android:background="#003399"
         android:textColor="@color/common_google_signin_btn_text_dark"/>
@@ -22,16 +23,16 @@ android:background="@color/appBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
-        android:layout_marginTop="10dp"
         >
 
         <EditText
             android:id="@+id/searchText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/search_with_mob"
+            android:hint="@string/search_member_num_id"
             android:inputType="number"
             android:layout_marginTop="15dp"
             android:layout_weight="0.85"/>
@@ -82,23 +83,34 @@ android:background="@color/appBackground"
         android:id="@+id/txt_friend_not_found"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:text="@string/friend_not_found"
-        android:visibility="invisible"
+        android:visibility="gone"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:textSize="15sp"
         android:textColor="@color/colorPrimary"/>
 
     <LinearLayout
         android:id="@+id/salLayout"
         android:orientation="vertical"
-        android:visibility="visible"
-        android:layout_margin="5dp"
+        android:visibility="invisible"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorAccent"
+            android:gravity="center">
 
         <TextView
             android:id="@+id/memberId"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -106,7 +118,7 @@ android:background="@color/appBackground"
             android:id="@+id/memberName"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:layout_below="@+id/memberId"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -114,11 +126,10 @@ android:background="@color/appBackground"
             android:id="@+id/memberNumber"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:layout_below="@+id/memberName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-
+        </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

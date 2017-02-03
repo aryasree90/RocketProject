@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="5dp"
     android:background="@color/appBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -13,7 +13,8 @@
         android:id="@+id/txt_add_expense_type"
         android:text="@string/add_expense_type"
         android:textSize="18sp"
-        android:layout_margin="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:gravity="center"
         android:textAlignment="center"
         android:background="#003399"
@@ -21,8 +22,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="60dp"
         android:background="@color/common_google_signin_btn_text_dark_pressed"
         android:orientation="vertical"
         android:weightSum="1">
