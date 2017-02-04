@@ -186,6 +186,8 @@
     <string name="calendar">Calendar</string>
     <string name="contact_us">We Exist @</string>
 
+    <string name="contact_sync">Synching Contacts</string>
+
     <string name="edit_event">Add Event</string>
     <string name="edit_service">Add Service</string>
     <string name="edit_live_update">Add Live Update</string>

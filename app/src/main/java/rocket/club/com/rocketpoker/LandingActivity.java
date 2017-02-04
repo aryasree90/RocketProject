@@ -179,6 +179,7 @@ public class LandingActivity extends AppCompatActivity
                         break;
                     case R.id.refresh:
                         if(!appGlobals.contactSyncInProgress) {
+                            appGlobals.toastMsg(context, getString(R.string.contact_sync), appGlobals.LENGTH_LONG);
                             ContactAsync contactAsync = new ContactAsync(context);
                             contactAsync.execute();
                         }

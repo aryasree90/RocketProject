@@ -108,14 +108,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             holder.friendImage.setImageResource(R.drawable.default_profile);
         }
 
-        holder.friendImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mainImageUrl = AppGlobals.SERVER_URL + friendList.getImage();
-//                Toast.makeText(context, mainImageUrl, Toast.LENGTH_LONG).show();
-                showImageDialog(mainImageUrl);
-            }
-        });
+        if(friendList.getImage() != null && !friendList.getImage().isEmpty()) {
+            holder.friendImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String mainImageUrl = AppGlobals.SERVER_URL + friendList.getImage();
+                    showImageDialog(mainImageUrl);
+                }
+            });
+        }
 
         holder.addFriend.setVisibility(View.GONE);
 
