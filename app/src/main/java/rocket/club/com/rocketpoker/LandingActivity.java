@@ -15,18 +15,35 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
+import com.google.gson.Gson;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.async.ContactAsync;
+import rocket.club.com.rocketpoker.classes.GameInvite;
+import rocket.club.com.rocketpoker.classes.InfoDetails;
+import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
+import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
@@ -59,6 +76,8 @@ public class LandingActivity extends AppCompatActivity
         setClickListener();
         checkContactSync();
         removeOldDataFromDB();
+
+        fetchInitDataFromServer();
     }
 
     private void initializeWidgets() {
@@ -427,11 +446,10 @@ public class LandingActivity extends AppCompatActivity
         }
     }
 
+    // To auto refresh contacts every 24 hours
     private void checkContactSync() {
         long curTime = System.currentTimeMillis();
-
         long lastUpdated = appGlobals.sharedPref.getContactSyncTime();
-
         long diff = ((curTime - lastUpdated)/1000)/3600;
 
         if(diff >= 24 && !appGlobals.contactSyncInProgress) {
@@ -440,8 +458,82 @@ public class LandingActivity extends AppCompatActivity
         }
     }
 
+    //To remove old data from db every specific time
     private void removeOldDataFromDB() {
         DBHelper db = new DBHelper(context);
         db.removeOldData();
+    }
+
+    // To fetch old data from server while installing
+    private void fetchInitDataFromServer() {
+
+        String mobile = appGlobals.sharedPref.getLoginMobile();
+        String timeStamp = System.currentTimeMillis() + "";
+
+    /*
+     *  1   friends
+     *  2   events, services
+     *  3   live udpates
+     *  4   game invites
+     */
+        initDb(mobile, "1", timeStamp);
+        initDb(mobile, "2", timeStamp);
+        initDb(mobile, "3", timeStamp);
+        initDb(mobile, "4", timeStamp);
+    }
+
+    private void initDb(final String mobile, final String type, final String timeStamp) {
+
+        final String INIT_URL = AppGlobals.SERVER_URL + "fetchFromDb.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, INIT_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Gson gson = new Gson();
+                        DBHelper db = new DBHelper(context);
+Log.d(TAG, "_______________________ " + response);
+                        if(type.equals("1")) {
+                            UserDetails[] details = gson.fromJson(response, UserDetails[].class);
+                            ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
+                            db.insertContactDetails(userDetails, false);
+                        } else if(type.equals("2")) {
+                            InfoDetails[] infoDetails = gson.fromJson(response, InfoDetails[].class);
+                            db.insertInfoDetails(infoDetails, context);
+                        } else if(type.equals("3")) {
+                            LiveUpdateDetails[] liveUpdateDetailsList = gson.fromJson(response, LiveUpdateDetails[].class);
+                            db.insertLiveUpdateDetails(liveUpdateDetailsList);
+                        } else if(type.equals("4")) {
+                            GameInvite[] gameInvites = gson.fromJson(response, GameInvite[].class);
+                            for(GameInvite gameInvite : gameInvites)
+                                db.insertInvitationDetails(gameInvite);
+                        }
+
+//                        appGlobals.cancelDialog(progressDialog);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String msg = "";
+//                        appGlobals.cancelDialog(progressDialog);
+
+                        appGlobals.toastMsg(context, msg, appGlobals.LENGTH_LONG);
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String,String>();
+                params.put("mobile", mobile);
+                params.put("timeStamp", timeStamp);
+                params.put("type", type);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 }

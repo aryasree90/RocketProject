@@ -173,7 +173,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
         for(UserDetails details : userDetails) {
 
-            ContactClass detailClass = getContacts(details.getMobile());
+            ContactClass detailClass = null;
+
+            if(details.getMobile() != null || !details.getMobile().isEmpty())
+                detailClass = getContacts(details.getMobile());
 
             if(detailClass == null) {
 
@@ -203,7 +206,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateContacts(int statusValue, String updtMob) {
         SQLiteDatabase db = this.getWritableDatabase();
         final String where = mobile + "=" + updtMob;
-        if(statusValue == AppGlobals.ACCEPTED_FRIENDS || statusValue == AppGlobals.PENDING_REQUEST) {
+
+        if(statusValue == AppGlobals.ACCEPTED_FRIENDS || statusValue == AppGlobals.PENDING_REQUEST
+                || statusValue == AppGlobals.PENDING_FRIENDS) {
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
             db.update(friendsTable, cv, where, null);
@@ -632,10 +637,44 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(TRUNCATE_ROCKETS_INFO);
         db.execSQL(TRUNCATE_ROCKETS_LIVE_UPDATE);
         db.execSQL(TRUNCATE_ROCKETS_TASKS);
-        db.execSQL(TRUNCATE_GAME_NAME_TABLE);
+//        db.execSQL(TRUNCATE_GAME_NAME_TABLE);
     }
 
+    public static final String SELECT_MSG_TABLE = "SELECT DISTINCT(" + time + ") FROM " + messageTable + " ORDER BY " + time;
+    public static final String SELECT_GAME_INVITE_TABLE = "SELECT DISTINCT(" + timeStamp + ") FROM " + gameInviteTable + " ORDER BY " + timeStamp;
+    public static final String SELECT_INFO_TABLE = "SELECT DISTINCT(" + infoTimeStamp + ") FROM " + rocketsInfoTable + " ORDER BY " + infoTimeStamp;
+    public static final String SELECT_LIVE_UPDATE_TABLE = "SELECT DISTINCT(" + updateTimeStamp + ") FROM " + rocketsLiveUpdateTable + " ORDER BY " + updateTimeStamp;
+    public static final String SELECT_TASKS_TABLE = "SELECT DISTINCT(" + taskTimeStamp + ") FROM " + rocketsTasks + " ORDER BY " + taskTimeStamp;
+
+
     public void removeOldData() {
+
+        executeQuery(SELECT_MSG_TABLE);
+        executeQuery(SELECT_GAME_INVITE_TABLE);
+        executeQuery(SELECT_INFO_TABLE);
+        executeQuery(SELECT_LIVE_UPDATE_TABLE);
+        executeQuery(SELECT_TASKS_TABLE);
+
+    }
+
+    private void executeQuery(String query) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor res = db.rawQuery(query, null);
+
+        if(res != null) {
+            res.moveToFirst();
+            String columnName = res.getColumnName(0);
+            while (!res.isAfterLast()) {
+                String timeStamp = res.getString(res.getColumnIndex(columnName));
+                Log.d(TAG, "_____________________________" + columnName + " " + timeStamp);
+                res.moveToNext();
+            }
+        }
+        if(db != null)
+            db.close();
+
 
     }
 }
