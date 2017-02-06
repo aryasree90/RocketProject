@@ -175,6 +175,11 @@ public class FilterTransaction extends AppCompatActivity {
             map.put("mobile", appGlobals.sharedPref.getLoginMobile());
             map.put("type", filterTrans);
 
+            if(!connectionDetector.isConnectingToInternet()) {
+                appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+                return;
+            }
+
             progressDialog = appGlobals.showDialog(this, "Fetching Details");
             serverCall(map, FETCH_ID);
         }
@@ -232,6 +237,11 @@ public class FilterTransaction extends AppCompatActivity {
 
         if(memId.equals("All")) {
             memId = "";
+        }
+
+        if(!connectionDetector.isConnectingToInternet()) {
+            appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+            return;
         }
 
         Map<String,String> map = new HashMap<String,String>();

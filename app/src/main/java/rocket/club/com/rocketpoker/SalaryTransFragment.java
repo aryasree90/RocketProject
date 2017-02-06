@@ -229,6 +229,13 @@ public class SalaryTransFragment extends Fragment {
 
     private void serverCall(final Map<String,String> params, final String url) {
 
+        if(!connectionDetector.isConnectingToInternet()) {
+            appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+            appGlobals.cancelDialog(progressDialog);
+            return;
+        }
+
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override

@@ -507,6 +507,10 @@ public class ProfileActivity extends ActionBarActivity {
         }
         if(imageFile.exists())
             profileImage.setImageURI(Uri.fromFile(imageFile));
+
+        if(!profileDetails.getName().isEmpty()) {
+            skipProfile.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
