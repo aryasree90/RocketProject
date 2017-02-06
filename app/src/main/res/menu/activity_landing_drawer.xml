@@ -10,11 +10,11 @@
             <menu>
                 <item
                     android:id="@+id/role_assign"
-                    android:icon="@mipmap/ic_id"
+                    android:icon="@mipmap/ic_assign_role_admin"
                     android:title="@string/admin_assign_role" />
                 <item
                     android:id="@+id/id_assign"
-                    android:icon="@mipmap/ic_id"
+                    android:icon="@mipmap/ic_assign_id"
                     android:title="@string/admin_assign_id" />
                 <item
                     android:id="@+id/add_exp_type"
@@ -104,7 +104,7 @@
             android:title="@string/transactions" />
         <item
             android:id="@+id/services"
-            android:icon="@mipmap/ic_locate_us"
+            android:icon="@mipmap/ic_services"
             android:title="@string/services" />
         <item
             android:id="@+id/settings"
