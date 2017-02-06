@@ -668,7 +668,6 @@ public class DBHelper extends SQLiteOpenHelper {
             String columnName = res.getColumnName(0);
             while (!res.isAfterLast()) {
                 String timeStamp = res.getString(res.getColumnIndex(columnName));
-                Log.d(TAG, "_____________________________" + columnName + " " + timeStamp);
                 res.moveToNext();
             }
         }

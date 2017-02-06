@@ -76,8 +76,6 @@ public class LandingActivity extends AppCompatActivity
         setClickListener();
         checkContactSync();
         removeOldDataFromDB();
-
-        fetchInitDataFromServer();
     }
 
     private void initializeWidgets() {
@@ -462,78 +460,5 @@ public class LandingActivity extends AppCompatActivity
     private void removeOldDataFromDB() {
         DBHelper db = new DBHelper(context);
         db.removeOldData();
-    }
-
-    // To fetch old data from server while installing
-    private void fetchInitDataFromServer() {
-
-        String mobile = appGlobals.sharedPref.getLoginMobile();
-        String timeStamp = System.currentTimeMillis() + "";
-
-    /*
-     *  1   friends
-     *  2   events, services
-     *  3   live udpates
-     *  4   game invites
-     */
-        initDb(mobile, "1", timeStamp);
-        initDb(mobile, "2", timeStamp);
-        initDb(mobile, "3", timeStamp);
-        initDb(mobile, "4", timeStamp);
-    }
-
-    private void initDb(final String mobile, final String type, final String timeStamp) {
-
-        final String INIT_URL = AppGlobals.SERVER_URL + "fetchFromDb.php";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, INIT_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        Gson gson = new Gson();
-                        DBHelper db = new DBHelper(context);
-Log.d(TAG, "_______________________ " + response);
-                        if(type.equals("1")) {
-                            UserDetails[] details = gson.fromJson(response, UserDetails[].class);
-                            ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
-                            db.insertContactDetails(userDetails, false);
-                        } else if(type.equals("2")) {
-                            InfoDetails[] infoDetails = gson.fromJson(response, InfoDetails[].class);
-                            db.insertInfoDetails(infoDetails, context);
-                        } else if(type.equals("3")) {
-                            LiveUpdateDetails[] liveUpdateDetailsList = gson.fromJson(response, LiveUpdateDetails[].class);
-                            db.insertLiveUpdateDetails(liveUpdateDetailsList);
-                        } else if(type.equals("4")) {
-                            GameInvite[] gameInvites = gson.fromJson(response, GameInvite[].class);
-                            for(GameInvite gameInvite : gameInvites)
-                                db.insertInvitationDetails(gameInvite);
-                        }
-
-//                        appGlobals.cancelDialog(progressDialog);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String msg = "";
-//                        appGlobals.cancelDialog(progressDialog);
-
-                        appGlobals.toastMsg(context, msg, appGlobals.LENGTH_LONG);
-                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String,String>();
-                params.put("mobile", mobile);
-                params.put("timeStamp", timeStamp);
-                params.put("type", type);
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        requestQueue.add(stringRequest);
     }
 }

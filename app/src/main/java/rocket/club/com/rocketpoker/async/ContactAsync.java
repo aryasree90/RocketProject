@@ -22,6 +22,9 @@ import rocket.club.com.rocketpoker.ProfileActivity;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.ContactHelper;
+import rocket.club.com.rocketpoker.classes.GameInvite;
+import rocket.club.com.rocketpoker.classes.InfoDetails;
+import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -50,8 +53,8 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
     Context context = null;
     AppGlobals appGlobals = null;
     private static final String TAG = "ContactAsync";
-    private static String FETCH_CONTACT_URL1 = AppGlobals.SERVER_URL + "/fetch_contacts.php";
-    private static String FETCH_CONTACT_URL = AppGlobals.SERVER_URL + "/fetchContacts.php";
+    private static String FETCH_CONTACT_URL = AppGlobals.SERVER_URL + "fetchContacts.php";
+    final String INIT_URL = AppGlobals.SERVER_URL + "fetchFromDb.php";
 
     public ContactAsync(Context context){
         this.context = context;
@@ -117,28 +120,94 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
         map.put("isLast", "" + contactHelper.isAtLast());
         map.put("isFirst", "" + contactHelper.isFirst());
 
-        serverCall(map);
+        serverCall(map, contactHelper.isAtLast(), "0", FETCH_CONTACT_URL);
     }
 
-    private void serverCall(final Map<String,String> params) {
+    // To fetch old data from server while installing
+    private void fetchInitDataFromServer() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, FETCH_CONTACT_URL,
+        String mobile = appGlobals.sharedPref.getLoginMobile();
+        String timeStamp = System.currentTimeMillis() + "";
+
+    /*
+     *  1   friends
+     *  2   events, services
+     *  3   live udpates
+     *  4   game invites
+     */
+        initDb(mobile, "1", timeStamp);
+        initDb(mobile, "2", timeStamp);
+        initDb(mobile, "3", timeStamp);
+        initDb(mobile, "4", timeStamp);
+    }
+
+    private void initDb(final String mobile, final String type, final String timeStamp) {
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("mobile", mobile);
+        params.put("timeStamp", timeStamp);
+        params.put("type", type);
+
+        serverCall(params, false, type, INIT_URL);
+    }
+
+    private void sendToDb(String response, String type) {
+        Gson gson = new Gson();
+        DBHelper db = new DBHelper(context);
+
+        appGlobals.logClass.setLogMsg(TAG, "Reached sendToDb", LogClass.DEBUG_MSG);
+        appGlobals.logClass.setLogMsg(TAG, "Type " + type, LogClass.DEBUG_MSG);
+        appGlobals.logClass.setLogMsg(TAG, response, LogClass.DEBUG_MSG);
+
+        if(type.equals("1")) {
+            UserDetails[] details = gson.fromJson(response, UserDetails[].class);
+            ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
+            if(userDetails.size() > 0)
+                db.insertContactDetails(userDetails, false);
+        } else if(type.equals("2")) {
+            InfoDetails[] infoDetails = gson.fromJson(response, InfoDetails[].class);
+            if(infoDetails.length > 0)
+                db.insertInfoDetails(infoDetails, context);
+        } else if(type.equals("3")) {
+            LiveUpdateDetails[] liveUpdateDetailsList = gson.fromJson(response, LiveUpdateDetails[].class);
+            if(liveUpdateDetailsList.length > 0)
+                db.insertLiveUpdateDetails(liveUpdateDetailsList);
+        } else if(type.equals("4")) {
+            GameInvite[] gameInvites = gson.fromJson(response, GameInvite[].class);
+            if(gameInvites.length > 0)
+                for(GameInvite gameInvite : gameInvites)
+                    db.insertInvitationDetails(gameInvite);
+        }
+    }
+
+    private void serverCall(final Map<String,String> params, final boolean isAtLast, final String type, final String url) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         appGlobals.logClass.setLogMsg(TAG, response, LogClass.DEBUG_MSG);
-                        appGlobals.sharedPref.setContactInit(true);
+                        appGlobals.logClass.setLogMsg(TAG, "Type " + type, LogClass.DEBUG_MSG);
 
-                        if(!response.isEmpty()) {
-                            Gson gson = new Gson();
+                        if(type.equals("0")) {
+                            if (!response.isEmpty()) {
+                                Gson gson = new Gson();
 
-                            UserDetails[] details = gson.fromJson(response, UserDetails[].class);
+                                UserDetails[] details = gson.fromJson(response, UserDetails[].class);
 
-                            if(details.length > 0) {
-                                ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
-                                DBHelper db = new DBHelper(context);
-                                db.insertContactDetails(userDetails, true);
+                                if (details.length > 0) {
+                                    ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
+                                    DBHelper db = new DBHelper(context);
+                                    db.insertContactDetails(userDetails, true);
+                                }
                             }
+
+                            if(isAtLast && !appGlobals.sharedPref.isContactInit()) {
+                                appGlobals.sharedPref.setContactInit(true);
+
+                                fetchInitDataFromServer();
+                            }
+                        } else {
+                            sendToDb(response, type);
                         }
                     }
                 },
@@ -158,71 +227,58 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
         requestQueue.add(stringRequest);
     }
 
-    private void sendContactsToServer1(ArrayList<ContactClass> contactList, ContactHelper contactHelper) {
+    private void initDb1(final String mobile, final String type, final String timeStamp) {
 
-        String resultstr = "";
-        try {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(FETCH_CONTACT_URL);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, INIT_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
 
-            JSONArray contactJsonArray = new JSONArray();
-            for(ContactClass contactClass : contactList) {
-                JSONObject contactJson = new JSONObject();
-                contactJson.put(contactClass.getContactName(), contactClass.getPhoneNumber());
-                contactJsonArray.put(contactJson);
+                        Gson gson = new Gson();
+                        DBHelper db = new DBHelper(context);
+                        Log.d(TAG, "_______________________ " + response);
+                        if(type.equals("1")) {
+                            UserDetails[] details = gson.fromJson(response, UserDetails[].class);
+                            ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
+                            db.insertContactDetails(userDetails, false);
+                        } else if(type.equals("2")) {
+                            InfoDetails[] infoDetails = gson.fromJson(response, InfoDetails[].class);
+                            db.insertInfoDetails(infoDetails, context);
+                        } else if(type.equals("3")) {
+                            LiveUpdateDetails[] liveUpdateDetailsList = gson.fromJson(response, LiveUpdateDetails[].class);
+                            db.insertLiveUpdateDetails(liveUpdateDetailsList);
+                        } else if(type.equals("4")) {
+                            GameInvite[] gameInvites = gson.fromJson(response, GameInvite[].class);
+                            for(GameInvite gameInvite : gameInvites)
+                                db.insertInvitationDetails(gameInvite);
+                        }
+
+//                        appGlobals.cancelDialog(progressDialog);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String msg = "";
+//                        appGlobals.cancelDialog(progressDialog);
+
+                        appGlobals.toastMsg(context, msg, appGlobals.LENGTH_LONG);
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String,String>();
+                params.put("mobile", mobile);
+                params.put("timeStamp", timeStamp);
+                params.put("type", type);
+                return params;
             }
+        };
 
-            appGlobals.logClass.setLogMsg(TAG, "Reached " + contactHelper.isFirst(), LogClass.DEBUG_MSG);
-
-            JSONObject jsonData = new JSONObject();
-            jsonData.put("ownId", appGlobals.sharedPref.getLoginMobile());
-            jsonData.put("contact", contactJsonArray.toString());
-            jsonData.put("isLast", contactHelper.isAtLast());
-            jsonData.put("isFirst", contactHelper.isFirst());
-
-            httppost.setEntity(new StringEntity(jsonData.toString(), "UTF-8"));
-
-            httppost.setHeader("Content-type", "application/json");
-            httppost.setHeader("Accept-Encoding", "application/json");
-            httppost.setHeader("Accept-Language", "en-US");
-
-            HttpResponse response = httpclient.execute(httppost);
-
-            HttpEntity entity = response.getEntity();
-            InputStream is = entity.getContent();
-
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            is.close();
-            resultstr = sb.toString();
-
-            appGlobals.logClass.setLogMsg(TAG, "Result " + resultstr, LogClass.DEBUG_MSG);
-
-            if(resultstr.contains("','")) {
-                ArrayList<UserDetails> userDetailList = new ArrayList<UserDetails>();
-                UserDetails userDetails = new UserDetails();
-                String list[] = resultstr.split("','");
-                int len = list.length - 1;
-                for(int i=0; i<len; i++) {
-                    String item[] = list[i].split("':'");
-                    appGlobals.logClass.setLogMsg(TAG, "Contacts " + item[0] + " " + item[1], LogClass.DEBUG_MSG);
-//                    userDetails.setUserId(item[0]);
-                    userDetails.setMobile(item[1]);
-                    userDetails.setUserName(item[2]);
-
-                    userDetailList.add(userDetails);
-                }
-                /*DBHelper db = new DBHelper(context);
-                db.insertContactDetails(userDetailList);*/
-            }
-        } catch (Exception e) {
-            appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
-        }
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
+
+
 }
