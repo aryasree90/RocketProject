@@ -106,7 +106,8 @@ public class LandingActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        setMenuVisibility();
+//        setMenuVisibility();
+        setItemVisibility();
 
         View headerView = getLayoutInflater().inflate(R.layout.nav_header_landing, navigationView, false);
         navigationView.addHeaderView(headerView);
@@ -240,6 +241,26 @@ public class LandingActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.landing, menu);
         return true;
     }  */
+
+    private void setItemVisibility() {
+
+        int msgType = appGlobals.sharedPref.getUserType();
+
+        navigationView.getMenu().findItem(R.id.admin).setVisible(false);
+        navigationView.getMenu().findItem(R.id.cashier).setVisible(false);
+        navigationView.getMenu().findItem(R.id.editor).setVisible(false);
+
+        if(msgType == AppGlobals.EDITOR) {
+            navigationView.getMenu().findItem(R.id.editor).setVisible(true);
+        } else if(msgType == AppGlobals.CASHIER) {
+            navigationView.getMenu().findItem(R.id.cashier).setVisible(true);
+        } else if(msgType == AppGlobals.ADMIN) {
+            navigationView.getMenu().findItem(R.id.admin).setVisible(true);
+            navigationView.getMenu().findItem(R.id.cashier).setVisible(true);
+            navigationView.getMenu().findItem(R.id.editor).setVisible(true);
+        }
+
+    }
 
     private void setMenuVisibility() {
 

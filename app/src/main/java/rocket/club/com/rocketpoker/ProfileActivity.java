@@ -78,6 +78,7 @@ public class ProfileActivity extends ActionBarActivity {
     static final int DATE_DIALOG_ID = 1111;
     private static final String TAG = "Profile Activity";
 
+    File imageUri = null;
     ProgressDialog progressDialog = null;
 
     @Override
@@ -505,8 +506,10 @@ public class ProfileActivity extends ActionBarActivity {
 
             appGlobals.searchUpdatedImage(context, params, imgPath, profileImage);
         }
-        if(imageFile.exists())
+        if(imageFile.exists()) {
+            imageUri = imageFile;
             profileImage.setImageURI(Uri.fromFile(imageFile));
+        }
 
         if(!profileDetails.getName().isEmpty()) {
             skipProfile.setVisibility(View.VISIBLE);
@@ -605,6 +608,10 @@ public class ProfileActivity extends ActionBarActivity {
                     appGlobals.logClass.setLogMsg(TAG, "Permission Granted", LogClass.DEBUG_MSG);
                     startContactSync();
                 }
+
+                if(imageUri != null && imageUri.exists())
+                    profileImage.setImageURI(Uri.fromFile(imageUri));
+
                 return;
             }
         }

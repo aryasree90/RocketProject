@@ -3,11 +3,14 @@
 
     <group android:checkableBehavior="single">
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/admin">
         <item
+            android:id="@+id/admin"
+            android:showAsAction="ifRoom|withText"
             android:title="@string/admin">
+
             <menu>
+
+        <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/role_assign"
                     android:icon="@mipmap/ic_id"
@@ -25,15 +28,18 @@
                     android:id="@+id/add_emp_sal"
                     android:icon="@mipmap/ic_id"
                     android:title="@string/add_emp_sal" />
-            </menu>
-        </item>
     </group>
+        </menu>
+        </item>
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/cashier">
         <item
+            android:id="@+id/cashier"
+            android:showAsAction="ifRoom|withText"
             android:title="@string/cashier">
+
             <menu>
+
+        <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/user_transactions"
                     android:icon="@mipmap/ic_currency"
@@ -54,15 +60,18 @@
                     android:id="@+id/exp_list"
                     android:icon="@mipmap/ic_currency"
                     android:title="@string/exp_list" />
-            </menu>
-        </item>
     </group>
+        </menu>
+        </item>
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/editor">
         <item
+            android:id="@+id/editor"
+            android:showAsAction="ifRoom|withText"
             android:title="@string/editor">
+
             <menu>
+
+        <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/edit_events"
                     android:icon="@mipmap/ic_about_us"
@@ -79,9 +88,10 @@
                     android:id="@+id/edit_game_type"
                     android:icon="@mipmap/ic_contact_us"
                     android:title="@string/edit_game_type" />
-            </menu>
-        </item>
     </group>
+        </menu>
+        </item>
+
 
     <group android:checkableBehavior="single"
         android:id="@+id/user_group">
@@ -112,20 +122,25 @@
             android:title="@string/settings" />
     </group>
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/common_group">
-        <item android:title="@string/app_name">
+
+        <item
+            android:id="@+id/appName"
+            android:showAsAction="ifRoom|withText"
+            android:title="@string/app_name">
             <menu>
-                <item
-                    android:id="@+id/about_us"
-                    android:icon="@mipmap/ic_about_us"
-                    android:title="@string/about_us" />
-                <item
-                    android:id="@+id/contact_us"
-                    android:icon="@mipmap/ic_contact_us"
-                    android:title="@string/contact_us" />
+                <group android:checkableBehavior="single"
+                    android:id="@+id/common_group">
+                    <item
+                        android:id="@+id/about_us"
+                        android:icon="@mipmap/ic_about_us"
+                        android:title="@string/about_us" />
+                    <item
+                        android:id="@+id/contact_us"
+                        android:icon="@mipmap/ic_contact_us"
+                        android:title="@string/contact_us" />
+                </group>
             </menu>
         </item>
-    </group>
+
     </group>
 </menu>
