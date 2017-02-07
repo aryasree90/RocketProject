@@ -340,6 +340,7 @@ pocket be sure to find yourself a welcoming spot at our action heavy board.</str
     <string name="assign_detail">Updating Details</string>
     <string name="saving">Saving</string>
     <string name="send_invitation">Sending Invitation</string>
+    <string name="invitation_sent">Invitation Sent</string>
     <string name="load_map">Loading Map</string>
     <string name="validating_user">Validating User</string>
     <string name="logging_in">Logging In</string>

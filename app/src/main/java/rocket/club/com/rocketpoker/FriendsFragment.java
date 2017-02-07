@@ -197,7 +197,7 @@ public class FriendsFragment extends Fragment {
                                 appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
                                 break;
                             }
-
+                            progressDialog = appGlobals.showDialog(context, getString(R.string.send_invitation));
                             String listMob = "";
                             int count = appGlobals.selectedNums.size();
                             for (String mob : appGlobals.selectedNums) {
@@ -213,11 +213,14 @@ public class FriendsFragment extends Fragment {
 
                             if (TextUtils.isEmpty(listMob)) {
                                 appGlobals.toastMsg(context, getString(R.string.select_friend), appGlobals.LENGTH_LONG);
+                                appGlobals.cancelDialog(progressDialog);
                             } else if (TextUtils.isEmpty(game)) {
                                 appGlobals.toastMsg(context, getString(R.string.select_game), appGlobals.LENGTH_LONG);
+                                appGlobals.cancelDialog(progressDialog);
                                 setTimeSlotDialog();
                             } else if (TextUtils.isEmpty(schedule)) {
                                 appGlobals.toastMsg(context, getString(R.string.select_time), appGlobals.LENGTH_LONG);
+                                appGlobals.cancelDialog(progressDialog);
                                 setTimeSlotDialog();
                             } else {
                                 DBHelper db = new DBHelper(context);
@@ -234,7 +237,6 @@ public class FriendsFragment extends Fragment {
                                 frnd_map.put("timeStamp", timeStamp);
                                 frnd_map.put("count", "" + count);
                                 frnd_map.put("task", AppGlobals.SEND_INVITE);
-                                progressDialog = appGlobals.showDialog(context, getString(R.string.send_invitation));
 
                                 serverCall(frnd_map, INVITE_TO_PLAY_URL);
                             }
@@ -411,7 +413,7 @@ public class FriendsFragment extends Fragment {
                             }
                         } else if(URL.equals(INVITE_TO_PLAY_URL)) {
                             Class fragmentInvite = InvitationListFragment.class;
-
+                            appGlobals.toastMsg(context, getString(R.string.invitation_sent), appGlobals.LENGTH_LONG);
                             try {
                                 Fragment fragment = (Fragment) fragmentInvite.newInstance();
                                 appGlobals.currentFragmentClass = fragmentInvite;

@@ -65,12 +65,20 @@ public class GameMembersAdapter  extends RecyclerView.Adapter<GameMembersAdapter
         String memberId = "";//item.split(":")[0];
         int memberStatusId = 0;//item.split(":")[1];
 
+        DBHelper db = new DBHelper(context);
+
         if(item.contains(":")) {
 
             memberId = item.split(":")[0];
             memberStatusId = Integer.parseInt(item.split(":")[1].trim());
 
-            holder.memberId.setText(memberId);
+            ContactClass contactClass = db.getContacts(memberId);
+
+            if(contactClass != null && !contactClass.getContactName().isEmpty())
+                holder.memberId.setText(contactClass.getContactName());
+            else
+                holder.memberId.setText(memberId);
+
             String memberStatus = "";
             if (memberStatusId == AppGlobals.ACCEPT_GAME) {
                 memberStatus = context.getString(R.string.accepted);
@@ -79,7 +87,15 @@ public class GameMembersAdapter  extends RecyclerView.Adapter<GameMembersAdapter
             }
             holder.status.setText(memberStatus);
         } else {
-            holder.memberId.setText(item);
+//            holder.memberId.setText(item);
+
+            ContactClass contactClass = db.getContacts(item);
+
+            if(contactClass != null && !contactClass.getContactName().isEmpty())
+                holder.memberId.setText(contactClass.getContactName());
+            else
+                holder.memberId.setText(item);
+
             holder.status.setText(context.getString(R.string.no_resp));
         }
 

@@ -20,11 +20,13 @@ import com.google.gson.JsonParser;
 
 import rocket.club.com.rocketpoker.ProfileActivity;
 import rocket.club.com.rocketpoker.R;
+import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.ContactHelper;
 import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
+import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
@@ -134,11 +136,13 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
      *  2   events, services
      *  3   live udpates
      *  4   game invites
+     *  5   chat msg
      */
         initDb(mobile, "1", timeStamp);
         initDb(mobile, "2", timeStamp);
         initDb(mobile, "3", timeStamp);
         initDb(mobile, "4", timeStamp);
+        initDb(mobile, "5", timeStamp);
     }
 
     private void initDb(final String mobile, final String type, final String timeStamp) {
@@ -176,6 +180,37 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
             if(gameInvites.length > 0)
                 for(GameInvite gameInvite : gameInvites)
                     db.insertInvitationDetails(gameInvite);
+        } else if(type.equals("5")) {
+
+            try {
+                JSONArray msgArr = new JSONArray(response);
+                int size = msgArr.length();
+
+                for(int i=0; i<size; i++) {
+                    JSONObject msgObj = msgArr.getJSONObject(i);
+
+                    String msgId = msgObj.getString("msgId");
+
+                    JSONObject msgDet = new JSONObject(msgObj.getString("msgJson"));
+                    String timeStamp = msgDet.getString("time");
+
+                    ChatListClass newChatList = new ChatListClass();
+                    newChatList.setMsgId(msgId);
+                    newChatList.setTime(Long.parseLong(timeStamp));
+                    newChatList.setMsg(msgDet.getString("msg"));
+                    newChatList.setSenderMob(msgDet.getString("senderMob"));
+
+                    if (msgDet.has("location")) {
+                        LocationClass locClass = gson.fromJson(msgDet.getString("location"), LocationClass.class);
+                        newChatList.setLocation(locClass);
+                    }
+
+                    db.insertMessages(newChatList);
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+                appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
+            }
         }
     }
 

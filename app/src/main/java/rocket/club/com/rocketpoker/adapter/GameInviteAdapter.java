@@ -104,6 +104,8 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
         if(itemList.getSenderMob().equals(loginNum)) {
             holder.btnLayout.setVisibility(View.GONE);
             holder.status.setVisibility(View.GONE);
+            holder.owner.setVisibility(View.GONE);
+            holder.owner.setText("");
         } else {
             DBHelper db = new DBHelper(context);
             ContactClass contactClass = db.getContacts(itemList.getSenderMob());
@@ -115,9 +117,10 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
             } else {
                 senderName = itemList.getSenderMob();
             }
+            holder.owner.setVisibility(View.VISIBLE);
             holder.owner.setText(senderName);
 
-            if(itemList.getStatus() == AppGlobals.UNSELECT_GAME) {
+            if(itemList.getStatus() == AppGlobals.UNSELECT_GAME || itemList.getStatus() == -1) {
                 holder.btnLayout.setVisibility(View.VISIBLE);
                 holder.status.setVisibility(View.GONE);
             } else {
@@ -126,7 +129,7 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
                 if(itemList.getStatus() == AppGlobals.ACCEPT_GAME) {
                     holder.status.setText(context.getString(R.string.accepted));
                     holder.status.setTextColor(Color.GREEN);
-                } else {
+                } else if (itemList.getStatus() == AppGlobals.REJECT_GAME){
                     holder.status.setText(context.getString(R.string.rejected));
                     holder.status.setTextColor(Color.RED);
                 }
