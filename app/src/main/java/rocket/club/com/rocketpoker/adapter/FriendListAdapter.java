@@ -124,6 +124,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
             holder.selectedItem.setVisibility(View.GONE);
             if(friendList.getStatus() == AppGlobals.SUGGESTED_FRIENDS) {
                 holder.addFriend.setVisibility(View.VISIBLE);
+                final Button addFriend = holder.addFriend;
 
                 holder.addFriend.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -142,14 +143,11 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
                         frnd_map.put("frnd_mobile", friendMob);
                         frnd_map.put("task", appGlobals.NEW_FRND_REQ);
                         progressDialog = appGlobals.showDialog(context, context.getString(R.string.saving));
-                        serverCall(frnd_map, FRIEND_REQ_URL, userDetails);
+                        serverCall(frnd_map, FRIEND_REQ_URL, userDetails, addFriend);
                     }
                 });
             } else if(friendList.getStatus() == AppGlobals.PENDING_REQUEST) {
-                holder.addFriend.setVisibility(View.VISIBLE);
-                holder.addFriend.setEnabled(false);
-                holder.addFriend.setText("Request Sent");
-                holder.addFriend.setBackgroundResource(R.drawable.round_cornered_clear_btn);
+                requestSent(holder.addFriend);
             }
         } else {
             holder.selectedItem.setVisibility(View.VISIBLE);
@@ -158,7 +156,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
         }
     }
 
-    private void serverCall(final Map<String, String> map, final String URL, final UserDetails userDetails) {
+    private void requestSent(Button addFriend) {
+        addFriend.setVisibility(View.VISIBLE);
+        addFriend.setEnabled(false);
+        addFriend.setText("Request Sent");
+        addFriend.setBackgroundResource(R.drawable.round_cornered_clear_btn);
+    }
+
+    private void serverCall(final Map<String, String> map, final String URL,
+                            final UserDetails userDetails, final Button addFriend) {
 
         if(!appGlobals.isNetworkConnected(context)) {
             appGlobals.toastMsg(context, context.getString(R.string.no_internet), appGlobals.LENGTH_LONG);
@@ -177,6 +183,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
                                 DBHelper db = new DBHelper(context);
                                 db.insertContactDetails(list, false);
                                 appGlobals.toastMsg(context, context.getString(R.string.req_sent), appGlobals.LENGTH_LONG);
+                                requestSent(addFriend);
                             }
                         }
                         appGlobals.cancelDialog(progressDialog);
