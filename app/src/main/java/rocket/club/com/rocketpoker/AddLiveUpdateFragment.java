@@ -180,11 +180,13 @@ public class AddLiveUpdateFragment extends Fragment {
                             return;
                         }
 
+                        updateHeader = updateHeader.substring(0,1).toUpperCase() + updateHeader.substring(1);
+
                         String curTime = "" + System.currentTimeMillis();
 
-                        LiveUpdateDetails updateDetails = new LiveUpdateDetails(updateType,
+                        /*LiveUpdateDetails updateDetails = new LiveUpdateDetails(updateType,
                                 updateHeader, updateText1, updateText2, updateText3,
-                                updateComments, curTime);
+                                updateComments, curTime);*/
 
                         Map<String,String> map = new HashMap<String,String>();
                         map.put("type", updateType);

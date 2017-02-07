@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
@@ -18,16 +20,22 @@ import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 
 public class LiveUpdateListAdapter extends PagerAdapter {
 
-    Context mContext;
-    LayoutInflater mLayoutInflater;
+    Context context;
+    LayoutInflater layoutInflater;
+    List<String> liveUpdateList;
     ArrayList<LiveUpdateDetails> updateList;
     View.OnClickListener itemClickListener;
 
+    private final String TAG = "LiveUpdateListAdapter";
+
     public LiveUpdateListAdapter(Context context, ArrayList<LiveUpdateDetails> list, View.OnClickListener clickListener) {
-        mContext = context;
-        mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         updateList=list;
         itemClickListener = clickListener;
+
+        String[] updateStr = context.getResources().getStringArray(R.array.live_update_list);
+        liveUpdateList = Arrays.asList(updateStr);
     }
 
     @Override
@@ -43,23 +51,26 @@ public class LiveUpdateListAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
-        int layout = R.layout.live_update_item;
-
+        View itemView = layoutInflater.inflate(R.layout.live_update_item, container, false);
         LiveUpdateDetails updateDetails = updateList.get(position);
 
-        switch(updateDetails.getUpdateType()) {
-            case "1":
-                layout = R.layout.live_update_item;
+        int backgroundId = 0;
+        int index= liveUpdateList.indexOf(updateDetails.getUpdateType());
+
+        switch(index) {
+            case 0:
+                backgroundId = R.drawable.winner_odd;
                 break;
-            case "2":
-                layout = R.layout.live_update_item;
+            case 1:
+                backgroundId = R.drawable.game_odd;
                 break;
-            case "3":
-                layout = R.layout.live_update_item;
+            case 2:
+                backgroundId = R.drawable.game_even;
                 break;
         }
 
-        View itemView = mLayoutInflater.inflate(layout, container, false);
+        LinearLayout liveUpdateLayout = (LinearLayout) itemView.findViewById(R.id.liveUpdateLayout);
+        liveUpdateLayout.setBackgroundResource(backgroundId);
 
         TextView msgHeader = (TextView) itemView.findViewById(R.id.updateHeader);
         TextView msgText1 = (TextView) itemView.findViewById(R.id.updateText1);
@@ -68,10 +79,10 @@ public class LiveUpdateListAdapter extends PagerAdapter {
         TextView msgComments = (TextView) itemView.findViewById(R.id.updateComments);
 
         msgHeader.setText(updateDetails.getUpdateHeader());
-
-        /*itemImage.setImageResource(updateList.get[position]);
-        itemImage.setOnClickListener(itemClickListener);
-        itemImage.setTag(position);*/
+        msgText1.setText(updateDetails.getUpdateText1());
+        msgText2.setText(updateDetails.getUpdateText2());
+        msgText3.setText(updateDetails.getUpdateText3());
+        msgComments.setText(updateDetails.getUpdateComments());
 
         container.addView(itemView);
 
@@ -82,5 +93,4 @@ public class LiveUpdateListAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((LinearLayout) object);
     }
-
 }

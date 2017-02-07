@@ -113,6 +113,7 @@ public class AddEventFragment extends Fragment {
 
                             if(TextUtils.isEmpty(header) || TextUtils.isEmpty(summary)) {
                                 appGlobals.toastMsg(context, getString(R.string.enter_all), appGlobals.LENGTH_LONG);
+                                return;
                             }
 
                             String timeStamp = String.valueOf(System.currentTimeMillis());
