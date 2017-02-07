@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +26,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
-import rocket.club.com.rocketpoker.utils.MultiSelectionSpinner;
 
 /**
  * Created by Admin on 11/28/2016.
@@ -64,8 +60,7 @@ public class AddGameTypeFragment extends Fragment {
     }
 
     private void loadGameNameSpinner() {
-        DBHelper db = new DBHelper(context);
-        String[] GAME_LIST = db.getRocketsGameList();
+        String[] GAME_LIST = appGlobals.sqLiteDb.getRocketsGameList();
         gameList = new ArrayList<String>(Arrays.asList(GAME_LIST));
 
         ArrayAdapter<String> gameListAdapter = new ArrayAdapter<String>(context,

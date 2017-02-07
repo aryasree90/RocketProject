@@ -3,22 +3,14 @@ package rocket.club.com.rocketpoker.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,21 +21,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.games.Game;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rocket.club.com.rocketpoker.InvitationListFragment;
 import rocket.club.com.rocketpoker.R;
-import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.GameInvite;
-import rocket.club.com.rocketpoker.classes.UserDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -107,8 +93,8 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
             holder.owner.setVisibility(View.GONE);
             holder.owner.setText("");
         } else {
-            DBHelper db = new DBHelper(context);
-            ContactClass contactClass = db.getContacts(itemList.getSenderMob());
+
+            ContactClass contactClass = appGlobals.sqLiteDb.getContacts(itemList.getSenderMob());
 
             String senderName = "";
 
@@ -215,8 +201,7 @@ public class GameInviteAdapter extends RecyclerView.Adapter<GameInviteAdapter.My
                     @Override
                     public void onResponse(String response) {
 
-                        DBHelper db = new DBHelper(context);
-                        db.updateGameStatus(itemList);
+                        appGlobals.sqLiteDb.updateGameStatus(itemList);
 
                         holder.btnLayout.setVisibility(View.GONE);
                         holder.status.setVisibility(View.VISIBLE);

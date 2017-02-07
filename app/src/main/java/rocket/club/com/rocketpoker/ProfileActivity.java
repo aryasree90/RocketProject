@@ -49,7 +49,6 @@ import java.util.regex.Pattern;
 
 import rocket.club.com.rocketpoker.async.ContactAsync;
 import rocket.club.com.rocketpoker.classes.ProfileDetailsClass;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 import rocket.club.com.rocketpoker.utils.MultiSelectionSpinner;
@@ -422,12 +421,11 @@ public class ProfileActivity extends ActionBarActivity {
                             JsonParser parser = new JsonParser();
                             JsonArray jsonArr = parser.parse(response).getAsJsonArray();
 
-                            DBHelper db = new DBHelper(context);
                             for(JsonElement jsonElem : jsonArr) {
                                 JsonObject jsonObj = jsonElem.getAsJsonObject();
                                 String gameName = jsonObj.get("gameName").getAsString();
 
-                                db.insertNewGameDetails(gameName);
+                                appGlobals.sqLiteDb.insertNewGameDetails(gameName);
                             }
                             loadGameNameSpinner();
                         }
@@ -459,8 +457,7 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void loadGameNameSpinner() {
-        DBHelper db = new DBHelper(context);
-        String[] GAME_LIST = db.getRocketsGameList();
+        String[] GAME_LIST = appGlobals.sqLiteDb.getRocketsGameList();
 
         gameTypeAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, GAME_LIST);

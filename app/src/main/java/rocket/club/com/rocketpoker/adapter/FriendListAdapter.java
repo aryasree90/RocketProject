@@ -3,13 +3,8 @@ package rocket.club.com.rocketpoker.adapter;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +14,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,7 +22,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,11 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import rocket.club.com.rocketpoker.InvitationListFragment;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -180,8 +171,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
                             if(response.equals("Success")) {
                                 ArrayList<UserDetails> list = new ArrayList<UserDetails>();
                                 list.add(userDetails);
-                                DBHelper db = new DBHelper(context);
-                                db.insertContactDetails(list, false);
+                                appGlobals.sqLiteDb.insertContactDetails(list, false);
                                 appGlobals.toastMsg(context, context.getString(R.string.req_sent), appGlobals.LENGTH_LONG);
                                 requestSent(addFriend);
                             }

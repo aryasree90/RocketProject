@@ -9,17 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.google.android.gcm.GCMRegistrar;
 
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
-import rocket.club.com.rocketpoker.utils.SharedPref;
 
 
 public class SettingsFragment extends Fragment {
@@ -107,8 +103,8 @@ public class SettingsFragment extends Fragment {
 
         appGlobals.currentFragmentClass = null;
         GCMRegistrar.setRegisteredOnServer(context, false);
-        DBHelper db = new DBHelper(context);
-        db.truncateTables();
+
+        appGlobals.sqLiteDb.truncateTables();
         appGlobals.sharedPref.clearPref();
 
         Intent loginActivity = new Intent(context, LoginActivity.class);

@@ -8,20 +8,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import rocket.club.com.rocketpoker.adapter.ChatRoomAdapter;
 import rocket.club.com.rocketpoker.adapter.GameInviteAdapter;
-import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.GameInvite;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -67,9 +62,7 @@ public class InvitationListFragment extends Fragment {
         recBtn = (RadioButton) view.findViewById(R.id.radioReceived);
         sentBtn = (RadioButton) view.findViewById(R.id.radioSent);
 
-
-        DBHelper db = new DBHelper(context);
-        fullInviteList = db.getInvitations();
+        fullInviteList = appGlobals.sqLiteDb.getInvitations();
 
         setListAdapter();
 
@@ -79,8 +72,7 @@ public class InvitationListFragment extends Fragment {
     private void setListAdapter() {
 
         try {
-            DBHelper db = new DBHelper(context);
-            fullInviteList = db.getInvitations();
+            fullInviteList = appGlobals.sqLiteDb.getInvitations();
 
             showInviteList.addAll(fullInviteList);
         } catch(Exception e) {

@@ -1,6 +1,5 @@
 package rocket.club.com.rocketpoker;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,17 +20,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import rocket.club.com.rocketpoker.adapter.EventListAdapter;
 import rocket.club.com.rocketpoker.adapter.InfoListAdapter;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -85,8 +76,7 @@ public class EventDetailActivity extends AppCompatActivity {
         if (bundle.containsKey(ITEM_POS))
             reqPos = bundle.getInt(ITEM_POS);
 
-        DBHelper db = new DBHelper(context);
-        infoList = db.getRocketsInfo(activityType);
+        infoList = appGlobals.sqLiteDb.getRocketsInfo(activityType);
 
         connectionDetector = new ConnectionDetector(getApplicationContext());
 

@@ -7,10 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +25,6 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.ContactClass;
-import rocket.club.com.rocketpoker.classes.UserDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -113,8 +108,7 @@ public class NewFriendListAdapter extends PagerAdapter {
                     @Override
                     public void onResponse(String response) {
                         if(response.equals("Success")) {
-                            DBHelper db = new DBHelper(mContext);
-                            db.updateContacts(status, frnd_mob);
+                            appGlobals.sqLiteDb.updateContacts(status, frnd_mob);
 
                             Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ);
                             mContext.sendBroadcast(autoIntent);

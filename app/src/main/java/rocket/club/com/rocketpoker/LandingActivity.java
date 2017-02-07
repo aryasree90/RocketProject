@@ -15,36 +15,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
-import com.google.gson.Gson;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import rocket.club.com.rocketpoker.async.ContactAsync;
-import rocket.club.com.rocketpoker.classes.GameInvite;
-import rocket.club.com.rocketpoker.classes.InfoDetails;
-import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
-import rocket.club.com.rocketpoker.classes.UserDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -482,7 +464,6 @@ public class LandingActivity extends AppCompatActivity
     //To remove old data from db every specific time
     private void removeOldDataFromDB() {
         appGlobals.logClass.setLogMsg(TAG, "removeOldDataFromDB", LogClass.DEBUG_MSG);
-        DBHelper db = new DBHelper(context);
-        db.removeOldData();
+        appGlobals.sqLiteDb.removeOldData();
     }
 }

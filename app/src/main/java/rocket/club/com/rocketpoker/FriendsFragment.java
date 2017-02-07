@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,17 +39,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import org.w3c.dom.Text;
-
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +52,6 @@ import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.FriendsListClass;
 import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.UserDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -164,14 +155,13 @@ public class FriendsFragment extends Fragment {
     private void fetchFriendList() {
         try {
             friendsList.clear();
-            DBHelper db = new DBHelper(context);
 
             int contactType = AppGlobals.SUGGESTED_FRIENDS;
             if(pageType == AppGlobals.INVITE_TO_CLUB) {
                 contactType = AppGlobals.ACCEPTED_FRIENDS;
             }
 
-            ArrayList<ContactClass> contactList = db.getContacts(contactType);
+            ArrayList<ContactClass> contactList = appGlobals.sqLiteDb.getContacts(contactType);
             for(ContactClass contactClass : contactList) {
                 String name = contactClass.getContactName();
                 String image = contactClass.getUserImage();
@@ -223,11 +213,10 @@ public class FriendsFragment extends Fragment {
                                 appGlobals.cancelDialog(progressDialog);
                                 setTimeSlotDialog();
                             } else {
-                                DBHelper db = new DBHelper(context);
                                 String timeStamp = "" +  System.currentTimeMillis();
                                 GameInvite gameInvite = new GameInvite(appGlobals.sharedPref.getLoginMobile(), listMob, game, schedule, timeStamp, count);
 
-                                db.insertInvitationDetails(gameInvite);
+                                appGlobals.sqLiteDb.insertInvitationDetails(gameInvite);
 
                                 Map<String, String> frnd_map = new HashMap<String, String>();
                                 frnd_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
@@ -246,8 +235,7 @@ public class FriendsFragment extends Fragment {
                         friendNotFoundTxt.setVisibility(View.GONE);
                         String frndMob = friendMobile.getText().toString();
 
-                        DBHelper db = new DBHelper(context);
-                        ContactClass contactFrnd = db.getContacts(frndMob);
+                        ContactClass contactFrnd = appGlobals.sqLiteDb.getContacts(frndMob);
 
                         if(contactFrnd != null && contactFrnd.getStatus() == AppGlobals.ACCEPTED_FRIENDS) {
                             String param = "";
@@ -371,8 +359,7 @@ public class FriendsFragment extends Fragment {
                         if(URL.equals(FRIEND_REQ_URL)) {
                             if(response.equals("Success")) {
                                 if (list != null && list.size() == 1) {
-                                    DBHelper db = new DBHelper(context);
-                                    db.insertContactDetails(list, false);
+                                    appGlobals.sqLiteDb.insertContactDetails(list, false);
                                     appGlobals.toastMsg(context, getString(R.string.req_sent), appGlobals.LENGTH_LONG);
                                 } else {
                                     appGlobals.toastMsg(context, getString(R.string.req_not_sent), appGlobals.LENGTH_LONG);
@@ -456,8 +443,7 @@ public class FriendsFragment extends Fragment {
         btnDateTime = (Button) dialog.findViewById(R.id.selectDateTime);
         Button confirmBtn = (Button) dialog.findViewById(R.id.confirmTime);
 
-        DBHelper db = new DBHelper(context);
-        String[] GAME_LIST = db.getRocketsGameList();
+        String[] GAME_LIST = appGlobals.sqLiteDb.getRocketsGameList();
 
         ArrayAdapter<String> gameTypeAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_dropdown_item_1line, GAME_LIST);

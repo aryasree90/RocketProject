@@ -61,6 +61,7 @@ import rocket.club.com.rocketpoker.ConnectionDetector;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.classes.DetailsListClass;
 import rocket.club.com.rocketpoker.classes.LocationClass;
+import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.receiver.LocationTrigger;
 import rocket.club.com.rocketpoker.service.GooglePlayServiceLocation;
 import rocket.club.com.rocketpoker.service.LocationService;
@@ -193,6 +194,8 @@ public class AppGlobals {
 
     public final String ROCKETS = "Rockets";
 
+    public DBHelper sqLiteDb = null;
+
     // methods
 
     public boolean init(Context context) {
@@ -201,8 +204,16 @@ public class AppGlobals {
             logClass = new LogClass();
             sharedPref = new SharedPref(context);
             connectionDetector = new ConnectionDetector(context);
+
+            sqLiteDb = DBHelper.getInstance(context);
+            if(sqLiteDb != null)
+                if(!sqLiteDb.init(context, appGlobals)) {
+                    appGlobals.logClass.setLogMsg(TAG, "Error in DB Initialization", LogClass.ERROR_MSG);
+                    return false;
+                }
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
+            return false;
         }
         return true;
     }

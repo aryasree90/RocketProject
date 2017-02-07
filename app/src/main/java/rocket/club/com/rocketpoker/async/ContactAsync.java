@@ -2,8 +2,6 @@ package rocket.club.com.rocketpoker.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -14,12 +12,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import rocket.club.com.rocketpoker.ProfileActivity;
-import rocket.club.com.rocketpoker.R;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.ContactHelper;
@@ -28,27 +30,9 @@ import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.UserDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.FetchContact;
 import rocket.club.com.rocketpoker.utils.LogClass;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void> {
 
@@ -156,7 +140,6 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
 
     private void sendToDb(String response, String type) {
         Gson gson = new Gson();
-        DBHelper db = new DBHelper(context);
 
         appGlobals.logClass.setLogMsg(TAG, "Reached sendToDb", LogClass.DEBUG_MSG);
         appGlobals.logClass.setLogMsg(TAG, "Type " + type, LogClass.DEBUG_MSG);
@@ -166,20 +149,20 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
             UserDetails[] details = gson.fromJson(response, UserDetails[].class);
             ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
             if(userDetails.size() > 0)
-                db.insertContactDetails(userDetails, false);
+                appGlobals.sqLiteDb.insertContactDetails(userDetails, false);
         } else if(type.equals("2")) {
             InfoDetails[] infoDetails = gson.fromJson(response, InfoDetails[].class);
             if(infoDetails.length > 0)
-                db.insertInfoDetails(infoDetails, context);
+                appGlobals.sqLiteDb.insertInfoDetails(infoDetails, context);
         } else if(type.equals("3")) {
             LiveUpdateDetails[] liveUpdateDetailsList = gson.fromJson(response, LiveUpdateDetails[].class);
             if(liveUpdateDetailsList.length > 0)
-                db.insertLiveUpdateDetails(liveUpdateDetailsList);
+                appGlobals.sqLiteDb.insertLiveUpdateDetails(liveUpdateDetailsList);
         } else if(type.equals("4")) {
             GameInvite[] gameInvites = gson.fromJson(response, GameInvite[].class);
             if(gameInvites.length > 0)
                 for(GameInvite gameInvite : gameInvites)
-                    db.insertInvitationDetails(gameInvite);
+                    appGlobals.sqLiteDb.insertInvitationDetails(gameInvite);
         } else if(type.equals("5")) {
 
             try {
@@ -205,7 +188,7 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
                         newChatList.setLocation(locClass);
                     }
 
-                    db.insertMessages(newChatList);
+                    appGlobals.sqLiteDb.insertMessages(newChatList);
                 }
             } catch(Exception e) {
                 e.printStackTrace();
@@ -231,8 +214,7 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
 
                                 if (details.length > 0) {
                                     ArrayList<UserDetails> userDetails = new ArrayList<UserDetails>(Arrays.asList(details));
-                                    DBHelper db = new DBHelper(context);
-                                    db.insertContactDetails(userDetails, true);
+                                    appGlobals.sqLiteDb.insertContactDetails(userDetails, true);
                                 }
                             }
 

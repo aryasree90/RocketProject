@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -25,9 +24,7 @@ import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.NotifClass;
-import rocket.club.com.rocketpoker.classes.TaskHolder;
 import rocket.club.com.rocketpoker.classes.UserDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -73,7 +70,6 @@ public final class CommonUtilities {
         AppGlobals appGlobals = AppGlobals.getInstance(context);
         appGlobals.logClass.setLogMsg(TAG, "Control reached updateFriends " + message, LogClass.DEBUG_MSG);
         try {
-            DBHelper db = new DBHelper(context);
 
             Gson gson = new Gson();
             NotifClass notif = gson.fromJson(message, NotifClass.class);
@@ -93,14 +89,14 @@ public final class CommonUtilities {
             if(type.equals(AppGlobals.NOTIF_FRND_REQ)) {
                 ArrayList<UserDetails> list = new ArrayList<>();
                 list.add(userDetails);
-                db.insertContactDetails(list, false);
+                appGlobals.sqLiteDb.insertContactDetails(list, false);
                 notifMsg = userDetails.getUserName() + context.getString(R.string.frnd_req_rec);
 
                 Intent autoIntent = new Intent(AppGlobals.NOTIF_FRND_REQ);
                 context.sendBroadcast(autoIntent);
 
             } else if(type.equals(AppGlobals.NOTIF_FRND_REQ_RESP)) {
-                db.updateContacts(userDetails.getStatus(), notif.getSender());
+                appGlobals.sqLiteDb.updateContacts(userDetails.getStatus(), notif.getSender());
                 if(userDetails.getStatus() == 1) {
                     notifMsg = notif.getSender() + context.getString(R.string.frnd_req_accept);
                 }
@@ -146,8 +142,7 @@ public final class CommonUtilities {
                 newChatList.setLocation(locClass);
             }
 
-            DBHelper db = new DBHelper(context);
-            db.insertMessages(newChatList);
+            appGlobals.sqLiteDb.insertMessages(newChatList);
 
             int count = appGlobals.sharedPref.getChatCount();
             appGlobals.sharedPref.setChatCount(++count);
@@ -176,8 +171,7 @@ public final class CommonUtilities {
         GameInvite gameInvite = gson.fromJson(message, GameInvite.class);
         gameInvite.setStatus(AppGlobals.UNSELECT_GAME);
 
-        DBHelper db = new DBHelper(context);
-        db.insertInvitationDetails(gameInvite);
+        appGlobals.sqLiteDb.insertInvitationDetails(gameInvite);
 
         int count = appGlobals.sharedPref.getInviteCount();
         appGlobals.sharedPref.setInviteCount(++count);
@@ -196,8 +190,7 @@ public final class CommonUtilities {
         Gson gson = new Gson();
         GameInvite gameInvite = gson.fromJson(message, GameInvite.class);
 
-        DBHelper db = new DBHelper(context);
-        db.updateInviteStatus(gameInvite);
+        appGlobals.sqLiteDb.updateInviteStatus(gameInvite);
     }
 
     static void getRocketsInfo(Context context, String message) {
@@ -207,8 +200,7 @@ public final class CommonUtilities {
         Gson gson = new Gson();
         InfoDetails[] infoDetails = gson.fromJson(message, InfoDetails[].class);
 
-        DBHelper db = new DBHelper(context);
-        db.insertInfoDetails(infoDetails, context);
+        appGlobals.sqLiteDb.insertInfoDetails(infoDetails, context);
     }
 
     static void getRocketsLiveUpdate(Context context, String message) {
@@ -218,8 +210,7 @@ public final class CommonUtilities {
         Gson gson = new Gson();
         LiveUpdateDetails[] liveUpdateDetailsList = gson.fromJson(message, LiveUpdateDetails[].class);
 
-        DBHelper db = new DBHelper(context);
-        db.insertLiveUpdateDetails(liveUpdateDetailsList);
+        appGlobals.sqLiteDb.insertLiveUpdateDetails(liveUpdateDetailsList);
     }
 
     static void getRocketsNewGame(Context context, String message) {
@@ -233,8 +224,7 @@ public final class CommonUtilities {
 
         String gameName = gameObj.get("gameName").getAsString();
 
-        DBHelper db = new DBHelper(context);
-        db.insertNewGameDetails(gameName);
+        appGlobals.sqLiteDb.insertNewGameDetails(gameName);
     }
 
     private static void generateNotification(Context ctx, String message, Intent notificationIntent) {

@@ -1,7 +1,5 @@
 package rocket.club.com.rocketpoker;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,34 +23,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.adapter.ChatRoomAdapter;
-import rocket.club.com.rocketpoker.adapter.FriendListAdapter;
 import rocket.club.com.rocketpoker.classes.ChatListClass;
-import rocket.club.com.rocketpoker.classes.ContactClass;
-import rocket.club.com.rocketpoker.classes.FriendsListClass;
 import rocket.club.com.rocketpoker.classes.LocationClass;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
-
-import static rocket.club.com.rocketpoker.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static rocket.club.com.rocketpoker.CommonUtilities.EXTRA_MESSAGE;
 
 /**
  * Created by Admin on 8/27/2016.
@@ -122,8 +101,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         chatList = new ArrayList<ChatListClass>();
         try {
-            DBHelper db = new DBHelper(context);
-            chatList = db.getMessages();
+            chatList = appGlobals.sqLiteDb.getMessages();
         } catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
@@ -173,8 +151,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 LocationClass locClass = gson.fromJson(appGlobals.sharedPref.getLocation(), LocationClass.class);
                                 msgClass.setLocation(locClass);
 
-                                DBHelper db = new DBHelper(context);
-                                db.insertMessages(msgClass);
+                                appGlobals.sqLiteDb.insertMessages(msgClass);
 
                                 String str = gson.toJson(msgClass);
                                 serverCall(str);
@@ -211,8 +188,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             JSONObject msgDet = new JSONObject(msgObj.getString("msgJson"));
                             String timeStamp = msgDet.getString("time");
 
-                            DBHelper db = new DBHelper(context);
-                            db.updateMessages(msgId, timeStamp);
+                            appGlobals.sqLiteDb.updateMessages(msgId, timeStamp);
 
                         } catch(Exception e) {
                             appGlobals.logClass.setLogMsg(TAG, "Exception in response" + e.toString(), LogClass.ERROR_MSG);

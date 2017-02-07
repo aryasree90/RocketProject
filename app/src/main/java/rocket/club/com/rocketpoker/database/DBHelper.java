@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import rocket.club.com.rocketpoker.classes.ChatListClass;
 import rocket.club.com.rocketpoker.classes.ContactClass;
@@ -16,15 +19,9 @@ import rocket.club.com.rocketpoker.classes.GameInvite;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 import rocket.club.com.rocketpoker.classes.LocationClass;
-import rocket.club.com.rocketpoker.classes.TaskHolder;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -152,8 +149,33 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String SELECT_ROCKETS_GAME_LIST = "SELECT * FROM " + rocketsGameNameTable;
 
-    public DBHelper(Context ctx) {
+    public static DBHelper dbHelper = null;
+    private SQLiteDatabase sqLiteDb = null;
+
+    public static DBHelper getInstance(Context context) {
+        if (dbHelper == null) {
+            dbHelper = new DBHelper(context);
+        }
+        return dbHelper;
+    }
+
+    private DBHelper(Context ctx) {
         super(ctx, DB_NAME, null, DB_VERSION);
+    }
+
+    public boolean init(Context context, AppGlobals appGlobals) {
+        return createDatabase(context, appGlobals);
+    }
+
+    private boolean createDatabase(Context context, AppGlobals appGlobals) {
+        try {
+            DBHelper dbHelper = new DBHelper(context);
+            sqLiteDb = dbHelper.getWritableDatabase();
+            sqLiteDb.setPageSize(4 * 1024);// default is 1 K
+        } catch(Exception e) {
+            appGlobals.logClass.setLogMsg(TAG, "Exception in createDatabase " + e.toString(), LogClass.ERROR_MSG);
+        }
+        return true;
     }
 
     @Override
@@ -184,7 +206,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 if(sync)
                     details.setStatus(AppGlobals.SUGGESTED_FRIENDS);
 
-                SQLiteDatabase db = this.getWritableDatabase();
+//                SQLiteDatabase db = this.getWritableDatabase();
 
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(this.mobile, details.getMobile());
@@ -193,10 +215,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 contentValues.put(this.status, details.getStatus());
                 contentValues.put(this.userImage, details.getUserImage());
 
-                db.insert(friendsTable, null, contentValues);
+                sqLiteDb.insert(friendsTable, null, contentValues);
 
-                if(db != null)
-                    db.close();
+                /*if(db != null)
+                    db.close();*/
             } else if(!sync) {
                 updateContacts(details.getStatus(), details.getMobile());
             }
@@ -205,26 +227,26 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void updateContacts(int statusValue, String updtMob) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         final String where = mobile + "=" + updtMob;
 
         if(statusValue == AppGlobals.ACCEPTED_FRIENDS || statusValue == AppGlobals.PENDING_REQUEST
                 || statusValue == AppGlobals.PENDING_FRIENDS) {
             ContentValues cv = new ContentValues();
             cv.put(status, statusValue);
-            db.update(friendsTable, cv, where, null);
+            sqLiteDb.update(friendsTable, cv, where, null);
         } else if(statusValue == AppGlobals.REJECT_FRIENDS){
 //            db.delete(friendsTable, where, null);
             ContentValues cv = new ContentValues();
             cv.put(status, AppGlobals.SUGGESTED_FRIENDS);
-            db.update(friendsTable, cv, where, null);
+            sqLiteDb.update(friendsTable, cv, where, null);
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
     }
 
     public ArrayList<ContactClass> getContacts(int type) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
         /*
         * 1 Accepted Friends
@@ -236,13 +258,13 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor res = null;
 
         if(type == AppGlobals.ACCEPTED_FRIENDS) {
-            res = db.rawQuery(SELECT_FRIENDS, null );
+            res = sqLiteDb.rawQuery(SELECT_FRIENDS, null );
         } else if(type == AppGlobals.PENDING_FRIENDS) {
-            res = db.rawQuery(SELECT_PENDING, null );
+            res = sqLiteDb.rawQuery(SELECT_PENDING, null );
         } else if(type == AppGlobals.SUGGESTED_FRIENDS) {
-            res = db.rawQuery(SELECT_SUGGESTED_FRIENDS, null );
+            res = sqLiteDb.rawQuery(SELECT_SUGGESTED_FRIENDS, null );
         } else {
-            res = db.rawQuery(SELECT_ALL_FRIENDS, null );
+            res = sqLiteDb.rawQuery(SELECT_ALL_FRIENDS, null );
         }
         ArrayList<ContactClass> contactList = new ArrayList<ContactClass>();
         if(res != null) {
@@ -266,15 +288,21 @@ public class DBHelper extends SQLiteOpenHelper {
                 res.moveToNext();
             }
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
+
         return contactList;
     }
 
     public ContactClass getContacts(String regMob) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_FRIENDS_USING_MOB, new String[]{regMob});
+        Cursor res = sqLiteDb.rawQuery(SELECT_FRIENDS_USING_MOB, new String[]{regMob});
 
         ContactClass contact = null;
 
@@ -292,14 +320,20 @@ public class DBHelper extends SQLiteOpenHelper {
             contact.setStatus(userStatus);
 
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
+
         return contact;
     }
 
 
     public boolean insertMessages(ChatListClass msgClass){
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
 
@@ -315,29 +349,29 @@ public class DBHelper extends SQLiteOpenHelper {
         Gson gson = new Gson();
         String loc = gson.toJson(locClass);
         contentValues.put(this.location, loc);
-        db.insert(messageTable, null, contentValues);
+        sqLiteDb.insert(messageTable, null, contentValues);
 
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
         return true;
     }
 
     public void updateMessages(String msgId, String timeStamp) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         final String where = time + "=" + timeStamp;
 
         ContentValues cv = new ContentValues();
         cv.put(this.msgId, msgId);
-        db.update(messageTable, cv, where, null);
+        sqLiteDb.update(messageTable, cv, where, null);
 
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
     }
 
     public ArrayList<ChatListClass> getMessages() {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_CHAT_MESSAGES, null );
+        Cursor res = sqLiteDb.rawQuery(SELECT_CHAT_MESSAGES, null );
 
         ArrayList<ChatListClass> chatList = new ArrayList<ChatListClass>();
         if(res != null) {
@@ -364,13 +398,19 @@ public class DBHelper extends SQLiteOpenHelper {
                 res.moveToNext();
             }
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
+
         return chatList;
     }
 
     public boolean insertInvitationDetails(GameInvite gameInvite){
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(this.senderMob, gameInvite.getSenderMob());
@@ -380,17 +420,17 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(this.timeStamp, gameInvite.getTimeStamp());
         contentValues.put(this.count, gameInvite.getCount());
         contentValues.put(this.status, gameInvite.getStatus());
-        db.insert(gameInviteTable, null, contentValues);
+        sqLiteDb.insert(gameInviteTable, null, contentValues);
 
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
         return true;
     }
 
     public ArrayList<GameInvite> getInvitations() {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_ALL_INVITATION, null);
+        Cursor res = sqLiteDb.rawQuery(SELECT_ALL_INVITATION, null);
 
         ArrayList<GameInvite> gameInviteList = new ArrayList<GameInvite>();
         if(res != null) {
@@ -423,15 +463,21 @@ public class DBHelper extends SQLiteOpenHelper {
                 res.moveToNext();
             }
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
+
         return gameInviteList;
     }
 
     public void updateInviteStatus(GameInvite gameInvite) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_INVITATION,  new String[]{gameInvite.getTimeStamp()});
+        Cursor res = sqLiteDb.rawQuery(SELECT_INVITATION,  new String[]{gameInvite.getTimeStamp()});
 
         if(res != null) {
             res.moveToFirst();
@@ -458,28 +504,31 @@ public class DBHelper extends SQLiteOpenHelper {
             final String where = timeStamp + "=" + gameInvite.getTimeStamp();
             ContentValues cv = new ContentValues();
             cv.put(invite_list, updateList);
-            db.update(gameInviteTable, cv, where, null);
+            sqLiteDb.update(gameInviteTable, cv, where, null);
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
     }
 
     public void updateGameStatus(GameInvite gameInvite) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
         final String where = timeStamp + "=" + gameInvite.getTimeStamp();
         ContentValues cv = new ContentValues();
         cv.put(status, gameInvite.getStatus());
-        db.update(gameInviteTable, cv, where, null);
+        sqLiteDb.update(gameInviteTable, cv, where, null);
 
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
     }
 
     public boolean insertInfoDetails(InfoDetails[] infoDetails, Context context){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        AppGlobals appGlobals = AppGlobals.getInstance(context);
+//        SQLiteDatabase db = this.getWritableDatabase();
 
         for(InfoDetails infoDetail : infoDetails) {
 
@@ -491,16 +540,16 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(this.infoEditor, infoDetail.getInfoEditor());
             contentValues.put(this.infoTimeStamp, infoDetail.getInfoTimeStamp());
             contentValues.put(this.infoMsgType, Integer.parseInt(infoDetail.getInfoMsgType()));
-            db.insert(rocketsInfoTable, null, contentValues);
+            sqLiteDb.insert(rocketsInfoTable, null, contentValues);
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
         return true;
     }
 
     public ArrayList<InfoDetails> getRocketsInfo(String searchMsgType) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery(SELECT_ROCKETS_INFO, new String[]{searchMsgType});
+//        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = sqLiteDb.rawQuery(SELECT_ROCKETS_INFO, new String[]{searchMsgType});
         ArrayList<InfoDetails> infoList = new ArrayList<InfoDetails>();
 
         if(res != null) {
@@ -523,14 +572,19 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
 
         return infoList;
     }
 
     public boolean insertLiveUpdateDetails(LiveUpdateDetails[] liveUpdateDetailsList){
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
         for(LiveUpdateDetails liveUpdateDetails : liveUpdateDetailsList) {
             ContentValues contentValues = new ContentValues();
@@ -541,18 +595,18 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(this.updateComments, liveUpdateDetails.getUpdateComments());
             contentValues.put(this.updateTimeStamp, liveUpdateDetails.getUpdateTimeStamp());
             contentValues.put(this.updateMsgType, liveUpdateDetails.getUpdateType());
-            db.insert(rocketsLiveUpdateTable, null, contentValues);
+            sqLiteDb.insert(rocketsLiveUpdateTable, null, contentValues);
         }
 
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
         return true;
     }
 
     public ArrayList<LiveUpdateDetails> getRocketsLatestUpdate() {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_ROCKETS_LIVE_UPDATE, null);
+        Cursor res = sqLiteDb.rawQuery(SELECT_ROCKETS_LIVE_UPDATE, null);
 
         ArrayList<LiveUpdateDetails> updateList = new ArrayList<LiveUpdateDetails>();
 
@@ -574,39 +628,49 @@ public class DBHelper extends SQLiteOpenHelper {
                 res.moveToNext();
             }
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
 
         return updateList;
     }
 
     public boolean insertNewGameDetails(String gameName){
-        SQLiteDatabase readDb = this.getReadableDatabase();
+//        SQLiteDatabase readDb = this.getReadableDatabase();
 
         String gameSearch = "SELECT * FROM " + rocketsGameNameTable + " WHERE " + this.gameName +
                 " = '" + gameName + "';";
-        Cursor res = readDb.rawQuery(gameSearch, null);
+        Cursor res = sqLiteDb.rawQuery(gameSearch, null);
 
         if(res == null || res.getCount() == 0) {
-            SQLiteDatabase db = this.getWritableDatabase();
+//            SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(this.gameName, gameName);
-            db.insert(rocketsGameNameTable, null, contentValues);
+            sqLiteDb.insert(rocketsGameNameTable, null, contentValues);
 
-            if (db != null)
-                db.close();
+            /*if (db != null)
+                db.close();*/
         }
 
-        if(readDb != null)
-            readDb.close();
+        /*if(readDb != null)
+            readDb.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
 
         return true;
     }
 
     public String[] getRocketsGameList() {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_ROCKETS_GAME_LIST, null);
+        Cursor res = sqLiteDb.rawQuery(SELECT_ROCKETS_GAME_LIST, null);
 
 //        ArrayList<String> gameList = new ArrayList<String>();
         String[] gameList = new String[res.getCount()];
@@ -621,8 +685,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 res.moveToNext();
             }
         }
-        if(db != null)
-            db.close();
+        /*if(db != null)
+            db.close();*/
+
+        if(res != null) {
+            res.close();
+            res = null;
+        }
 
         return gameList;
     }
@@ -630,15 +699,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void truncateTables() {
 
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL(TRUNCATE_TABLE);
-        db.execSQL(TRUNCATE_MSG_TABLE);
-        db.execSQL(TRUNCATE_GAME_INVITE);
-        db.execSQL(TRUNCATE_ROCKETS_INFO);
-        db.execSQL(TRUNCATE_ROCKETS_LIVE_UPDATE);
-        db.execSQL(TRUNCATE_ROCKETS_TASKS);
-//        db.execSQL(TRUNCATE_GAME_NAME_TABLE);
+        sqLiteDb.execSQL(TRUNCATE_TABLE);
+        sqLiteDb.execSQL(TRUNCATE_MSG_TABLE);
+        sqLiteDb.execSQL(TRUNCATE_GAME_INVITE);
+        sqLiteDb.execSQL(TRUNCATE_ROCKETS_INFO);
+        sqLiteDb.execSQL(TRUNCATE_ROCKETS_LIVE_UPDATE);
+        sqLiteDb.execSQL(TRUNCATE_ROCKETS_TASKS);
+//        sqLiteDb.execSQL(TRUNCATE_GAME_NAME_TABLE);
     }
 
     public static final String SELECT_MSG_TABLE = "SELECT DISTINCT(" + time + ") FROM " + messageTable + " ORDER BY " + time;
@@ -661,8 +730,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private void executeQuery(String query, String tableName) {
 
         long curTimeStamp = System.currentTimeMillis();
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery(query, null);
+//        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = sqLiteDb.rawQuery(query, null);
 
         if(res != null) {
             res.moveToFirst();
@@ -675,14 +744,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 if(diffInDays > AppGlobals.FILTER_IN_DAYS) {
                     String delQuery = "DELETE FROM " + tableName + " WHERE " +
                             columnName + "='" + timeStamp + "'";
-                    db.execSQL(delQuery);
+                    sqLiteDb.execSQL(delQuery);
                 }
                 res.moveToNext();
             }
         }
-        if(db != null)
-            db.close();
-
-
+        /*if(db != null)
+            db.close();*/
+        if(res != null) {
+            res.close();
+            res = null;
+        }
     }
 }

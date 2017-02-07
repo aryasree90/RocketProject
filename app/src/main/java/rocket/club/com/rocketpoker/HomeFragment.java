@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,9 @@ import java.util.ArrayList;
 import rocket.club.com.rocketpoker.adapter.EventListAdapter;
 import rocket.club.com.rocketpoker.adapter.LiveUpdateListAdapter;
 import rocket.club.com.rocketpoker.adapter.NewFriendListAdapter;
-import rocket.club.com.rocketpoker.adapter.ServiceListAdapter;
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -39,7 +36,6 @@ public class HomeFragment extends Fragment {
     NewFriendListAdapter newFriendAdapter = null;
     ViewPager eventList = null, liveUpdateList = null, newFriendsList = null;
     TextView emptyFriend = null, emptyEvent = null, emptyService = null, emptyUpdate = null;
-    DBHelper db = null;
     Button addnewfriend;
     LinearLayout emptyFriendlnr;
 
@@ -103,13 +99,11 @@ public class HomeFragment extends Fragment {
 
         ProgressDialog progressDialog = appGlobals.showDialog(context, getString(R.string.load_home_page));
 
-        db = new DBHelper(context);
-
         eventList = (ViewPager) view.findViewById(R.id.eventList);
         emptyEvent = (TextView) view.findViewById(R.id.emptyEventItem);
         addnewfriend=(Button)view.findViewById(R.id.btn_addnewfriend);
 
-        ArrayList<InfoDetails> infoList = db.getRocketsInfo(AppGlobals.EVENT_INFO);
+        ArrayList<InfoDetails> infoList = appGlobals.sqLiteDb.getRocketsInfo(AppGlobals.EVENT_INFO);
 
         if(!infoList.isEmpty()) {
             eventList.setVisibility(View.VISIBLE);
@@ -124,7 +118,7 @@ public class HomeFragment extends Fragment {
         liveUpdateList = (ViewPager) view.findViewById(R.id.liveUpdateList);
         emptyUpdate = (TextView) view.findViewById(R.id.emptyUpdateItem);
 
-        ArrayList<LiveUpdateDetails> updateList = db.getRocketsLatestUpdate();
+        ArrayList<LiveUpdateDetails> updateList = appGlobals.sqLiteDb.getRocketsLatestUpdate();
 
         if(updateList.size() != 0) {
             liveUpdateList.setVisibility(View.VISIBLE);
@@ -157,7 +151,7 @@ public class HomeFragment extends Fragment {
 
     private void refreshFriendReqList() {
         try {
-            userList = db.getContacts(AppGlobals.PENDING_FRIENDS);
+            userList = appGlobals.sqLiteDb.getContacts(AppGlobals.PENDING_FRIENDS);
             if(userList != null && userList.size() > 0) {
                 newFriendsList.setVisibility(View.VISIBLE);
                 emptyFriendlnr.setVisibility(View.GONE);

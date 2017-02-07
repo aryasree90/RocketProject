@@ -1,14 +1,11 @@
 package rocket.club.com.rocketpoker;
 
-import android.*;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,13 +35,11 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.classes.ContactClass;
 import rocket.club.com.rocketpoker.classes.LocationClass;
-import rocket.club.com.rocketpoker.database.DBHelper;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
@@ -164,8 +159,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
                     JSONObject obj = arr.getJSONObject(i);
                     String regMob = obj.getString("reg_mob");
 
-                    DBHelper db = new DBHelper(context);
-                    ContactClass contact = db.getContacts(regMob);
+                    ContactClass contact = appGlobals.sqLiteDb.getContacts(regMob);
 
                     publishProgress(obj.getString("user_location"), contact.getContactName());
                 }
