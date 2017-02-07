@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -85,10 +84,11 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/timerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/otp_info" />
+            android:text="@string/otp_info"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -160,7 +160,14 @@
 
 
     </LinearLayout>
-
+        <TextView
+            android:id="@+id/resendText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resend_sms"
+            android:enabled="false"
+            android:visibility="gone"
+            android:gravity="center" />
     </LinearLayout>
     </LinearLayout>
 </LinearLayout>

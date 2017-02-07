@@ -289,8 +289,6 @@ public class ProfileActivity extends ActionBarActivity {
         final String userGameType = gameTypeMultiSpinner.getSelectedItemsAsString();
         final String userGender = genderSpinner.getText().toString();
         final String userDob = dob.getText().toString();
-        final String userFullName = tempFullName.substring(0, 1).toUpperCase() +
-                tempFullName.substring(1);
 
         String userImage = "", thumbImage = "";
 
@@ -308,9 +306,16 @@ public class ProfileActivity extends ActionBarActivity {
             }
         }
 
-        if(validateFields(userFullName, userEmail, userNickName, userGender, userGameType))
+        if(validateFields(tempFullName, userEmail, userNickName, userGender, userGameType)) {
+
+            final String userFullName = tempFullName.substring(0, 1).toUpperCase() +
+                    tempFullName.substring(1);
+
+            fullName.setText(userFullName);
+
             updateProfile(userFullName, userEmail, userNickName, userGender, userGameType, userDob,
                     userImage, thumbImage);
+        }
 
     }
 
@@ -508,7 +513,7 @@ public class ProfileActivity extends ActionBarActivity {
             profileImage.setImageURI(Uri.fromFile(imageFile));
         }
 
-        if(!profileDetails.getName().isEmpty()) {
+        if(profileDetails != null && profileDetails.getName() != null &&!profileDetails.getName().isEmpty()) {
             skipProfile.setVisibility(View.VISIBLE);
         }
     }

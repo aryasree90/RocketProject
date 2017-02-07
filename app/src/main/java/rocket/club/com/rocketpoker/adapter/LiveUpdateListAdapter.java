@@ -70,7 +70,7 @@ public class LiveUpdateListAdapter extends PagerAdapter {
         }
 
         LinearLayout liveUpdateLayout = (LinearLayout) itemView.findViewById(R.id.liveUpdateLayout);
-        liveUpdateLayout.setBackgroundResource(backgroundId);
+//        liveUpdateLayout.setBackgroundResource(backgroundId);
 
         TextView msgHeader = (TextView) itemView.findViewById(R.id.updateHeader);
         TextView msgText1 = (TextView) itemView.findViewById(R.id.updateText1);

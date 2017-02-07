@@ -103,7 +103,9 @@
     <string name="enter_first_3">Enter first 3 fields</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
-    <string name="otp_info">Automatically fetching OTP.\nPlease wait.</string>
+    <string name="otp_info">Automatically fetches OTP.\nPlease wait.</string>
+    <string name="otp_info1">Automatically fetches OTP in %1$s minutes.\nPlease wait.</string>
+    <string name="resend_sms">Resend SMS</string>
     <string name="pls_try_later">Please try later</string>
     <string name="settings_title">SETTINGS</string>
     <string name="settings_notification">Notification</string>

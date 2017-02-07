@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
@@ -39,10 +40,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 
-public class LoginAsync extends AsyncTask<String, Void, String> {
+public class LoginAsync extends AsyncTask<String, String, String> {
 
     Context ctx;
     Activity loginActivity;
@@ -54,11 +56,13 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
     private final String TAG = "LoginAsync";
     ProgressDialog progressDialog = null;
     private static String VALIDATION_URL = AppGlobals.SERVER_URL + "validate_user.php";
+    LoginActivity login = null;
 
     public LoginAsync(Context ctx, Activity loginActivity) {
         this.ctx = ctx;
         this.loginActivity = loginActivity;
         this.appGlobals = AppGlobals.getInstance(ctx);
+        login = new LoginActivity();
     }
 
     @Override
@@ -71,8 +75,38 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String mobile = "";
         mobile = params[0];
+//        startTimer();
         registerNumer(mobile);
         return mobile;
+    }
+
+    private void startTimer() {
+
+        new CountDownTimer(10000, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+
+                String timer = String.format("%d:%d",
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+
+                publishProgress(new String[] {timer});
+
+            }
+
+            public void onFinish() {
+                publishProgress(new String[] {""});
+            }
+        }.start();
+    }
+
+    @Override
+    protected void onProgressUpdate(String... values) {
+        super.onProgressUpdate(values);
+
+        if(login != null)
+            login.setTimerMsg(values[0]);
     }
 
     @Override
@@ -156,6 +190,9 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
         appGlobals.logClass.setLogMsg(TAG, "Reached sendValidationSms", LogClass.DEBUG_MSG);
 
         if (!isTabletDevice(ctx)) {
+
+            appGlobals.logClass.setLogMsg(TAG, "sendValidationSms is not in tablet", LogClass.DEBUG_MSG);
+
 			int min = 1001;
 			int max = 9999;
 			Random random = new Random();
@@ -177,11 +214,12 @@ public class LoginAsync extends AsyncTask<String, Void, String> {
                 smsManager.sendTextMessage(mobNum, null, validMsg, null, null);
 
             } catch (Exception e) {
-                appGlobals.logClass.setLogMsg(TAG, "Exception while sending Validation Msg " + e.toString(), LogClass.DEBUG_MSG);
+                appGlobals.logClass.setLogMsg(TAG, "Exception while sending Validation Msg " + e.toString(), LogClass.ERROR_MSG);
             }
         } else {
             appGlobals.logClass.setLogMsg(TAG, "sendValidationSms is in tablet", LogClass.DEBUG_MSG);
-                // ToDo for Tablets: Yet to decide
+
+            appGlobals.sharedPref.setValidationCode(appGlobals.tabletValidCode);
         }
 
         appGlobals.logClass.setLogMsg(TAG, "Completed sendValidationSms", LogClass.DEBUG_MSG);

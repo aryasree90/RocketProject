@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import rocket.club.com.rocketpoker.async.LoginAsync;
@@ -41,8 +44,11 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
 import com.hbb20.CountryCodePicker;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static rocket.club.com.rocketpoker.CommonUtilities.EXTRA_MESSAGE;
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
@@ -59,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Context context = null;
     View.OnClickListener clickListener = null;
+    TextView timerText = null, resendText = null;
     EditText editMobileNum, otp1, otp2, otp3, otp4;
     Button btnLogin, btnClear, btnContinue, btnClear1;
     LinearLayout loginLayout = null, otpLayout = null;
@@ -98,6 +105,9 @@ public class LoginActivity extends AppCompatActivity {
         editMobileNum = (EditText) findViewById(R.id.edit_mobile_num);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnClear = (Button) findViewById(R.id.btn_clear);
+
+        timerText = (TextView) findViewById(R.id.timerText);
+        resendText = (TextView) findViewById(R.id.resendText);
 
         otp1 = (EditText) findViewById(R.id.otp1);
         otp2 = (EditText) findViewById(R.id.otp2);
@@ -242,6 +252,19 @@ public class LoginActivity extends AppCompatActivity {
             appGlobals.sharedPref.setLoginMobile(canonicalMobile);
             LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
             loginAsync.execute(canonicalMobile);
+        }
+    }
+
+    public void setTimerMsg(String msg) {
+
+        if(msg.isEmpty()) {
+            timerText.setText("Check your message settings");
+            resendText.setEnabled(true);
+            //                    resendText.setTextColor(getColor(R.color.colorBlueButton));
+        } else {
+            String otpMsg = getString(R.string.otp_info1, msg);
+            Log.d(TAG, "______________________ " + otpMsg);
+            timerText.setText(otpMsg);
         }
     }
 
