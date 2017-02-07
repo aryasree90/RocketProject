@@ -131,6 +131,8 @@ public class AppGlobals {
     public static final int REQUEST_CODE_LOCATION = 101;
     public static final int REQUEST_EXTERNAL_STORAGE = 102;
 
+    public static final int FILTER_IN_DAYS = 10;
+
     //Profile
     public final String UPDATE_PROFILE = "1";
     public final String FETCH_PROFILE = "2";

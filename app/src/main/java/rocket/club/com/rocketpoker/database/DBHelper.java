@@ -19,6 +19,7 @@ import rocket.club.com.rocketpoker.classes.LocationClass;
 import rocket.club.com.rocketpoker.classes.TaskHolder;
 import rocket.club.com.rocketpoker.classes.UserDetails;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SELECT_FRIENDS_USING_MOB = "SELECT * FROM " + friendsTable + " WHERE " +
             mobile + "=?";
 
-    public static final String SELECT_ALL_MESSAGES = "SELECT * FROM " + messageTable;
+    public static final String SELECT_CHAT_MESSAGES = "SELECT * FROM " + messageTable;
 
     public static final String SELECT_ALL_INVITATION = "SELECT * FROM " + gameInviteTable;
 
@@ -336,7 +337,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<ChatListClass> getMessages() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res = db.rawQuery(SELECT_ALL_MESSAGES, null );
+        Cursor res = db.rawQuery(SELECT_CHAT_MESSAGES, null );
 
         ArrayList<ChatListClass> chatList = new ArrayList<ChatListClass>();
         if(res != null) {
@@ -649,18 +650,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void removeOldData() {
 
-        executeQuery(SELECT_MSG_TABLE);
-        executeQuery(SELECT_GAME_INVITE_TABLE);
-        executeQuery(SELECT_INFO_TABLE);
-        executeQuery(SELECT_LIVE_UPDATE_TABLE);
-        executeQuery(SELECT_TASKS_TABLE);
+        executeQuery(SELECT_MSG_TABLE, messageTable);
+        executeQuery(SELECT_GAME_INVITE_TABLE, gameInviteTable);
+        executeQuery(SELECT_INFO_TABLE, rocketsInfoTable);
+        executeQuery(SELECT_LIVE_UPDATE_TABLE, rocketsLiveUpdateTable);
+        executeQuery(SELECT_TASKS_TABLE, rocketsTasks);
 
     }
 
-    private void executeQuery(String query) {
+    private void executeQuery(String query, String tableName) {
 
+        long curTimeStamp = System.currentTimeMillis();
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor res = db.rawQuery(query, null);
 
         if(res != null) {
@@ -668,6 +669,14 @@ public class DBHelper extends SQLiteOpenHelper {
             String columnName = res.getColumnName(0);
             while (!res.isAfterLast()) {
                 String timeStamp = res.getString(res.getColumnIndex(columnName));
+
+                long diffInDays = (((curTimeStamp - Long.parseLong(timeStamp))/1000)/3600)/24;
+
+                if(diffInDays > AppGlobals.FILTER_IN_DAYS) {
+                    String delQuery = "DELETE FROM " + tableName + " WHERE " +
+                            columnName + "='" + timeStamp + "'";
+                    db.execSQL(delQuery);
+                }
                 res.moveToNext();
             }
         }

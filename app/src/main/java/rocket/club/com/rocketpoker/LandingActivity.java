@@ -75,7 +75,6 @@ public class LandingActivity extends AppCompatActivity
         initializeWidgets();
         setClickListener();
         checkContactSync();
-        removeOldDataFromDB();
     }
 
     private void initializeWidgets() {
@@ -469,16 +468,20 @@ public class LandingActivity extends AppCompatActivity
     private void checkContactSync() {
         long curTime = System.currentTimeMillis();
         long lastUpdated = appGlobals.sharedPref.getContactSyncTime();
-        long diff = ((curTime - lastUpdated)/1000)/3600;
+        long diffInHrs = ((curTime - lastUpdated)/1000)/3600;
 
-        if(diff >= 24 && !appGlobals.contactSyncInProgress) {
+        if(diffInHrs >= 24 && !appGlobals.contactSyncInProgress) {
+            appGlobals.logClass.setLogMsg(TAG, "Reached more than 24 hours contact sync", LogClass.DEBUG_MSG);
             ContactAsync contactAsync = new ContactAsync(context);
             contactAsync.execute();
+
+            removeOldDataFromDB();
         }
     }
 
     //To remove old data from db every specific time
     private void removeOldDataFromDB() {
+        appGlobals.logClass.setLogMsg(TAG, "removeOldDataFromDB", LogClass.DEBUG_MSG);
         DBHelper db = new DBHelper(context);
         db.removeOldData();
     }
