@@ -35,6 +35,7 @@ public class SplashScreen extends Activity {
         context = getApplicationContext();
         appGlobals = AppGlobals.getInstance(context);
 
+        appGlobals.fetchUserRole(context);
         startRotation();
 //        startAnimations();
     }

@@ -537,6 +537,38 @@ public class AppGlobals {
         requestQueue.add(stringRequest);
     }
 
+    public void fetchUserRole(final Context context) {
+
+        final String url = AppGlobals.SERVER_URL + "fetchUserRole.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(final String response) {
+                        appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
+
+                        if(!response.isEmpty())
+                            appGlobals.sharedPref.setUserType(Integer.parseInt(response));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String,String>();
+                params.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
     public ProgressDialog showDialog(Context context, String message) {
         ProgressDialog progress = new ProgressDialog(context);
         progress.setMessage(message);
