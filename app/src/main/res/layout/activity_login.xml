@@ -83,6 +83,12 @@
         android:visibility="gone"
         android:gravity="center">
 
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/timerText"
             android:layout_width="wrap_content"
@@ -164,9 +170,10 @@
             android:id="@+id/resendText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/resend_sms"
+            android:text="@string/msg_settings"
             android:enabled="false"
-            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimary"
             android:gravity="center" />
     </LinearLayout>
     </LinearLayout>

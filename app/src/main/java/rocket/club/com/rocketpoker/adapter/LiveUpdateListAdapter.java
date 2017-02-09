@@ -59,18 +59,18 @@ public class LiveUpdateListAdapter extends PagerAdapter {
 
         switch(index) {
             case 0:
-                backgroundId = R.drawable.winner_odd;
+                backgroundId = R.drawable.winner;
                 break;
             case 1:
-                backgroundId = R.drawable.game_odd;
+                backgroundId = R.drawable.game1;
                 break;
             case 2:
-                backgroundId = R.drawable.game_even;
+                backgroundId = R.drawable.game1;
                 break;
         }
 
         LinearLayout liveUpdateLayout = (LinearLayout) itemView.findViewById(R.id.liveUpdateLayout);
-//        liveUpdateLayout.setBackgroundResource(backgroundId);
+        liveUpdateLayout.setBackgroundResource(backgroundId);
 
         TextView msgHeader = (TextView) itemView.findViewById(R.id.updateHeader);
         TextView msgText1 = (TextView) itemView.findViewById(R.id.updateText1);

@@ -493,7 +493,9 @@ public class ProfileActivity extends ActionBarActivity {
         dob.setText(profileDetails.getDob());
 //        gameTypeSpinner.setText(profileDetails.getGametype());
         String selected[] = profileDetails.getGametype().split(", ");
-        gameTypeMultiSpinner.setSelection(selected);
+
+        if(gameTypeMultiSpinner != null && gameTypeMultiSpinner.getCount() > 0)
+            gameTypeMultiSpinner.setSelection(selected);
 
         genderSpinner.setText(profileDetails.getGender());
 

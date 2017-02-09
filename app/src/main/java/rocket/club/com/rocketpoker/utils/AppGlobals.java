@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
@@ -121,6 +122,7 @@ public class AppGlobals {
     public final String LOC_NAME = "loc_name";
 
     public static final String SEND_SMS = android.Manifest.permission.SEND_SMS;
+    public static final String READ_SMS = android.Manifest.permission.READ_SMS;
     public static final String ACCESS_COARSE_LOC = android.Manifest.permission.ACCESS_COARSE_LOCATION;
     public static final String ACCESS_FINE_LOC = android.Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String CALL_PHONE = android.Manifest.permission.CALL_PHONE;

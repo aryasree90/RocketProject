@@ -105,6 +105,7 @@
     <string name="navigation_drawer_close">Close</string>
     <string name="otp_info">Automatically fetches OTP.\nPlease wait.</string>
     <string name="otp_info1">Automatically fetches OTP in %1$s minutes.\nPlease wait.</string>
+    <string name="msg_settings">Check your message settings if you are not receiving an OTP message</string>
     <string name="resend_sms">Resend SMS</string>
     <string name="pls_try_later">Please try later</string>
     <string name="settings_title">SETTINGS</string>
@@ -259,6 +260,7 @@
     <string name="select_paymnt_type">Select Payment Type</string>
     <string name="trans_type">Transaction Type</string>
     <string name="trans_save">Transaction Saved</string>
+    <string name="change_save">Changes Saved</string>
     <string name="sal_save">Salary Saved</string>
     <string name="saving_trans">Saving Transaction</string>
     <string name="trans_fail">Unable to save transaction</string>

@@ -1,50 +1,30 @@
 package rocket.club.com.rocketpoker.async;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.CountDownTimer;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.google.android.gcm.GCMRegistrar;
+
+import java.util.Random;
 
 import rocket.club.com.rocketpoker.LoginActivity;
-import rocket.club.com.rocketpoker.ProfileActivity;
 import rocket.club.com.rocketpoker.R;
 import rocket.club.com.rocketpoker.ServerUtilities;
 import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gcm.GCMRegistrar;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 
-public class LoginAsync extends AsyncTask<String, String, String> {
+public class LoginAsync extends AsyncTask<String, Void, String> {
 
     Context ctx;
     Activity loginActivity;
@@ -56,13 +36,11 @@ public class LoginAsync extends AsyncTask<String, String, String> {
     private final String TAG = "LoginAsync";
     ProgressDialog progressDialog = null;
     private static String VALIDATION_URL = AppGlobals.SERVER_URL + "validate_user.php";
-    LoginActivity login = null;
 
     public LoginAsync(Context ctx, Activity loginActivity) {
         this.ctx = ctx;
         this.loginActivity = loginActivity;
         this.appGlobals = AppGlobals.getInstance(ctx);
-        login = new LoginActivity();
     }
 
     @Override
@@ -78,35 +56,6 @@ public class LoginAsync extends AsyncTask<String, String, String> {
 //        startTimer();
         registerNumer(mobile);
         return mobile;
-    }
-
-    private void startTimer() {
-
-        new CountDownTimer(10000, 1000) { // adjust the milli seconds here
-
-            public void onTick(long millisUntilFinished) {
-
-                String timer = String.format("%d:%d",
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
-
-                publishProgress(new String[] {timer});
-
-            }
-
-            public void onFinish() {
-                publishProgress(new String[] {""});
-            }
-        }.start();
-    }
-
-    @Override
-    protected void onProgressUpdate(String... values) {
-        super.onProgressUpdate(values);
-
-        if(login != null)
-            login.setTimerMsg(values[0]);
     }
 
     @Override
@@ -224,8 +173,6 @@ public class LoginAsync extends AsyncTask<String, String, String> {
 
         appGlobals.logClass.setLogMsg(TAG, "Completed sendValidationSms", LogClass.DEBUG_MSG);
     }
-
-
 
     public static boolean isTabletDevice(Context context) {
         TelephonyManager telephony = (TelephonyManager) context

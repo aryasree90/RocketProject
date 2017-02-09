@@ -1,7 +1,5 @@
 package rocket.club.com.rocketpoker;
 
-import android.*;
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,11 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -21,18 +16,13 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import rocket.club.com.rocketpoker.async.LoginAsync;
-import rocket.club.com.rocketpoker.utils.AppGlobals;
-import rocket.club.com.rocketpoker.utils.FetchContact;
-import rocket.club.com.rocketpoker.utils.LogClass;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -44,16 +34,17 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gcm.GCMRegistrar;
 import com.hbb20.CountryCodePicker;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
+import rocket.club.com.rocketpoker.async.LoginAsync;
+import rocket.club.com.rocketpoker.utils.AppGlobals;
+import rocket.club.com.rocketpoker.utils.LogClass;
+
+import static rocket.club.com.rocketpoker.CommonUtilities.DISPLAY_MESSAGE_ACTION;
 import static rocket.club.com.rocketpoker.CommonUtilities.EXTRA_MESSAGE;
 import static rocket.club.com.rocketpoker.CommonUtilities.SENDER_ID;
 import static rocket.club.com.rocketpoker.CommonUtilities.SERVER_URL;
-import static rocket.club.com.rocketpoker.CommonUtilities.DISPLAY_MESSAGE_ACTION;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -65,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
 
     Context context = null;
     View.OnClickListener clickListener = null;
-    TextView timerText = null, resendText = null;
     EditText editMobileNum, otp1, otp2, otp3, otp4;
     Button btnLogin, btnClear, btnContinue, btnClear1;
     LinearLayout loginLayout = null, otpLayout = null;
@@ -105,9 +95,6 @@ public class LoginActivity extends AppCompatActivity {
         editMobileNum = (EditText) findViewById(R.id.edit_mobile_num);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnClear = (Button) findViewById(R.id.btn_clear);
-
-        timerText = (TextView) findViewById(R.id.timerText);
-        resendText = (TextView) findViewById(R.id.resendText);
 
         otp1 = (EditText) findViewById(R.id.otp1);
         otp2 = (EditText) findViewById(R.id.otp2);
@@ -199,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 if(!appGlobals.checkLocationPermission(context, AppGlobals.SEND_SMS)) {
                                     ActivityCompat.requestPermissions(LoginActivity.this,
-                                            new String[]{AppGlobals.SEND_SMS}, AppGlobals.REQUEST_CODE_SMS);
+                                            new String[]{AppGlobals.SEND_SMS, AppGlobals.READ_SMS}, AppGlobals.REQUEST_CODE_SMS);
                                 } else {
                                     startLoginAsync();
                                 }
@@ -252,19 +239,6 @@ public class LoginActivity extends AppCompatActivity {
             appGlobals.sharedPref.setLoginMobile(canonicalMobile);
             LoginAsync loginAsync = new LoginAsync(context, LoginActivity.this);
             loginAsync.execute(canonicalMobile);
-        }
-    }
-
-    public void setTimerMsg(String msg) {
-
-        if(msg.isEmpty()) {
-            timerText.setText("Check your message settings");
-            resendText.setEnabled(true);
-            //                    resendText.setTextColor(getColor(R.color.colorBlueButton));
-        } else {
-            String otpMsg = getString(R.string.otp_info1, msg);
-            Log.d(TAG, "______________________ " + otpMsg);
-            timerText.setText(otpMsg);
         }
     }
 
