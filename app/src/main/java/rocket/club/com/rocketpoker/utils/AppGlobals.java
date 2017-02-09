@@ -429,7 +429,7 @@ public class AppGlobals {
     }
 
     public void loadImageFromServer(final String imageUrl, final ImageView itemImage,
-                                    final TextView imageText, final Context context) {
+                                    final TextView imageText, final boolean loadDefault) {
         new AsyncTask<Void, Void, Bitmap>() {
 
             String errMsg = "";
@@ -444,7 +444,7 @@ public class AppGlobals {
                     URL url = new URL(imageUrl);
                     return BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 } catch(FileNotFoundException fnfe) {
-                    errMsg = "No Preview Available";
+                    errMsg = "No Images";
                 } catch(Exception e) {
                     errMsg = "Unable to load Image";
                     appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
@@ -456,10 +456,12 @@ public class AppGlobals {
             protected void onPostExecute(Bitmap bmp) {
                 super.onPostExecute(bmp);
                 if(bmp != null) {
-                    if(imageText != null)
+                    if (imageText != null)
                         imageText.setVisibility(View.GONE);
                     itemImage.setVisibility(View.VISIBLE);
                     itemImage.setImageBitmap(bmp);
+                } else if(loadDefault) {
+                    itemImage.setImageResource(R.drawable.logo);
                 } else if(imageText != null){
                     imageText.setVisibility(View.VISIBLE);
                     itemImage.setVisibility(View.GONE);

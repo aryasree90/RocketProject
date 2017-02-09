@@ -68,7 +68,7 @@ public class EventListAdapter extends PagerAdapter {
         InfoDetails infoItem = infoList.get(position);
         try {
             String imgPath = AppGlobals.SERVER_URL + infoItem.getInfoImage();
-            appGlobals.loadImageFromServer(imgPath, itemImage, imageText, context);
+            appGlobals.loadImageFromServer(imgPath, itemImage, imageText, false);
         }catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }

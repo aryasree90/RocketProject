@@ -101,7 +101,7 @@ public class InfoListAdapter extends PagerAdapter {
         final InfoDetails infoItem = infoList.get(position);
         try {
             String imgPath = AppGlobals.SERVER_URL + infoItem.getInfoImage();
-            appGlobals.loadImageFromServer(imgPath, eventImage, imageText, context);
+            appGlobals.loadImageFromServer(imgPath, eventImage, imageText, true);
         }catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
@@ -110,7 +110,7 @@ public class InfoListAdapter extends PagerAdapter {
         eventSubHeader.setText(infoItem.getInfoSubTitle());
 
         if (activityType.equals(AppGlobals.EVENT_INFO)) {
-            likeShareTool.setVisibility(View.VISIBLE);
+            likeShareTool.setVisibility(View.GONE);
             if (appGlobals.sharedPref.getLikeEventList().contains(infoItem.getId())) {
                 likeImageBtn.setImageResource(R.mipmap.ic_favorite);
             } else {

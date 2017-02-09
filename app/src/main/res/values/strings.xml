@@ -160,6 +160,7 @@
     <string name="okButton">Ok</string>
     <string name="already_frnd">%1$s is already your friend</string>
     <string name="req_to_own_num">You cannot send request to same login number</string>
+    <string name="edit_own_role">You cannot change your own role</string>
     <string name="event_details">Event Details</string>
     <string name="service_details">Service Details</string>
     <string name="camera">Camera</string>

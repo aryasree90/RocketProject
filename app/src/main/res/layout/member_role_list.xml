@@ -21,4 +21,13 @@
         android:textColorHint="#05ab9a"
         app:met_floatingLabel="normal" />
 
+    <TextView
+        android:id="@+id/memberTypeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:layout_weight="0.4"/>
+
 </LinearLayout>

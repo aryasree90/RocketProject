@@ -139,10 +139,9 @@ public class AssignRoleFragment extends Fragment {
                         if(caller == 1) {
                             Gson gson = new Gson();
                             registerDetails = gson.fromJson(response, RegisterDetails[].class);
-                            appGlobals.toastMsg(context, getString(R.string.change_save), appGlobals.LENGTH_LONG);
                             loadDetails();
                         } else if(caller == 2) {
-
+                            appGlobals.toastMsg(context, getString(R.string.change_save), appGlobals.LENGTH_LONG);
                         }
                         appGlobals.cancelDialog(progressDialog);
                     }

@@ -41,7 +41,7 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
     final private String TAG = "AdminRoleAdapter";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView memberDetail;
+        TextView memberDetail, memberTypeText;
         MaterialBetterSpinner memberType;
 
         public MyViewHolder(View view) {
@@ -49,7 +49,7 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
             memberDetail = (TextView) view.findViewById(R.id.memberDetail);
             memberType = (MaterialBetterSpinner) view.findViewById(R.id.memberType);
             memberType.setAdapter(memberTypeAdapter);
-
+            memberTypeText = (TextView) view.findViewById(R.id.memberTypeText);
         }
     }
 
@@ -81,13 +81,22 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
         final int pos = Integer.parseInt(regDetail.getUser_type());
         holder.memberType.setText(MEMBER_TYPES[pos]);
 
-        holder.memberType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                regDetail.setUser_type("" + position);
-                changedList.add(regDetail);
-            }
-        });
+        if(regDetail.getReg_mob().equals(appGlobals.sharedPref.getLoginMobile())) {
+            holder.memberType.setVisibility(View.GONE);
+            holder.memberTypeText.setVisibility(View.VISIBLE);
+
+            holder.memberTypeText.setText(MEMBER_TYPES[pos]);
+        } else {
+            holder.memberType.setVisibility(View.VISIBLE);
+            holder.memberTypeText.setVisibility(View.GONE);
+            holder.memberType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    regDetail.setUser_type("" + position);
+                    changedList.add(regDetail);
+                }
+            });
+        }
 
 
     }
