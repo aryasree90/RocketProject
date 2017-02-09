@@ -122,7 +122,7 @@ public class AddEventFragment extends Fragment {
                             if (activityType.equals(AppGlobals.EVENT_INFO)) {
                                 message = getString(R.string.save_new_event);
                             } else {
-                                message = getString(R.string.save_new_summary);
+                                message = getString(R.string.save_new_service);
                             }
                             progressDialog = appGlobals.showDialog(context, message);
 
@@ -167,6 +167,7 @@ public class AddEventFragment extends Fragment {
     private void clearFields() {
         headerText.setText("");
         summaryText.setText("");
+        eventImage.setImageResource(R.drawable.upload_images);
     }
 
     private void serverCall(final Map<String,String> params) {
@@ -176,6 +177,14 @@ public class AddEventFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         appGlobals.logClass.setLogMsg(TAG, "Received " + response, LogClass.INFO_MSG);
+                        String msg = "";
+                        if (activityType.equals(AppGlobals.EVENT_INFO)) {
+                            msg = getString(R.string.event_success);
+                        } else {
+                            msg = getString(R.string.service_success);
+                        }
+
+                        appGlobals.toastMsg(context, msg, appGlobals.LENGTH_LONG);
                         CommonUtilities.getRocketsInfo(context, response);
                         clearFields();
                         appGlobals.cancelDialog(progressDialog);
@@ -185,6 +194,14 @@ public class AddEventFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                        String msg = "";
+                        if (activityType.equals(AppGlobals.EVENT_INFO)) {
+                            msg = getString(R.string.event_failure);
+                        } else {
+                            msg = getString(R.string.service_failure);
+                        }
+
+                        appGlobals.toastMsg(context, msg, appGlobals.LENGTH_LONG);
                         appGlobals.cancelDialog(progressDialog);
                     }
                 }) {

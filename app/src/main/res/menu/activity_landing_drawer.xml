@@ -5,7 +5,6 @@
 
         <item
             android:id="@+id/admin"
-            android:showAsAction="ifRoom|withText"
             android:title="@string/admin">
 
             <menu>
@@ -26,7 +25,7 @@
                 <item
 
                     android:id="@+id/add_emp_sal"
-                    android:icon="@mipmap/ic_id"
+                    android:icon="@mipmap/ic_currency"
                     android:title="@string/add_emp_sal" />
     </group>
         </menu>
@@ -34,7 +33,6 @@
 
         <item
             android:id="@+id/cashier"
-            android:showAsAction="ifRoom|withText"
             android:title="@string/cashier">
 
             <menu>
@@ -42,7 +40,7 @@
         <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/user_transactions"
-                    android:icon="@mipmap/ic_currency"
+                    android:icon="@mipmap/ic_assign_role_admin"
                     android:title="@string/user_trans" />
                 <item
                     android:id="@+id/salary_transactions"
@@ -50,15 +48,15 @@
                     android:title="@string/sal_trans" />
                 <item
                     android:id="@+id/exp_transactions"
-                    android:icon="@mipmap/ic_currency"
+                    android:icon="@mipmap/ic_assign_id"
                     android:title="@string/exp_trans" />
                 <item
                     android:id="@+id/salary_list"
-                    android:icon="@mipmap/ic_currency"
+                    android:icon="@mipmap/ic_transactions"
                     android:title="@string/sal_list" />
                 <item
                     android:id="@+id/exp_list"
-                    android:icon="@mipmap/ic_currency"
+                    android:icon="@mipmap/ic_id"
                     android:title="@string/exp_list" />
     </group>
         </menu>
@@ -66,7 +64,6 @@
 
         <item
             android:id="@+id/editor"
-            android:showAsAction="ifRoom|withText"
             android:title="@string/editor">
 
             <menu>
@@ -74,11 +71,11 @@
         <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/edit_events"
-                    android:icon="@mipmap/ic_about_us"
+                    android:icon="@mipmap/ic_assign_id"
                     android:title="@string/edit_event" />
                 <item
                     android:id="@+id/edit_services"
-                    android:icon="@mipmap/ic_contact_us"
+                    android:icon="@mipmap/ic_services"
                     android:title="@string/edit_service" />
                 <item
                     android:id="@+id/edit_live_update"
@@ -86,7 +83,7 @@
                     android:title="@string/edit_live_update" />
                 <item
                     android:id="@+id/edit_game_type"
-                    android:icon="@mipmap/ic_contact_us"
+                    android:icon="@mipmap/ic_assign_role"
                     android:title="@string/edit_game_type" />
     </group>
         </menu>
@@ -125,7 +122,6 @@
 
         <item
             android:id="@+id/appName"
-            android:showAsAction="ifRoom|withText"
             android:title="@string/app_name">
             <menu>
                 <group android:checkableBehavior="single"

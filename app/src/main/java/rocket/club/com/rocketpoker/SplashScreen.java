@@ -43,7 +43,7 @@ public class SplashScreen extends Activity {
     private void startRotation() {
         ImageView rotate_image =(ImageView) findViewById(R.id.splash);
         RotateAnimation rotate = new RotateAnimation(30, 360, Animation.RELATIVE_TO_SELF, 0.5f,  Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(2500);
+        rotate.setDuration(1000);
         rotate_image.startAnimation(rotate);
 
         startThread();
@@ -72,7 +72,7 @@ public class SplashScreen extends Activity {
                 try {
                     int waited = 0;
                     // Splash screen pause time
-                    while (waited < 3500) {
+                    while (waited < 1100) {
                         sleep(100);
                         waited += 100;
                     }

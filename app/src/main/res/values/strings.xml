@@ -335,7 +335,11 @@ pocket be sure to find yourself a welcoming spot at our action heavy board.</str
     <string name="fetch_profile">Fetching Profile Details</string>
     <string name="save_profile">Saving Profile Details</string>
     <string name="save_new_event">Saving New Event</string>
-    <string name="save_new_summary">Saving New Summary</string>
+    <string name="save_new_service">Saving New Service</string>
+    <string name="event_success">Event saved successfully</string>
+    <string name="event_failure">Event not saved. Please try later</string>
+    <string name="service_success">Service saved successfully</string>
+    <string name="service_failure">Service not saved. Please try later</string>
     <string name="save_new_game">Saving New Game</string>
     <string name="save_live_update">Saving Live Update</string>
     <string name="save_sal">Saving Salary</string>

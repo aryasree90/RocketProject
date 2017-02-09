@@ -8,6 +8,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="friend_btn">40dp</dimen>
 
-    <dimen name="header_size">14dp</dimen>
+    <dimen name="header_size">16dp</dimen>
     <dimen name="summary_size">12dp</dimen>
 </resources>
