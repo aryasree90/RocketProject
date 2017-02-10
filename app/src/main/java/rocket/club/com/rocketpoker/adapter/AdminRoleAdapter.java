@@ -90,7 +90,7 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
         holder.memberType.setText(SUPER_ADMIN_TYPES[pos]);
 
         if(regDetail.getReg_mob().equals(appGlobals.sharedPref.getLoginMobile()) ||
-                pos == AppGlobals.SUPER_ADMIN) {
+                (pos == AppGlobals.SUPER_ADMIN && appGlobals.sharedPref.getUserType() != AppGlobals.SUPER_ADMIN)) {
             holder.memberType.setVisibility(View.GONE);
             holder.memberTypeText.setVisibility(View.VISIBLE);
 
