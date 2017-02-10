@@ -166,6 +166,7 @@ public class AppGlobals {
     public static final int EDITOR = 1;
     public static final int CASHIER = 2;
     public static final int ADMIN = 3;
+    public static final int SUPER_ADMIN = 4;
 
     //Friends Database
     public static final int PENDING_REQUEST = -1;

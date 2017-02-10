@@ -34,10 +34,10 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
     AppGlobals appGlobals;
     private ArrayList<RegisterDetails> changedList;
     private RegisterDetails[] tempList;
-    String[] MEMBER_TYPES = null;
+    String[] MEMBER_TYPES = null, SUPER_ADMIN_TYPES = null;
 
     RegisterDetails[] registerDetails = null;
-    ArrayAdapter<String> memberTypeAdapter = null;
+    ArrayAdapter<String> memberTypeAdapter = null, superAdminTypeAdapter = null;
     final private String TAG = "AdminRoleAdapter";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -62,6 +62,10 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
         MEMBER_TYPES = context.getResources().getStringArray(R.array.member_list);
         memberTypeAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_dropdown_item_1line, MEMBER_TYPES);
+
+        SUPER_ADMIN_TYPES = context.getResources().getStringArray(R.array.super_admin_list);
+        superAdminTypeAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_dropdown_item_1line, SUPER_ADMIN_TYPES);
     }
 
     @Override
@@ -79,13 +83,18 @@ public class AdminRoleAdapter extends RecyclerView.Adapter<AdminRoleAdapter.MyVi
         holder.memberDetail.setText(regDetail.getName() + "\n" + regDetail.getReg_mob());
 
         final int pos = Integer.parseInt(regDetail.getUser_type());
-        holder.memberType.setText(MEMBER_TYPES[pos]);
 
-        if(regDetail.getReg_mob().equals(appGlobals.sharedPref.getLoginMobile())) {
+        if(appGlobals.sharedPref.getUserType() == AppGlobals.SUPER_ADMIN)
+            holder.memberType.setAdapter(superAdminTypeAdapter);
+
+        holder.memberType.setText(SUPER_ADMIN_TYPES[pos]);
+
+        if(regDetail.getReg_mob().equals(appGlobals.sharedPref.getLoginMobile()) ||
+                pos == AppGlobals.SUPER_ADMIN) {
             holder.memberType.setVisibility(View.GONE);
             holder.memberTypeText.setVisibility(View.VISIBLE);
 
-            holder.memberTypeText.setText(MEMBER_TYPES[pos]);
+            holder.memberTypeText.setText(SUPER_ADMIN_TYPES[pos]);
         } else {
             holder.memberType.setVisibility(View.VISIBLE);
             holder.memberTypeText.setVisibility(View.GONE);

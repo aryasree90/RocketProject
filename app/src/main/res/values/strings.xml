@@ -61,6 +61,14 @@
         <item><string name="set_admin">Admin</string></item>
     </string-array>
 
+    <string-array name="super_admin_list">
+        <item><string name="set_normal1">Normal User</string></item>
+        <item><string name="set_editor1">Editor</string></item>
+        <item><string name="set_cashier1">Cashier</string></item>
+        <item><string name="set_admin1">Admin</string></item>
+        <item><string name="set_super_admin1">Super Admin</string></item>
+    </string-array>
+
     <string-array name="gender_list">
         <item><string name="male">Male</string></item>
         <item><string name="female">Female</string></item>

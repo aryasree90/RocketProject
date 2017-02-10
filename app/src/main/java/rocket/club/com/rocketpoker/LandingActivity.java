@@ -237,6 +237,8 @@ public class LandingActivity extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.cashier).setVisible(true);
         } else if(msgType == AppGlobals.ADMIN) {
             navigationView.getMenu().findItem(R.id.admin).setVisible(true);
+        } else if(msgType == AppGlobals.SUPER_ADMIN) {
+            navigationView.getMenu().findItem(R.id.admin).setVisible(true);
             navigationView.getMenu().findItem(R.id.cashier).setVisible(true);
             navigationView.getMenu().findItem(R.id.editor).setVisible(true);
         }
