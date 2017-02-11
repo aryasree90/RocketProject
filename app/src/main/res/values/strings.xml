@@ -271,6 +271,7 @@
     <string name="trans_save">Transaction Saved</string>
     <string name="change_save">Changes Saved</string>
     <string name="sal_save">Salary Saved</string>
+    <string name="remove_friend">Removed Friend</string>
     <string name="saving_trans">Saving Transaction</string>
     <string name="trans_fail">Unable to save transaction</string>
     <string name="invalid_amt">Invalid Amount</string>

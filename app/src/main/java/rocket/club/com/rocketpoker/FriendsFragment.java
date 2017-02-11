@@ -7,17 +7,27 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -120,6 +131,7 @@ public class FriendsFragment extends Fragment {
 
         if(pageType == AppGlobals.FRIEND_LIST) {
             addNewFriend.setText(getString(R.string.add_new_friend));
+            initSwipe();
         } else {
             addNewFriend.setText(getString(R.string.invite_to_play));
         }
@@ -150,6 +162,107 @@ public class FriendsFragment extends Fragment {
         friendsListView.setLayoutManager(mLayoutManager);
         friendsListView.setItemAnimator(new DefaultItemAnimator());
         friendsListView.setAdapter(mAdapter);
+
+    }
+    Paint p = new Paint();
+    private void initSwipe() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+
+                FriendsListClass friendClass = friendsList.get(position);
+                int status = friendClass.getStatus();
+
+                if(status != AppGlobals.ACCEPTED_FRIENDS)
+                    return;
+
+                final String mobile = friendClass.getMobile();
+
+                if(direction == ItemTouchHelper.LEFT) {
+
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+
+                                    if(!appGlobals.isNetworkConnected(context)) {
+                                        appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
+
+                                        return;
+                                    }
+
+                                    progressDialog = appGlobals.showDialog(context, getString(R.string.saving));
+
+                                    Map<String,String> map = new HashMap<String,String>();
+                                    map.put("mobile", appGlobals.sharedPref.getLoginMobile());
+                                    map.put("frnd_mobile", mobile);
+                                    map.put("status", Integer.toString(AppGlobals.REJECT_FRIENDS));
+                                    map.put("task", appGlobals.REPLY_FRND_REQ);
+
+                                    serverCall(map, FRIEND_REQ_URL, mobile);
+//friendsList.remove(position);TODO move to server call and change status to rejected
+                                    mAdapter.notifyDataSetChanged();
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    mAdapter.notifyDataSetChanged();
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+
+                }
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                int position = viewHolder.getAdapterPosition();
+                FriendsListClass friendClass = friendsList.get(position);
+
+                int status = friendClass.getStatus();
+
+                if(status != AppGlobals.ACCEPTED_FRIENDS)
+                    return;
+
+                Bitmap icon;
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    if(dX < -300)
+                        dX = -300;
+
+                    if(dX < 0){
+//                        p.setColor(Color.parseColor("#D32F2F"));
+                        p.setColor(getResources().getColor(R.color.appBackground));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom()-40);
+                        c.drawRect(background,p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_delete);
+                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width - 30,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
+                        c.drawBitmap(icon,null,icon_dest,p);
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper touchHelper = new ItemTouchHelper(simpleCallback);
+        touchHelper.attachToRecyclerView(friendsListView);
+
     }
 
     private void fetchFriendList() {
@@ -227,7 +340,7 @@ public class FriendsFragment extends Fragment {
                                 frnd_map.put("count", "" + count);
                                 frnd_map.put("task", AppGlobals.SEND_INVITE);
 
-                                serverCall(frnd_map, INVITE_TO_PLAY_URL);
+                                serverCall(frnd_map, INVITE_TO_PLAY_URL, "");
                             }
                         }
                         break;
@@ -252,7 +365,7 @@ public class FriendsFragment extends Fragment {
                             frnd_map.put("frnd_mobile", friendMobile.getText().toString());
                             frnd_map.put("task", appGlobals.NEW_FRND_REQ);
                             progressDialog = appGlobals.showDialog(context, getString(R.string.saving));
-                            serverCall(frnd_map, FRIEND_REQ_URL);
+                            serverCall(frnd_map, FRIEND_REQ_URL, "");
                             resetDialog();
                         }
                         break;
@@ -274,7 +387,7 @@ public class FriendsFragment extends Fragment {
                             search_map.put("mobile", appGlobals.sharedPref.getLoginMobile());
                             search_map.put("frnd_mobile", searchAFriend);
                             progressDialog = appGlobals.showDialog(context, getString(R.string.search_member));
-                            serverCall(search_map, FRIEND_SEARCH_URL);
+                            serverCall(search_map, FRIEND_SEARCH_URL, "");
                         }
                         break;
                     case R.id.selectDateTime:
@@ -344,7 +457,7 @@ public class FriendsFragment extends Fragment {
         return finalVal;
     }
 
-    private void serverCall(final Map<String, String> map, final String URL) {
+    private void serverCall(final Map<String, String> map, final String URL, final String removeFriend) {
 
         if(!appGlobals.isNetworkConnected(context)) {
             appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
@@ -358,11 +471,16 @@ public class FriendsFragment extends Fragment {
                     public void onResponse(String response) {
                         if(URL.equals(FRIEND_REQ_URL)) {
                             if(response.equals("Success")) {
-                                if (list != null && list.size() == 1) {
-                                    appGlobals.sqLiteDb.insertContactDetails(list, false);
-                                    appGlobals.toastMsg(context, getString(R.string.req_sent), appGlobals.LENGTH_LONG);
+                                if(!removeFriend.isEmpty()) {
+                                    appGlobals.sqLiteDb.updateContacts(AppGlobals.REJECT_FRIENDS, removeFriend);
+                                    appGlobals.toastMsg(context, getString(R.string.remove_friend), appGlobals.LENGTH_LONG);
                                 } else {
-                                    appGlobals.toastMsg(context, getString(R.string.req_not_sent), appGlobals.LENGTH_LONG);
+                                    if (list != null && list.size() == 1) {
+                                        appGlobals.sqLiteDb.insertContactDetails(list, false);
+                                        appGlobals.toastMsg(context, getString(R.string.req_sent), appGlobals.LENGTH_LONG);
+                                    } else {
+                                        appGlobals.toastMsg(context, getString(R.string.req_not_sent), appGlobals.LENGTH_LONG);
+                                    }
                                 }
                             }
                         } else if(URL.equals(FRIEND_SEARCH_URL)){
