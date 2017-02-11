@@ -3,7 +3,7 @@
     android:id="@+id/liveUpdateLayout"
     android:orientation="vertical"
     android:gravity="bottom"
-    android:background="@drawable/game1"
+    android:background="@drawable/game_curtly_rung"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
