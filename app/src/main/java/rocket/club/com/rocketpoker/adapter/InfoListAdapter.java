@@ -1,5 +1,6 @@
 package rocket.club.com.rocketpoker.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -41,9 +43,9 @@ import rocket.club.com.rocketpoker.utils.LogClass;
 public class InfoListAdapter extends PagerAdapter {
 
     Context context;
-    ImageButton likeImageBtn, shareImageBtn;
-    TextView eventHeader = null, eventSubHeader = null;
-    ImageView eventImage = null;
+//    ImageButton likeImageBtn, shareImageBtn;
+//    TextView eventHeader = null, eventSubHeader = null;
+//    ImageView eventImage = null;
     LayoutInflater mLayoutInflater;
     ArrayList<InfoDetails> infoList = null;
     View.OnClickListener itemClickListener;
@@ -91,11 +93,12 @@ public class InfoListAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(layoutId, container, false);
 
         LinearLayout likeShareTool = (LinearLayout) itemView.findViewById(R.id.likeShareTool);
-        likeImageBtn = (ImageButton) itemView.findViewById(R.id.likeImage);
-        shareImageBtn = (ImageButton) itemView.findViewById(R.id.shareImage);
-        eventHeader = (TextView) itemView.findViewById(R.id.eventHeaderText);
-        eventSubHeader = (TextView) itemView.findViewById(R.id.eventSummaryText);
-        eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
+        final ImageButton likeImageBtn = (ImageButton) itemView.findViewById(R.id.likeImage);
+        ImageButton shareImageBtn = (ImageButton) itemView.findViewById(R.id.shareImage);
+        ImageButton fbShareImageBtn = (ImageButton) itemView.findViewById(R.id.fbShareImage);
+        TextView eventHeader = (TextView) itemView.findViewById(R.id.eventHeaderText);
+        TextView eventSubHeader = (TextView) itemView.findViewById(R.id.eventSummaryText);
+        ImageView eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
         TextView imageText = (TextView) itemView.findViewById(R.id.imageText);
 
         final InfoDetails infoItem = infoList.get(position);
@@ -110,7 +113,7 @@ public class InfoListAdapter extends PagerAdapter {
         eventSubHeader.setText(infoItem.getInfoSubTitle());
 
         if (activityType.equals(AppGlobals.EVENT_INFO)) {
-            likeShareTool.setVisibility(View.GONE);
+            likeShareTool.setVisibility(View.VISIBLE);
             if (appGlobals.sharedPref.getLikeEventList().contains(infoItem.getId())) {
                 likeImageBtn.setImageResource(R.mipmap.ic_favorite);
             } else {
@@ -120,11 +123,52 @@ public class InfoListAdapter extends PagerAdapter {
             likeShareTool.setVisibility(View.GONE);
         }
 
-        likeImageBtn.setOnClickListener(clickListener);
-        shareImageBtn.setOnClickListener(clickListener);
+        likeImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        likeImageBtn.setTag(position);
-        shareImageBtn.setTag(position);
+                String likeEventList = appGlobals.sharedPref.getLikeEventList();
+                String likeId = infoItem.getId() + ",";
+                if (likeEventList.contains(infoItem.getId())) {
+                    likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
+                    infoItem.setInfoLikeStatus("false");
+                    likeEventList = likeEventList.replace(likeId, "");
+                } else {
+                    likeImageBtn.setImageResource(R.mipmap.ic_favorite);
+                    infoItem.setInfoLikeStatus("true");
+                    likeEventList += likeId;
+                }
+                appGlobals.sharedPref.setLikeEventList(likeEventList);
+//                infoAdapter.notifyDataSetChanged();
+                Map<String,String> map = new HashMap<String,String>();
+                map.put("likeStatus", infoItem.getInfoLikeStatus());
+                map.put("likeTimeStamp", infoItem.getInfoTimeStamp());
+                map.put("likeId", infoItem.getId());
+
+                serverCall(map);
+            }
+        });
+
+        shareImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String headerMsg = infoItem.getInfoTitle() + "\n" + infoItem.getInfoSubTitle();
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, headerMsg);
+                sendIntent.setType("text/plain");
+                context.startActivity(Intent.createChooser(sendIntent,
+                        context.getResources().getText(R.string.send_to)).
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+        fbShareImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "fb clicked", Toast.LENGTH_LONG).show();
+            }
+        });
 
         container.addView(itemView);
         return itemView;
@@ -146,7 +190,6 @@ public class InfoListAdapter extends PagerAdapter {
                         } else {
                             appGlobals.toastMsg(context, context.getString(R.string.pls_try_later), appGlobals.LENGTH_LONG);
                         }
-
                     }
                 },
                 new Response.ErrorListener() {

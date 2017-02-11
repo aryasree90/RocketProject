@@ -126,6 +126,8 @@ public class AddEventFragment extends Fragment {
                             }
                             progressDialog = appGlobals.showDialog(context, message);
 
+                            header = header.substring(0, 1).toUpperCase() + header.substring(1);
+
                             String userImage = "";
 
                             if(!TextUtils.isEmpty(imagePath) && new File(imagePath).exists())
