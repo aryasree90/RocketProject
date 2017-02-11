@@ -59,13 +59,13 @@ public class LiveUpdateListAdapter extends PagerAdapter {
 
         switch(index) {
             case 0:
-                backgroundId = R.drawable.winner;
+                backgroundId = R.drawable.game_winner;
                 break;
             case 1:
-                backgroundId = R.drawable.game1;
+                backgroundId = R.drawable.game_curtly_rung;
                 break;
             case 2:
-                backgroundId = R.drawable.game1;
+                backgroundId = R.drawable.game_yet_to_strt;
                 break;
         }
 

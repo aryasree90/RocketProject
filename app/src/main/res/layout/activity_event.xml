@@ -9,7 +9,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:weightSum="1">
 
         <ImageView
@@ -32,14 +33,12 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.6"
-            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/likeShareTool"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:background="#90D3F1"
                 android:gravity="center">
 
@@ -65,12 +64,11 @@
                 android:id="@+id/eventHeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:gravity="center"
                 android:background="@color/colorBlueButton"
-                android:textSize="@dimen/header_size"
+                android:textSize="20sp"
                 android:text="Header Text comes here"/>
 
 
@@ -78,10 +76,9 @@
                 android:id="@+id/eventSummaryText"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:padding="5dp"
-                android:textColor="@color/common_action_bar_splitter"
+                android:textColor="@color/common_plus_signin_btn_text_light_focused"
                 android:background="@color/colorAccent"
-                android:textSize="@dimen/summary_size"
+                android:textSize="16sp"
                 android:text="Header Text comes here"/>
         </LinearLayout>
     </LinearLayout>

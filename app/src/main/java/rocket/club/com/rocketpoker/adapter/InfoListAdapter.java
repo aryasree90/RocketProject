@@ -110,7 +110,7 @@ public class InfoListAdapter extends PagerAdapter {
         eventSubHeader.setText(infoItem.getInfoSubTitle());
 
         if (activityType.equals(AppGlobals.EVENT_INFO)) {
-            likeShareTool.setVisibility(View.GONE);
+            likeShareTool.setVisibility(View.VISIBLE);
             if (appGlobals.sharedPref.getLikeEventList().contains(infoItem.getId())) {
                 likeImageBtn.setImageResource(R.mipmap.ic_favorite);
             } else {
