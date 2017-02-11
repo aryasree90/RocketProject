@@ -2,11 +2,9 @@ package rocket.club.com.rocketpoker.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import rocket.club.com.rocketpoker.R;
-import rocket.club.com.rocketpoker.classes.InfoDetails;
 import rocket.club.com.rocketpoker.classes.LiveUpdateDetails;
 
 public class LiveUpdateListAdapter extends PagerAdapter {
@@ -51,27 +48,24 @@ public class LiveUpdateListAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
-        View itemView = layoutInflater.inflate(R.layout.live_update_item, container, false);
         LiveUpdateDetails updateDetails = updateList.get(position);
 
-        int backgroundId = 0;
+        int layout = R.layout.live_update_winner;
         int index= liveUpdateList.indexOf(updateDetails.getUpdateType());
 
         switch(index) {
             case 0:
-                backgroundId = R.drawable.winner;
+                layout = R.layout.live_update_winner;
                 break;
             case 1:
-                backgroundId = R.drawable.game1;
+                layout = R.layout.live_update_current_game;
                 break;
             case 2:
-                backgroundId = R.drawable.game1;
+                layout = R.layout.live_update_yet_to_start;
                 break;
         }
 
-        LinearLayout liveUpdateLayout = (LinearLayout) itemView.findViewById(R.id.liveUpdateLayout);
-        liveUpdateLayout.setBackgroundResource(backgroundId);
-        liveUpdateLayout.setAlpha(0.5f);
+        View itemView = layoutInflater.inflate(layout, container, false);
 
         TextView msgHeader = (TextView) itemView.findViewById(R.id.updateHeader);
         TextView msgText1 = (TextView) itemView.findViewById(R.id.updateText1);
