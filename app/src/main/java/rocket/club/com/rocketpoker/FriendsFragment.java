@@ -76,6 +76,7 @@ public class FriendsFragment extends Fragment {
     Button addNewFriend = null;
     EditText searchFriend = null;
 
+    Paint p = new Paint();
     Dialog dialog = null;
     ImageButton searchBtn = null;
 
@@ -164,7 +165,7 @@ public class FriendsFragment extends Fragment {
         friendsListView.setAdapter(mAdapter);
 
     }
-    Paint p = new Paint();
+
     private void initSwipe() {
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
