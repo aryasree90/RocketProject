@@ -53,6 +53,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,7 +175,7 @@ public class AppGlobals {
     public static final int ACCEPTED_FRIENDS = 1;
     public static final int PENDING_FRIENDS = 0;
     public static final int ALL_FRIENDS = 3;
-    public static final int SUGGESTED_FRIENDS = 4;
+    public static final int SUGGESTED_FRIENDS = -3;
 
     //Notification keys
     public static final String USER_TYPE = "user_type";
@@ -271,6 +272,44 @@ public class AppGlobals {
     public static String getMonthYear(long timeStamp) {
         String month = (String) DateFormat.format("MMM yy", timeStamp);
         return month;
+    }
+
+    private static Calendar clearTimes(Calendar c) {
+        c.set(Calendar.HOUR_OF_DAY,0);
+        c.set(Calendar.MINUTE,0);
+        c.set(Calendar.SECOND,0);
+        c.set(Calendar.MILLISECOND,0);
+        return c;
+    }
+
+    public static String convertSimpleDayFormat(long val) {
+        Calendar today=Calendar.getInstance();
+        today=clearTimes(today);
+
+        Calendar yesterday=Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_YEAR,-1);
+        yesterday=clearTimes(yesterday);
+
+        /*Calendar last7days=Calendar.getInstance();
+        last7days.add(Calendar.DAY_OF_YEAR,-7);
+        last7days=clearTimes(last7days);
+
+        Calendar last30days=Calendar.getInstance();
+        last30days.add(Calendar.DAY_OF_YEAR,-30);
+        last30days=clearTimes(last30days);*/
+
+
+        if(val >today.getTimeInMillis())
+        {
+            return "Today, " + convertTime(val);
+        }
+        else if(val>yesterday.getTimeInMillis())
+        {
+            return "Yesterday, " + convertTime(val);
+        }
+        else {
+            return convertDateTime(val);
+        }
     }
 
     public int getScreenHeight(Context context) {

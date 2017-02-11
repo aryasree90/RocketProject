@@ -129,7 +129,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SELECT_SUGGESTED_FRIENDS = "SELECT * FROM " + friendsTable + " WHERE " +
             status + "=" + AppGlobals.ACCEPTED_FRIENDS + " or " +
             status + "=" + AppGlobals.SUGGESTED_FRIENDS + " or " +
-            status + "=" + AppGlobals.PENDING_REQUEST;
+            status + "=" + AppGlobals.PENDING_REQUEST + " order by status desc";
 
     public static final String SELECT_FRIENDS_USING_MOB = "SELECT * FROM " + friendsTable + " WHERE " +
             mobile + "=?";

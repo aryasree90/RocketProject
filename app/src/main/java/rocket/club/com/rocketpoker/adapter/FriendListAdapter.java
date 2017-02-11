@@ -174,6 +174,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
                                 appGlobals.sqLiteDb.insertContactDetails(list, false);
                                 appGlobals.toastMsg(context, context.getString(R.string.req_sent), appGlobals.LENGTH_LONG);
                                 requestSent(addFriend);
+                                notifyDataSetChanged();
                             }
                         }
                         appGlobals.cancelDialog(progressDialog);

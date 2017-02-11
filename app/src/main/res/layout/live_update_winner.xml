@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/liveUpdateLayout"
+    android:orientation="vertical"
+    android:gravity="bottom"
+    android:background="@drawable/winner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/updateHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#50EC16"
+        android:text="Header"/>
+
+    <TextView
+        android:id="@+id/updateText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#50EC16"
+        android:textSize="15sp"
+        android:text="Text1"/>
+
+    <TextView
+        android:id="@+id/updateText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#50EC16"
+        android:textSize="15sp"
+        android:text="Text2"/>
+
+    <TextView
+        android:id="@+id/updateText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#50EC16"
+        android:textSize="15sp"
+        android:text="Text3"/>
+
+    <TextView
+        android:id="@+id/updateComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#50EC16"
+        android:textSize="15sp"
+        android:text="Comments"/>
+
+</LinearLayout>

@@ -57,6 +57,15 @@
                     android:background="@android:color/transparent"
                     android:layout_marginLeft="10dp"/>
 
+                <ImageButton
+                    android:id="@+id/fbShareImage"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/ic_share"
+                    android:background="@android:color/transparent"
+                    android:visibility="gone"
+                    android:layout_marginLeft="10dp"/>
+
             </LinearLayout>
 
 
