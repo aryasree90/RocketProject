@@ -169,7 +169,7 @@ public class ContactAsync extends AsyncTask<Void, ArrayList<ContactClass>, Void>
                 JSONArray msgArr = new JSONArray(response);
                 int size = msgArr.length();
 
-                for(int i=0; i<size; i++) {
+                for(int i=size-1; i>=0; i--) {
                     JSONObject msgObj = msgArr.getJSONObject(i);
 
                     String msgId = msgObj.getString("msgId");

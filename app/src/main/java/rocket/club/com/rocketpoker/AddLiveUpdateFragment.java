@@ -264,6 +264,7 @@ public class AddLiveUpdateFragment extends Fragment {
 
                         break;
                     case R.id.clearBtn:
+                        updateTypeSpinner.setText("");
                         clearFields();
                         break;
                 }
@@ -274,7 +275,6 @@ public class AddLiveUpdateFragment extends Fragment {
     }
 
     private void clearFields() {
-        updateTypeSpinner.setText("");
         header.setText("");
         text1.setText("");
         text2.setText("");
