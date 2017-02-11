@@ -566,8 +566,8 @@ public class FriendsFragment extends Fragment {
 
         ArrayAdapter<String> gameTypeAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_dropdown_item_1line, GAME_LIST);
-        selectGameType = (MaterialBetterSpinner)
-                dialog.findViewById(R.id.selectGameType);
+        /*selectGameType = (MaterialBetterSpinner)
+                dialog.findViewById(R.id.selectGameType);*/
         selectGameType.setAdapter(gameTypeAdapter);
 
         selectGameType.setOnClickListener(clickListener);
@@ -643,4 +643,5 @@ public class FriendsFragment extends Fragment {
             appGlobals.logClass.setLogMsg(TAG, "UnRegister Receiver Error > " + e.getMessage(), LogClass.ERROR_MSG);
         }
     }
+
 }

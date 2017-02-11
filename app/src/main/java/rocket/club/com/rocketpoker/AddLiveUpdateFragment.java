@@ -1,9 +1,13 @@
 package rocket.club.com.rocketpoker;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TimePicker;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +52,7 @@ public class AddLiveUpdateFragment extends Fragment {
     ProgressDialog progressDialog = null;
 
     final String VALIDATION_URL = AppGlobals.SERVER_URL + AppGlobals.EDITORS_URL;
+    String selDateTime = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,7 +106,8 @@ public class AddLiveUpdateFragment extends Fragment {
         updateTypeSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String headerHint = "", text1Hint = "", text2Hint = "";
+
+                clearFields();
 
                 header.setVisibility(View.VISIBLE);
                 text1.setVisibility(View.VISIBLE);
@@ -111,6 +120,8 @@ public class AddLiveUpdateFragment extends Fragment {
                     gameTypeSpinner.setHint(getString(R.string.game_type));
                     text2.setHint(getString(R.string.table_no));
 
+                    text2.setInputType(InputType.TYPE_CLASS_NUMBER);
+
                     text1.setVisibility(View.GONE);
                     gameTypeSpinner.setVisibility(View.VISIBLE);
 
@@ -119,6 +130,9 @@ public class AddLiveUpdateFragment extends Fragment {
                     gameTypeSpinner.setHint(getString(R.string.game_type));
                     text1.setHint(getString(R.string.table_no));
                     text2.setHint(getString(R.string.update_text));
+
+                    text1.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    text2.setInputType(InputType.TYPE_CLASS_TEXT);
 
                     header.setVisibility(View.GONE);
                     gameTypeSpinner.setVisibility(View.VISIBLE);
@@ -129,12 +143,73 @@ public class AddLiveUpdateFragment extends Fragment {
                     text1.setHint(getString(R.string.table_no));
                     text2.setHint(getString(R.string.set_game_time));
 
+                    text1.setInputType(InputType.TYPE_CLASS_NUMBER);
+
                     header.setVisibility(View.GONE);
                     gameTypeSpinner.setVisibility(View.VISIBLE);
                 }
+
+                final int curPos = position;
+
+                text2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(curPos == 2)
+                            showDatePickerDialog();
+                    }
+                });
             }
         });
+    }
 
+    private void showDatePickerDialog() {
+
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener(){
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        int month = monthOfYear + 1;
+                        selDateTime = checkTime(dayOfMonth) + "-" + checkTime(month) + "-" + year;
+                        showTimePickerDialog();
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+    private String checkTime(int val) {
+        String finalVal = "";
+        if(val < 10)
+            finalVal = "0" + val;
+        else
+            finalVal = "" + val;
+        return finalVal;
+    }
+
+    private void showTimePickerDialog() {
+        final Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        selDateTime += " " + checkTime(hourOfDay) + ":" + checkTime(minute);
+                        text2.setText(selDateTime);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
     }
 
     private void setClickListener() {
