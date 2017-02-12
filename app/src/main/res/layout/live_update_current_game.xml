@@ -3,9 +3,15 @@
     android:id="@+id/liveUpdateLayout"
     android:orientation="vertical"
     android:gravity="bottom"
-    android:background="@drawable/game1"
+    android:background="@drawable/game_curtly_rung"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/updateHeader"
@@ -14,14 +20,14 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:textColor="#50EC16"
+        android:textColor="@color/colorBlueButton"
         android:text="Header"/>
 
     <TextView
         android:id="@+id/updateText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#50EC16"
+        android:textColor="@color/colorBlueButton"
         android:textSize="15sp"
         android:text="Text1"/>
 
@@ -29,7 +35,7 @@
         android:id="@+id/updateText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#50EC16"
+        android:textColor="@color/colorBlueButton"
         android:textSize="15sp"
         android:text="Text2"/>
 
@@ -37,7 +43,7 @@
         android:id="@+id/updateText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#50EC16"
+        android:textColor="@color/colorBlueButton"
         android:textSize="15sp"
         android:text="Text3"/>
 
@@ -45,8 +51,10 @@
         android:id="@+id/updateComments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#50EC16"
+        android:textColor="@color/colorBlueButton"
         android:textSize="15sp"
         android:text="Comments"/>
+
+    </LinearLayout>
 
 </LinearLayout>
