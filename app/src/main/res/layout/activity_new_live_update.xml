@@ -81,8 +81,7 @@
         android:id="@+id/updateComments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="false"
-        android:lines="2"
+        android:singleLine="true"
         android:maxLength="50"
         android:hint="@string/update_comments"/>
 
