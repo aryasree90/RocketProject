@@ -103,7 +103,6 @@
     </string-array>
 
     <string-array name="live_update_list">
-        <item><string name="update1">Winner</string></item>
         <item><string name="update2">Current running game</string></item>
         <item><string name="update3">Yet to start</string></item>
     </string-array>
@@ -113,7 +112,7 @@
     <string name="navigation_drawer_close">Close</string>
     <string name="otp_info">Automatically fetches OTP.\nPlease wait.</string>
     <string name="otp_info1">Automatically fetches OTP in %1$s minutes.\nPlease wait.</string>
-    <string name="msg_settings">Check your message settings if you are not receiving an OTP message</string>
+    <string name="msg_settings">Note : Check your message settings if you are not receiving an OTP message</string>
     <string name="resend_sms">Resend SMS</string>
     <string name="pls_try_later">Please try later</string>
     <string name="settings_title">SETTINGS</string>
@@ -121,6 +120,7 @@
     <string name="settings_chat">Chat Notification</string>
     <string name="update_header">Enter Header</string>
     <string name="update_text">Enter text</string>
+    <string name="limit">Enter Amount</string>
     <string name="update_comments">Enter some comments</string>
     <string name="game_name">Enter Game Name</string>
     <string name="game_found">Game already added</string>
@@ -285,6 +285,7 @@
 
     <string name="winner_name">Winner Name</string>
     <string name="table_no">Table No.</string>
+    <string name="starts_at">Starts @&#160;</string>
 
 
     <!-- Contents about the club -->

@@ -114,7 +114,7 @@ public class AddLiveUpdateFragment extends Fragment {
                 gameTypeSpinner.setVisibility(View.GONE);
                 updtDetLayout.setVisibility(View.VISIBLE);
 
-                if(position == 0) {         //Winner
+                /*if(position == 0) {         //Winner
 
                     header.setHint(getString(R.string.winner_name));
                     gameTypeSpinner.setHint(getString(R.string.game_type));
@@ -125,26 +125,30 @@ public class AddLiveUpdateFragment extends Fragment {
                     text1.setVisibility(View.GONE);
                     gameTypeSpinner.setVisibility(View.VISIBLE);
 
-                } else if(position == 1) {  //Current running game
+                } else*/
+                if(position == 0) {  //Current running game
 
                     gameTypeSpinner.setHint(getString(R.string.game_type));
                     text1.setHint(getString(R.string.table_no));
-                    text2.setHint(getString(R.string.update_text));
+                    text2.setHint(getString(R.string.limit));
 
                     text1.setInputType(InputType.TYPE_CLASS_NUMBER);
                     text2.setInputType(InputType.TYPE_CLASS_TEXT);
 
+                    text3.setVisibility(View.GONE);
                     header.setVisibility(View.GONE);
                     gameTypeSpinner.setVisibility(View.VISIBLE);
 
-                } else if(position == 2) {  //Yet to start
+                } else if(position == 1) {  //Yet to start
 
                     gameTypeSpinner.setHint(getString(R.string.game_type));
                     text1.setHint(getString(R.string.table_no));
                     text2.setHint(getString(R.string.set_game_time));
+                    text3.setHint(getString(R.string.limit));
 
                     text1.setInputType(InputType.TYPE_CLASS_NUMBER);
 
+                    text3.setVisibility(View.VISIBLE);
                     header.setVisibility(View.GONE);
                     gameTypeSpinner.setVisibility(View.VISIBLE);
                 }
@@ -154,7 +158,7 @@ public class AddLiveUpdateFragment extends Fragment {
                 text2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(curPos == 2)
+                        if(curPos == 1)
                             showDatePickerDialog();
                     }
                 });

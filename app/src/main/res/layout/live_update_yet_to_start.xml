@@ -2,51 +2,87 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/liveUpdateLayout"
     android:orientation="vertical"
-    android:gravity="bottom"
-    android:background="@drawable/game_yet_to_strt"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="4">
 
     <TextView
-        android:id="@+id/updateHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="20sp"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#50EC16"
-        android:text="Header"/>
+        android:background="@drawable/app_multicolor"
+        android:text="Soon @ Rockets"/>
 
-    <TextView
-        android:id="@+id/updateText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#50EC16"
-        android:textSize="15sp"
-        android:text="Text1"/>
 
-    <TextView
-        android:id="@+id/updateText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#50EC16"
-        android:textSize="15sp"
-        android:text="Text2"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:background="@drawable/game_yet_to_strt"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/updateText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#50EC16"
-        android:textSize="15sp"
-        android:text="Text3"/>
+        <TextView
+            android:id="@+id/updateHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Header"/>
 
-    <TextView
-        android:id="@+id/updateComments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#50EC16"
-        android:textSize="15sp"
-        android:text="Comments"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp"
+                android:text="@string/table_no"/>
+
+            <TextView
+                android:id="@+id/updateText1"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="15dp"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                android:background="@drawable/textview_round"
+                android:textSize="25sp"
+                android:text="Text1"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/updateText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlueButton"
+            android:textSize="15sp"
+            android:text="Text2"/>
+
+        <TextView
+            android:id="@+id/updateText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlueButton"
+            android:textSize="15sp"
+            android:text="Text3"/>
+
+        <TextView
+            android:id="@+id/updateComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlueButton"
+            android:textSize="15sp"
+            android:text="Comments"/>
+    </LinearLayout>
 </LinearLayout>

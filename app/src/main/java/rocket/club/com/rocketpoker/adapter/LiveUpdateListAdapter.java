@@ -5,6 +5,8 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,13 +56,13 @@ public class LiveUpdateListAdapter extends PagerAdapter {
         int index= liveUpdateList.indexOf(updateDetails.getUpdateType());
 
         switch(index) {
-            case 0:
+            /*case 0:
                 layout = R.layout.live_update_winner;
-                break;
-            case 1:
+                break;*/
+            case 0:
                 layout = R.layout.live_update_current_game;
                 break;
-            case 2:
+            case 1:
                 layout = R.layout.live_update_yet_to_start;
                 break;
         }
@@ -73,10 +75,27 @@ public class LiveUpdateListAdapter extends PagerAdapter {
         TextView msgText3 = (TextView) itemView.findViewById(R.id.updateText3);
         TextView msgComments = (TextView) itemView.findViewById(R.id.updateComments);
 
+        msgText3.setVisibility(View.GONE);
+
         msgHeader.setText(updateDetails.getUpdateHeader());
         msgText1.setText(updateDetails.getUpdateText1());
-        msgText2.setText(updateDetails.getUpdateText2());
-        msgText3.setText(updateDetails.getUpdateText3());
+
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(500); //You can manage the time of the blink with this parameter
+        anim.setStartOffset(100);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        msgText1.startAnimation(anim);
+
+
+        if(index == 0) {
+            msgText2.setText(context.getString(R.string.exp_label2) + ":" + updateDetails.getUpdateText2());
+        } else if(index == 1) {
+            msgText2.setText(context.getString(R.string.starts_at) + updateDetails.getUpdateText2());
+            msgText3.setText(context.getString(R.string.exp_label2) + ":" + updateDetails.getUpdateText3());
+            msgText3.setVisibility(View.VISIBLE);
+        }
+
         msgComments.setText(updateDetails.getUpdateComments());
 
         container.addView(itemView);

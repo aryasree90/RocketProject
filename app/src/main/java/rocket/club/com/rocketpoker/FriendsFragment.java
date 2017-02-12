@@ -606,6 +606,7 @@ public class FriendsFragment extends Fragment {
         searchBtn.setOnClickListener(clickListener);
 
         dialog.show();
+        appGlobals.setDialogLayoutParams(dialog, context, false, true);
     }
 
     private void resetDialog() {

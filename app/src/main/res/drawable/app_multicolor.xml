@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<stroke android:width="6dp" android:color="#FFCCCCCC"/>
+    <!--<stroke android:width="6dp" android:color="#FFCCCCCC"/>-->
 
-    <padding
+    <!--<padding
         android:left="5dp"
         android:top="5dp"
-        android:right="5dp"
-        android:bottom="5dp" />
+        android:right="5dp"190A70
+        android:bottom="5dp" />-->
 
-    <corners android:radius="8dp" />-->
+    <corners android:radius="8dp" />
 
     <gradient
         android:angle="270"
-        android:startColor="@color/colorPrimary"
+        android:startColor="@color/appBackground"
         android:endColor="@color/windowBackground"
         android:type="linear" />
 
