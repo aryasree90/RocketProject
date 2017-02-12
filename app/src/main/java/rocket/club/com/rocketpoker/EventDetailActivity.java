@@ -111,7 +111,7 @@ public class EventDetailActivity extends AppCompatActivity {
         if (!infoList.isEmpty()) {
             infoItemPager.setVisibility(View.VISIBLE);
             infoEmptyText.setVisibility(View.GONE);
-            infoAdapter = new InfoListAdapter(context, infoList, clickListener, activityType);
+            infoAdapter = new InfoListAdapter(context, infoList, clickListener, activityType, EventDetailActivity.this);
             infoItemPager.setAdapter(infoAdapter);
         } else {
             infoItemPager.setVisibility(View.GONE);

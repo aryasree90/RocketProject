@@ -53,6 +53,7 @@
     <string name="empty_update">No New Updates!!!!</string>
     <string name="empty_events">0 Events to Display! </string>
     <string name="skip">Skip >></string>
+    <string name="app_unavailable">WhatsApp and Facebook are not available</string>
 
     <string-array name="member_list">
         <item><string name="set_normal">Normal User</string></item>
