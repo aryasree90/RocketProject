@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -111,6 +114,15 @@ public class ProfileActivity extends ActionBarActivity {
         skipProfile = (TextView) findViewById(R.id.skipProfile);
         rocketId = (TextView) findViewById(R.id.rocketId);
 
+        dob.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_UP)
+                    showDateDialog();
+                return false;
+            }
+        });
+
         if(appGlobals.sharedPref.isInitLoad()) {
             skipProfile.setVisibility(View.GONE);
         }
@@ -156,7 +168,8 @@ public class ProfileActivity extends ActionBarActivity {
                         imagePath = "";
                         break;
                     case R.id.DOB:
-                        showDialog(DATE_DIALOG_ID);
+//                        showDialog(DATE_DIALOG_ID);
+                        showDateDialog();
                         break;
                     case R.id.skipProfile:
                         gotoHomeActivity();
@@ -197,9 +210,31 @@ public class ProfileActivity extends ActionBarActivity {
         gotoHome.setOnClickListener(clickListener);
         clear.setOnClickListener(clickListener);
         profileImage.setOnClickListener(clickListener);
-        dob.setOnClickListener(clickListener);
+//        dob.setOnClickListener(clickListener);
         skipProfile.setOnClickListener(clickListener);
         emptyImage.setOnClickListener(clickListener);
+    }
+
+    private void showDateDialog() {
+
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(ProfileActivity.this,
+                new DatePickerDialog.OnDateSetListener(){
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        int month = monthOfYear + 1;
+                        String selDateTime = appGlobals.checkTime(dayOfMonth) + "-" + appGlobals.checkTime(month) + "-" + year;
+                        dob.setText(selDateTime);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
     }
 
     @Override
@@ -520,7 +555,7 @@ public class ProfileActivity extends ActionBarActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DATE_DIALOG_ID:
@@ -545,7 +580,7 @@ public class ProfileActivity extends ActionBarActivity {
             dob.setText(new StringBuilder().append(month)
                     .append("-").append(day).append("-").append(year));
         }
-    };
+    };*/
 
     private void gotoHomeActivity() {
         Intent profileIntent = new Intent(context, LandingActivity.class);

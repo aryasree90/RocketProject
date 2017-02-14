@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -155,11 +156,12 @@ public class AddLiveUpdateFragment extends Fragment {
 
                 final int curPos = position;
 
-                text2.setOnClickListener(new View.OnClickListener() {
+                text2.setOnTouchListener(new View.OnTouchListener() {
                     @Override
-                    public void onClick(View v) {
-                        if(curPos == 1)
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction()==MotionEvent.ACTION_UP)
                             showDatePickerDialog();
+                        return false;
                     }
                 });
             }
@@ -181,20 +183,11 @@ public class AddLiveUpdateFragment extends Fragment {
                                           int monthOfYear, int dayOfMonth) {
 
                         int month = monthOfYear + 1;
-                        selDateTime = checkTime(dayOfMonth) + "-" + checkTime(month) + "-" + year;
+                        selDateTime = appGlobals.checkTime(dayOfMonth) + "-" + appGlobals.checkTime(month) + "-" + year;
                         showTimePickerDialog();
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
-    }
-
-    private String checkTime(int val) {
-        String finalVal = "";
-        if(val < 10)
-            finalVal = "0" + val;
-        else
-            finalVal = "" + val;
-        return finalVal;
     }
 
     private void showTimePickerDialog() {
@@ -209,7 +202,7 @@ public class AddLiveUpdateFragment extends Fragment {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        selDateTime += " " + checkTime(hourOfDay) + ":" + checkTime(minute);
+                        selDateTime += " " + appGlobals.checkTime(hourOfDay) + ":" + appGlobals.checkTime(minute);
                         text2.setText(selDateTime);
                     }
                 }, mHour, mMinute, false);

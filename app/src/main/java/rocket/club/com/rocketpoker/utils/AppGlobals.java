@@ -283,6 +283,15 @@ public class AppGlobals {
         return c;
     }
 
+    public String checkTime(int val) {
+        String finalVal = "";
+        if(val < 10)
+            finalVal = "0" + val;
+        else
+            finalVal = "" + val;
+        return finalVal;
+    }
+
     public static String convertSimpleDayFormat(long val) {
         Calendar today=Calendar.getInstance();
         today=clearTimes(today);

@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -131,6 +132,24 @@ public class FilterTransaction extends AppCompatActivity {
         filter2 = (Button) findViewById(R.id.filter2);
         filter3 = (Button) findViewById(R.id.filter3);
         filterView = (RecyclerView) findViewById(R.id.clubList);
+
+        filter2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_UP)
+                    showDatePickerDialog(filter2, true);
+                return false;
+            }
+        });
+
+        filter3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_UP)
+                    showDatePickerDialog(filter3, false);
+                return false;
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
@@ -269,7 +288,7 @@ public class FilterTransaction extends AppCompatActivity {
                                           int monthOfYear, int dayOfMonth) {
 
                         int month = monthOfYear + 1;
-                        String selDateTime = checkTime(dayOfMonth) + "-" + checkTime(month) + "-" + year;
+                        String selDateTime = appGlobals.checkTime(dayOfMonth) + "-" + appGlobals.checkTime(month) + "-" + year;
                         btn.setText(selDateTime);
 
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -296,15 +315,6 @@ public class FilterTransaction extends AppCompatActivity {
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
-    }
-
-    private String checkTime(int val) {
-        String finalVal = "";
-        if(val < 10)
-            finalVal = "0" + val;
-        else
-            finalVal = "" + val;
-        return finalVal;
     }
 
     private void setOnClickListener() {
@@ -342,8 +352,8 @@ public class FilterTransaction extends AppCompatActivity {
         searchBtn.setOnClickListener(clickListener);
         clearBtn.setOnClickListener(clickListener);
         graphBtn.setOnClickListener(clickListener);
-        filter2.setOnClickListener(clickListener);
-        filter3.setOnClickListener(clickListener);
+        /*filter2.setOnClickListener(clickListener);
+        filter3.setOnClickListener(clickListener);*/
     }
 
     private void fetchDetails() {

@@ -423,7 +423,7 @@ public class FriendsFragment extends Fragment {
                                           int monthOfYear, int dayOfMonth) {
 
                         int month = monthOfYear + 1;
-                        selDateTime = checkTime(dayOfMonth) + "-" + checkTime(month) + "-" + year;
+                        selDateTime = appGlobals.checkTime(dayOfMonth) + "-" + appGlobals.checkTime(month) + "-" + year;
                         showTimePickerDialog();
                     }
                 }, mYear, mMonth, mDay);
@@ -442,20 +442,11 @@ public class FriendsFragment extends Fragment {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        selDateTime += " " + checkTime(hourOfDay) + ":" + checkTime(minute);
+                        selDateTime += " " + appGlobals.checkTime(hourOfDay) + ":" + appGlobals.checkTime(minute);
                         btnDateTime.setText(selDateTime);
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
-    }
-
-    private String checkTime(int val) {
-        String finalVal = "";
-        if(val < 10)
-            finalVal = "0" + val;
-        else
-            finalVal = "" + val;
-        return finalVal;
     }
 
     private void serverCall(final Map<String, String> map, final String URL, final String removeFriend) {
