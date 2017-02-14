@@ -196,6 +196,7 @@ public class AppGlobals {
     public final String IMG_FILE_EXTENSION = ".jpg";
     public final String IMAGE_FOLDER = "profile";
     public final String tabletValidCode = "7235";
+    public final String tempFile = "tempFile" + IMG_FILE_EXTENSION;
 
     public final String ROCKETS = "Rockets";
 

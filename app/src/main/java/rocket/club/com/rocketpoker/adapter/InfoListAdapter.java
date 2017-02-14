@@ -1,35 +1,23 @@
 package rocket.club.com.rocketpoker.adapter;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -44,7 +32,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import rocket.club.com.rocketpoker.ConnectionDetector;
@@ -55,11 +42,10 @@ import rocket.club.com.rocketpoker.utils.AppGlobals;
 import rocket.club.com.rocketpoker.utils.LogClass;
 
 /**
- * Created by Admin on 10/12/2016.
+ * Created by Admin on 2/14/2017.
  */
-public class InfoListAdapter extends PagerAdapter {
+public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.MyViewHolder> {
 
-    Context context;
     final String WHATSAPP = "com.whatsapp", FACEBOOK = "com.viber.voip";
     Dialog dialog = null;
 
@@ -70,90 +56,101 @@ public class InfoListAdapter extends PagerAdapter {
     View.OnClickListener clickListener = null;
     final String VALIDATION_URL = AppGlobals.SERVER_URL + "likeEvent.php";
 
-    AppGlobals appGlobals = null;
     String activityType = null;
     EventDetailActivity eda = null;
 
-    private final String TAG = "InfoListAdapter";
+    AppGlobals appGlobals = null;
+    final private String TAG = "InfoListAdapter";
+    String loginNum = "";
+    Context context = null;
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        LinearLayout likeShareTool;
+        ImageButton likeImageBtn, shareImageBtn;
+        TextView eventHeader, eventSubHeader,imageText;
+        ImageView eventImage;
+
+        public MyViewHolder(View view) {
+            super(view);
+
+            likeShareTool = (LinearLayout) itemView.findViewById(R.id.likeShareTool);
+            likeImageBtn = (ImageButton) itemView.findViewById(R.id.likeImage);
+            shareImageBtn = (ImageButton) itemView.findViewById(R.id.shareImage);
+            eventHeader = (TextView) itemView.findViewById(R.id.eventHeaderText);
+            eventSubHeader = (TextView) itemView.findViewById(R.id.eventSummaryText);
+            eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
+            imageText = (TextView) itemView.findViewById(R.id.imageText);
+        }
+    }
 
     public InfoListAdapter(Context context, ArrayList<InfoDetails> infoList,
                            View.OnClickListener clickListener, String actType, EventDetailActivity eda) {
+
         this.context = context;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        appGlobals = AppGlobals.getInstance(context);
+
         this.infoList = infoList;
         connectionDetector = new ConnectionDetector(context);
-        appGlobals = AppGlobals.getInstance(context);
         this.clickListener = clickListener;
         this.activityType = actType;
         this.eda = eda;
+        loginNum = appGlobals.sharedPref.getLoginMobile();
     }
 
     @Override
-    public int getCount() {
-        return infoList.size();
-    }
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == ((LinearLayout) object);
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, final int position) {
-
-        int layoutId = R.layout.activity_event;
-
+        /*int layoutId = R.layout.activity_event;
         if (activityType.equals(AppGlobals.EVENT_INFO)) {
             layoutId = R.layout.activity_event;
         } else if (activityType.equals(AppGlobals.SERVICE_INFO)) {
             layoutId = R.layout.activity_service;
-        }
+        }*/
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.activity_event, parent, false);
 
-        View itemView = mLayoutInflater.inflate(layoutId, container, false);
 
-        LinearLayout likeShareTool = (LinearLayout) itemView.findViewById(R.id.likeShareTool);
-        final ImageButton likeImageBtn = (ImageButton) itemView.findViewById(R.id.likeImage);
-        ImageButton shareImageBtn = (ImageButton) itemView.findViewById(R.id.shareImage);
-        TextView eventHeader = (TextView) itemView.findViewById(R.id.eventHeaderText);
-        TextView eventSubHeader = (TextView) itemView.findViewById(R.id.eventSummaryText);
-        final ImageView eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
-        TextView imageText = (TextView) itemView.findViewById(R.id.imageText);
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         final InfoDetails infoItem = infoList.get(position);
-
         try {
             String imgPath = AppGlobals.SERVER_URL + infoItem.getInfoImage();
-            appGlobals.loadImageFromServer(imgPath, eventImage, imageText, true);
+            appGlobals.loadImageFromServer(imgPath, holder.eventImage, holder.imageText, true);
         }catch(Exception e) {
             appGlobals.logClass.setLogMsg(TAG, e.toString(), LogClass.ERROR_MSG);
         }
 
-        eventHeader.setText(infoItem.getInfoTitle());
-        eventSubHeader.setText(infoItem.getInfoSubTitle());
+        holder.eventHeader.setText(infoItem.getInfoTitle());
+        holder.eventSubHeader.setText(infoItem.getInfoSubTitle());
 
         if (activityType.equals(AppGlobals.EVENT_INFO)) {
-            likeShareTool.setVisibility(View.VISIBLE);
+            holder.likeShareTool.setVisibility(View.VISIBLE);
             if (appGlobals.sharedPref.getLikeEventList().contains(infoItem.getId())) {
-                likeImageBtn.setImageResource(R.mipmap.ic_favorite);
+                holder.likeImageBtn.setImageResource(R.mipmap.ic_favorite);
             } else {
-                likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
+                holder.likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
             }
         } else if(activityType.equals(AppGlobals.SERVICE_INFO)) {
-            likeShareTool.setVisibility(View.GONE);
+            holder.likeShareTool.setVisibility(View.GONE);
         }
 
-        likeImageBtn.setOnClickListener(new View.OnClickListener() {
+        holder.likeImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String likeEventList = appGlobals.sharedPref.getLikeEventList();
                 String likeId = infoItem.getId() + ",";
                 if (likeEventList.contains(infoItem.getId())) {
-                    likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
+                    holder.likeImageBtn.setImageResource(R.mipmap.ic_favorite_border);
                     infoItem.setInfoLikeStatus("false");
                     likeEventList = likeEventList.replace(likeId, "");
                 } else {
-                    likeImageBtn.setImageResource(R.mipmap.ic_favorite);
+                    holder.likeImageBtn.setImageResource(R.mipmap.ic_favorite);
                     infoItem.setInfoLikeStatus("true");
                     likeEventList += likeId;
                 }
@@ -168,16 +165,17 @@ public class InfoListAdapter extends PagerAdapter {
             }
         });
 
-        shareImageBtn.setOnClickListener(new View.OnClickListener() {
+        holder.shareImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String fileName = appGlobals.getRocketsPath(context) + "/tempFile.jpeg";
+                String fileName = appGlobals.getRocketsPath(context) + "/" + appGlobals.tempFile;
                 FileOutputStream out = null;
                 try {
                     out = new FileOutputStream(fileName);
-                    Bitmap bitmap = ((BitmapDrawable)eventImage.getDrawable()).getBitmap();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    Bitmap bitmap = ((BitmapDrawable) holder.eventImage.getDrawable()).getBitmap();
+                    if(bitmap != null)
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
                     // PNG is a lossless format, the compression factor (100) is ignored
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -193,19 +191,42 @@ public class InfoListAdapter extends PagerAdapter {
 
                 shareViaApp(infoItem);
 
-                /*String headerMsg = infoItem.getInfoTitle() + "\n" + infoItem.getInfoSubTitle();
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, headerMsg);
-                sendIntent.setType("text/plain");
-                context.startActivity(Intent.createChooser(sendIntent,
-                        context.getResources().getText(R.string.send_to)).
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));*/
             }
         });
+    }
 
-        container.addView(itemView);
-        return itemView;
+    @Override
+    public int getItemCount() {
+        return infoList.size();
+    }
+
+    private void serverCall(final Map<String,String> params) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().contains("success")) {
+
+                        } else {
+                            appGlobals.toastMsg(context, context.getString(R.string.pls_try_later), appGlobals.LENGTH_LONG);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
     private void shareViaApp(InfoDetails infoItem) {
@@ -268,10 +289,9 @@ public class InfoListAdapter extends PagerAdapter {
         }
     }
 
-
     private void inviteViaApp(String app, InfoDetails infoItem) {
 
-        String fileName = appGlobals.getRocketsPath(context) + "/tempFile.jpeg";
+        String fileName = appGlobals.getRocketsPath(context) + "/" + appGlobals.tempFile;
         String picture_text = infoItem.getInfoTitle() + "\n" + infoItem.getInfoSubTitle();
         Uri imageUri = Uri.parse(fileName);
         Intent shareIntent = new Intent();
@@ -282,8 +302,12 @@ public class InfoListAdapter extends PagerAdapter {
             shareIntent.setPackage("com.whatsapp");
             //Add text and then Image URI
             shareIntent.putExtra(Intent.EXTRA_TEXT, picture_text);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-            shareIntent.setType("image/jpeg");
+            if(new File(fileName).exists()) {
+                shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                shareIntent.setType("image/jpeg");
+            } else {
+                shareIntent.setType("text/plain");
+            }
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -306,40 +330,6 @@ public class InfoListAdapter extends PagerAdapter {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
-    }
-
-    private void serverCall(final Map<String,String> params) {
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, VALIDATION_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.trim().contains("success")) {
-
-                        } else {
-                            appGlobals.toastMsg(context, context.getString(R.string.pls_try_later), appGlobals.LENGTH_LONG);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        appGlobals.logClass.setLogMsg(TAG, error.toString(), LogClass.ERROR_MSG);
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        requestQueue.add(stringRequest);
     }
 
     class MyAdapter extends BaseAdapter {

@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +35,7 @@ import rocket.club.com.rocketpoker.utils.LogClass;
 public class EventDetailActivity extends AppCompatActivity {
 
     Context context;
-    private ViewPager infoItemPager = null;
+    private RecyclerView infoItemPager = null;
     private TextView infoEmptyText = null;
     private boolean likeStatus = false;
     AppGlobals appGlobals = null;
@@ -80,7 +83,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
         connectionDetector = new ConnectionDetector(getApplicationContext());
 
-        infoItemPager = (ViewPager) findViewById(R.id.infoList);
+        infoItemPager = (RecyclerView) findViewById(R.id.infoList);
         infoEmptyText = (TextView) findViewById(R.id.emptyInfoItem);
 
         toolBar = (Toolbar) findViewById(R.id.hometoolbar);
@@ -112,6 +115,10 @@ public class EventDetailActivity extends AppCompatActivity {
             infoItemPager.setVisibility(View.VISIBLE);
             infoEmptyText.setVisibility(View.GONE);
             infoAdapter = new InfoListAdapter(context, infoList, clickListener, activityType, EventDetailActivity.this);
+
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+            infoItemPager.setLayoutManager(mLayoutManager);
+            infoItemPager.setItemAnimator(new DefaultItemAnimator());
             infoItemPager.setAdapter(infoAdapter);
         } else {
             infoItemPager.setVisibility(View.GONE);
@@ -234,5 +241,18 @@ public class EventDetailActivity extends AppCompatActivity {
                     .findViewById(R.id.eventHeaderText);
         }
         return progress;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        String fileName = appGlobals.getRocketsPath(context) + "/" + appGlobals.tempFile;
+        File file = new File(fileName);
+        if(file.exists()) {
+            file.deleteOnExit();
+            file = null;
+        }
+
     }
 }
