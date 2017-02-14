@@ -66,7 +66,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout likeShareTool;
+        LinearLayout likeShareTool, eventLayout;
         ImageButton likeImageBtn, shareImageBtn;
         TextView eventHeader, eventSubHeader,imageText;
         ImageView eventImage;
@@ -74,6 +74,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.MyView
         public MyViewHolder(View view) {
             super(view);
 
+            eventLayout = (LinearLayout) itemView.findViewById(R.id.eventLayout);
             likeShareTool = (LinearLayout) itemView.findViewById(R.id.likeShareTool);
             likeImageBtn = (ImageButton) itemView.findViewById(R.id.likeImage);
             shareImageBtn = (ImageButton) itemView.findViewById(R.id.shareImage);
@@ -81,6 +82,13 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.MyView
             eventSubHeader = (TextView) itemView.findViewById(R.id.eventSummaryText);
             eventImage = (ImageView) itemView.findViewById(R.id.eventImage);
             imageText = (TextView) itemView.findViewById(R.id.imageText);
+
+            int height = (appGlobals.getScreenHeight(context) * 75)/100;
+            ViewGroup.LayoutParams params = eventLayout.getLayoutParams();
+            params.height = height;
+
+            eventLayout.setLayoutParams(params);
+
         }
     }
 
