@@ -210,6 +210,7 @@ public class AssignIdFragment extends Fragment {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             requestQueue.add(stringRequest);
         } else {
+            appGlobals.cancelDialog(progressDialog);
             appGlobals.toastMsg(context, getString(R.string.no_internet), appGlobals.LENGTH_LONG);
         }
     }
