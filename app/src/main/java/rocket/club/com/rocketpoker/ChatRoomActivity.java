@@ -162,7 +162,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                                     msgClass.setLocation(locClass);
 
                                     appGlobals.sqLiteDb.insertMessages(msgClass);
-//                                    serverCall(str);
+
+                                    String str = gson.toJson(msgClass);
+                                    serverCall(str);
 
                                     chatMsg.setText("");
                                     chatList.add(msgClass);
