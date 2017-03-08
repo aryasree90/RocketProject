@@ -70,11 +70,12 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.MyView
         ChatListClass itemList = chatList.get(position);
 
         String time = AppGlobals.convertSimpleDayFormat(itemList.getTime());
+        String msg = appGlobals.decodeText(itemList.getMsg());
         if(itemList.getSenderMob().equals(loginNum)) {
             holder.sentMsgLayout.setVisibility(View.VISIBLE);
             holder.receivedMsgLayout.setVisibility(View.GONE);
 
-            holder.sent_msg.setText(itemList.getMsg());
+            holder.sent_msg.setText(msg);
             holder.sent_time.setText(time);
         } else {
             holder.sentMsgLayout.setVisibility(View.GONE);
@@ -91,7 +92,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.MyView
             }
 
             holder.rec_senderId.setText(senderName);
-            holder.rec_msg.setText(itemList.getMsg());
+            holder.rec_msg.setText(msg);
             holder.rec_time.setText(time);
         }
     }

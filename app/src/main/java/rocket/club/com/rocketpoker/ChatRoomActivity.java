@@ -12,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,6 +30,8 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,7 +114,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         chatRecyclerView.setLayoutManager(mLayoutManager);
         chatRecyclerView.setItemAnimator(new DefaultItemAnimator());
         chatRecyclerView.setAdapter(mAdapter);
-        chatRecyclerView.scrollToPosition(chatList.size()-1);
+        chatRecyclerView.scrollToPosition(chatList.size() - 1);
         AppGlobals.inChatRoom = true;
     }
 
@@ -137,30 +141,37 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                         String msg = chatMsg.getText().toString();
 
-                        if(!TextUtils.isEmpty(msg)) {
-                            if(appGlobals.isNetworkConnected(context)) {
-                                ChatListClass msgClass = new ChatListClass();
-                                String mob = appGlobals.sharedPref.getLoginMobile();
+                        try {
+                            if (!TextUtils.isEmpty(msg)) {
+                                if (appGlobals.isNetworkConnected(context)) {
+                                    ChatListClass msgClass = new ChatListClass();
+                                    String mob = appGlobals.sharedPref.getLoginMobile();
 
-                                msgClass.setSenderMob(mob);
-                                msgClass.setMsg(msg);
-                                msgClass.setTime(System.currentTimeMillis());
+                                    msg = appGlobals.encodeText(msg);
+
+                                    if(msg == null)
+                                        return;
+
+                                    msgClass.setSenderMob(mob);
+                                    msgClass.setMsg(msg);
+                                    msgClass.setTime(System.currentTimeMillis());
 //                                msgClass.setLocation(appGlobals.sharedPref.getLocation());
 
-                                Gson gson = new Gson();
-                                LocationClass locClass = gson.fromJson(appGlobals.sharedPref.getLocation(), LocationClass.class);
-                                msgClass.setLocation(locClass);
+                                    Gson gson = new Gson();
+                                    LocationClass locClass = gson.fromJson(appGlobals.sharedPref.getLocation(), LocationClass.class);
+                                    msgClass.setLocation(locClass);
 
-                                appGlobals.sqLiteDb.insertMessages(msgClass);
+                                    appGlobals.sqLiteDb.insertMessages(msgClass);
+//                                    serverCall(str);
 
-                                String str = gson.toJson(msgClass);
-                                serverCall(str);
-
-                                chatMsg.setText("");
-                                chatList.add(msgClass);
-                                mAdapter.notifyDataSetChanged();
-                                chatRecyclerView.scrollToPosition(chatList.size() - 1);
+                                    chatMsg.setText("");
+                                    chatList.add(msgClass);
+                                    mAdapter.notifyDataSetChanged();
+                                    chatRecyclerView.scrollToPosition(chatList.size() - 1);
+                                }
                             }
+                        } catch(Exception e) {
+                            appGlobals.logClass.setLogMsg(TAG, "Exception while sending message " + e.toString(), LogClass.ERROR_MSG);
                         }
                         break;
                 }

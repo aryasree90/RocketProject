@@ -51,6 +51,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -426,6 +427,28 @@ public class AppGlobals {
         byte[] imageBytes = baos.toByteArray();
         String thumbImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return thumbImage;
+    }
+
+    public String encodeText(String msg) {
+        try {
+            byte[] data = msg.getBytes("UTF-8");
+            msg = Base64.encodeToString(data, Base64.DEFAULT);
+            return msg;
+        } catch(UnsupportedEncodingException uee) {
+            appGlobals.logClass.setLogMsg(TAG, "UnsupportedEncodingException Encrypt " + uee.toString(), LogClass.ERROR_MSG);
+            return null;
+        }
+    }
+
+    public String decodeText(String base64) {
+        try {
+            byte[] data = Base64.decode(base64, Base64.DEFAULT);
+            String text = new String(data, "UTF-8");
+            return text;
+        } catch(UnsupportedEncodingException uee) {
+            appGlobals.logClass.setLogMsg(TAG, "UnsupportedEncodingException Decrypt " + uee.toString(), LogClass.ERROR_MSG);
+            return null;
+        }
     }
 
     public boolean compressImage(String srcFileName, String destFileName) {
